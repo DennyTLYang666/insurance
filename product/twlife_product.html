@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>台灣人壽保障型商品篩選</title>
+<style>
+  :root{--bg:#f4f6f8;--card:#fff;--text:#1c2430;--muted:#6b7280;--line:#e3e7ec;--accent:#0d6b5b;--accent-soft:#e6f3f0;--warn:#b45309;--warn-soft:#fdf3e3;--usd:#1d4ed8;--usd-soft:#e8efff;--twd:#0d6b5b;--twd-soft:#e6f3f0;color-scheme:light}
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){--bg:#0e1116;--card:#171c24;--text:#e5e9f0;--muted:#9aa3b2;--line:#262e3a;--accent:#4fd1b0;--accent-soft:#16302a;--warn:#f5b85c;--warn-soft:#332716;--usd:#8fb3ff;--usd-soft:#1a2440;--twd:#4fd1b0;--twd-soft:#16302a;color-scheme:dark}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.5}
+  .wrap{max-width:1200px;margin:0 auto;padding:16px}
+  h1{font-size:18px;margin:4px 0 2px}
+  .sub{color:var(--muted);font-size:12px;margin-bottom:12px}
+
+  /* controls */
+  .bar{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:10px;position:sticky;top:0;z-index:5}
+  .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .row label{font-size:12px;color:var(--muted);min-width:44px}
+  input[type=search],input[type=number],select{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit;font-size:14px}
+  input[type=search]{flex:1 1 200px}
+  input[type=number]{width:90px}
+  select{flex:1 1 130px;min-width:0}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:999px;padding:4px 12px;font:inherit;font-size:13px;cursor:pointer}
+  .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+  .count{font-size:13px;color:var(--muted);margin:10px 2px}
+
+  /* cards */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .badge{display:inline-flex;align-items:center;justify-content:center;height:24px;min-width:56px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;text-align:center}
+  .b-cat{background:var(--chip,var(--line));color:var(--text)}
+  .b-twd{background:var(--twd-soft);color:var(--twd)}
+  .b-usd{background:var(--usd-soft);color:var(--usd)}
+  .b-unk{background:var(--warn-soft);color:var(--warn)}
+  .name{font-weight:600;font-size:15px;line-height:1.4;margin:0}
+  .goals{display:flex;flex-wrap:wrap;gap:6px}
+  .goal{font-size:12px;padding:2px 8px;border-radius:6px;background:var(--accent-soft);color:var(--accent)}
+  .meta{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:12px;background:var(--bg);border-radius:8px;padding:8px;text-align:center}
+  .meta b{display:block;font-size:13px;color:var(--text)}
+  .meta span{color:var(--muted)}
+  .fit{font-size:13px}
+  .fit b{color:var(--accent)}
+  .watch{font-size:12px;color:var(--warn)}
+  .links{display:flex;gap:6px;margin-top:auto}
+  .btn{flex:1;text-align:center;font-size:12px;padding:6px 0;border:1px solid var(--line);border-radius:8px;color:var(--accent);text-decoration:none}
+  .btn.off{color:var(--muted);pointer-events:none;opacity:.5}
+  .empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}
+  .foot{font-size:11px;color:var(--muted);margin:18px 2px;line-height:1.6}
+  @media (max-width:600px){ .meta{font-size:11px} .wrap{padding:10px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>台灣人壽 保障型商品篩選</h1>
+  <div class="sub" id="sub"></div>
+
+  <div class="bar">
+    <div class="row">
+      <input id="q" type="search" placeholder="搜尋商品名稱或關鍵字">
+    </div>
+    <div class="row">
+      <label>幣別</label>
+      <div class="chips" id="cur">
+        <button class="chip" data-v="" aria-pressed="true">全部</button>
+        <button class="chip" data-v="台幣" aria-pressed="false">台幣</button>
+        <button class="chip" data-v="美元" aria-pressed="false">美元</button>
+        <button class="chip" data-v="其他外幣" aria-pressed="false">其他外幣</button>
+      </div>
+    </div>
+    <div class="row">
+      <label>需求</label>
+      <div class="chips" id="goal">
+        <button class="chip" data-v="保障" aria-pressed="false">保障</button>
+        <button class="chip" data-v="儲蓄" aria-pressed="false">儲蓄</button>
+        <button class="chip" data-v="投資" aria-pressed="false">投資</button>
+        <button class="chip" data-v="傳承" aria-pressed="false">傳承</button>
+        <button class="chip" data-v="健康" aria-pressed="false">健康</button>
+        <button class="chip" data-v="長照" aria-pressed="false">長照</button>
+        <button class="chip" data-v="意外" aria-pressed="false">意外</button>
+      </div>
+    </div>
+    <div class="row">
+      <label>年齡</label>
+      <input id="age" type="number" min="0" max="110" placeholder="歲">
+      <select id="risk">
+        <option value="">風險不限</option>
+        <option value="低">風險低</option>
+        <option value="中">風險中</option>
+        <option value="高">風險高</option>
+      </select>
+      <select id="sort">
+        <option value="order">排序：預設</option>
+        <option value="name">名稱</option>
+        <option value="ageMin">最低承保年齡</option>
+        <option value="risk">風險（低→高）</option>
+        <option value="liq">流動性（高→低）</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="count" id="count"></div>
+  <div class="grid" id="grid"></div>
+
+  <div class="foot">
+    保費與保額未收錄，需以 DM 與條款為準。風險、流動性、適合與注意事項為依商品類別之初步分類，非逐項閱讀DM後的評估。投資型與利變型之報酬非保證。
+  </div>
+</div>
+
+<script>
+const P = [
+  {"id": "NUEW0401", "name": "台灣人壽多美旺美元養老保險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 88, "goals": ["儲蓄"], "risk": "低", "liq": "低", "fit": "有閒置資金、想10年後領回", "watch": "一次繳費；美元匯率風險", "dm": "https://www.taiwanlife.com/portal-api/File/26384", "pd": "https://www.taiwanlife.com/product/48/NUEW0401"},
+  {"id": "NIFU2401", "name": "台灣人壽臻鑽滿滿外幣變額萬能壽險", "cat": "投資型", "cur": "美元", "ageMin": 16, "ageMax": 85, "goals": ["投資", "保障"], "risk": "高", "liq": "中", "fit": "有投資經驗、想高齡仍能投保", "watch": "淨值可能下跌；需看標的費用", "dm": "https://www.taiwanlife.com/portal-api/File/26216", "pd": "https://www.taiwanlife.com/product/48/NIFU2401", "tg": "https://www.taiwanlife.com/investment-target-info?id=NIFU2401"},
+  {"id": "NITU2401", "name": "台灣人壽臻鑽滿滿變額萬能壽險", "cat": "投資型", "cur": "台幣", "ageMin": 16, "ageMax": 85, "goals": ["投資", "保障"], "risk": "高", "liq": "中", "fit": "不想換匯、定期彈性投入", "watch": "淨值可能下跌；需看標的費用", "dm": "https://www.taiwanlife.com/portal-api/File/26217", "pd": "https://www.taiwanlife.com/product/48/NITU2401", "tg": "https://www.taiwanlife.com/investment-target-info?id=NITU2401"},
+  {"id": "NTPA4101", "name": "台灣人壽樂齡心安定期傷害保險", "cat": "意外傷害", "cur": "台幣", "ageMin": 55, "ageMax": 76, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "55歲以上、主要擔心意外與骨折", "watch": "定期險，只保意外不保疾病", "dm": "https://www.taiwanlife.com/portal-api/File/26148", "pd": "https://www.taiwanlife.com/product/48/NTPA4101"},
+  {"id": "NUIW9401", "name": "台灣人壽樂活安鑫美元利率變動型終身保險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 72, "goals": ["保障", "健康"], "risk": "中", "liq": "低", "fit": "想終身保障＋美元資產、擔心癌症", "watch": "宣告利率非保證；匯率風險", "dm": "https://www.taiwanlife.com/portal-api/File/26035", "pd": "https://www.taiwanlife.com/product/48/NUIW9401"},
+  {"id": "NTLC0901", "name": "台灣人壽信福員滿長期照顧定期健康保險", "cat": "長照", "cur": "台幣", "ageMin": 18, "ageMax": 70, "goals": ["長照", "保障"], "risk": "低", "liq": "中", "fit": "家中有長照顧慮、想補現金流", "watch": "限特定通路；定期無返還", "dm": null, "pd": "https://www.taiwanlife.com/product/48/NTLC0901"},
+  {"id": "NTPC0201", "name": "台灣人壽超享紅分紅終身還本保險", "cat": "分紅保單", "cur": "台幣", "ageMin": null, "ageMax": null, "goals": ["傳承", "儲蓄"], "risk": "中", "liq": "低", "fit": "重傳承、願長期持有", "watch": "紅利非保證；前期現金價值需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/26000", "pd": "https://www.taiwanlife.com/product/48/NTPC0201"},
+  {"id": "NTCI1301", "name": "台灣人壽月月心安99重大傷病終身健康保險", "cat": "重大傷病", "cur": "台幣", "ageMin": null, "ageMax": null, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "怕重病後收入中斷、需月領", "watch": "重大疾病定義各家不同", "dm": "https://www.taiwanlife.com/portal-api/File/25729", "pd": "https://www.taiwanlife.com/product/48/NTCI1301"},
+  {"id": "NITU2201", "name": "台灣人壽臻鑽75變額萬能壽險", "cat": "投資型", "cur": "台幣", "ageMin": 30, "ageMax": 65, "goals": ["投資", "保障"], "risk": "高", "liq": "中高", "fit": "30–65歲、有投資經驗、保費較高", "watch": "第6年起免解約費；前5年費用需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/25698", "pd": "https://www.taiwanlife.com/product/48/NITU2201", "tg": "https://www.taiwanlife.com/investment-target-info?id=NITU2201"},
+  {"id": "NUIW9001", "name": "台灣人壽鑫金美勝美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 85, "goals": ["保障", "傳承"], "risk": "中", "liq": "低", "fit": "有一筆資金、高齡想投保、重傳承", "watch": "躉繳/短年期；宣告利率非保證", "dm": "https://www.taiwanlife.com/portal-api/File/25689", "pd": "https://www.taiwanlife.com/product/48/NUIW9001"},
+  {"id": "NUWL0301", "name": "台灣人壽美利33美元終身壽險", "cat": "壽險", "cur": "美元", "ageMin": 0, "ageMax": 77, "goals": ["保障", "傳承"], "risk": "低", "liq": "中", "fit": "需要身故保障、家庭責任期間", "watch": "定期險到期無返還；保費與保額需符合預算", "dm": "https://www.taiwanlife.com/portal-api/File/26002", "pd": "https://www.taiwanlife.com/product/48/NUWL0301"},
+  {"id": "NTPS0301", "name": "台灣人壽超順心手術醫療終身健康保險", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 65, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": "https://www.taiwanlife.com/portal-api/File/25158", "pd": "https://www.taiwanlife.com/product/48/NTPS0301"},
+  {"id": "NTPH2101", "name": "台灣人壽超實在醫療99終身健康保險", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 65, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": "https://www.taiwanlife.com/portal-api/File/25079", "pd": "https://www.taiwanlife.com/product/48/NTPH2101"},
+  {"id": "NUEW0301", "name": "台灣人壽多美好美元養老保險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 80, "goals": ["保障", "儲蓄"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/25206", "pd": "https://www.taiwanlife.com/product/48/NUEW0301"},
+  {"id": "NUIW8901", "name": "台灣人壽美好60美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 88, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/25073", "pd": "https://www.taiwanlife.com/product/48/NUIW8901"},
+  {"id": "NTCC1401", "name": "台灣人壽鳳守愛防癌定期健康保險", "cat": "癌症險", "cur": "台幣", "ageMin": 18, "ageMax": 60, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "擔心癌症、想補癌症醫療與一次金", "watch": "癌症定義與等待期需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/24546", "pd": "https://www.taiwanlife.com/product/48/NTCC1401"},
+  {"id": "NUPW0701", "name": "台灣人壽美紅富利美元分紅終身壽險", "cat": "分紅保單", "cur": "美元", "ageMin": 0, "ageMax": 88, "goals": ["傳承", "儲蓄"], "risk": "中", "liq": "低", "fit": "重視傳承、願長期持有", "watch": "紅利非保證；前期現金價值需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/24357", "pd": "https://www.taiwanlife.com/product/48/NUPW0701"},
+  {"id": "NTTW1001", "name": "台灣人壽要保人豁免保險費一年定期壽險附約", "cat": "壽險", "cur": "台幣", "ageMin": 15, "ageMax": 75, "goals": ["保障"], "risk": "低", "liq": "中", "fit": "需要身故保障、家庭責任期間", "watch": "定期險到期無返還；保費與保額需符合預算", "dm": null, "pd": "https://www.taiwanlife.com/product/48/NTTW1001"},
+  {"id": "NTTW0901", "name": "台灣人壽要保人豁免保險費一年定期健康保險附約", "cat": "壽險", "cur": "台幣", "ageMin": 0, "ageMax": 75, "goals": ["保障"], "risk": "低", "liq": "中", "fit": "需要身故保障、家庭責任期間", "watch": "定期險到期無返還；保費與保額需符合預算", "dm": null, "pd": "https://www.taiwanlife.com/product/48/NTTW0901"},
+  {"id": "NUIW8501", "name": "台灣人壽美鑫永旺美元利率變動型終身壽險【限本公司特定通路銷售】", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 88, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": null, "pd": "https://www.taiwanlife.com/product/48/NUIW8501"},
+  {"id": "NUPW1001", "name": "台灣人壽美盛長紅美元分紅終身壽險", "cat": "分紅保單", "cur": "美元", "ageMin": null, "ageMax": null, "goals": ["傳承", "儲蓄"], "risk": "中", "liq": "低", "fit": "重視傳承、願長期持有", "watch": "紅利非保證；前期現金價值需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/25990", "pd": "https://www.taiwanlife.com/product/48/NUPW1001"},
+  {"id": "NUIW9301", "name": "台灣人壽旺美勝利美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 80, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/25598", "pd": "https://www.taiwanlife.com/product/48/NUIW9301"},
+  {"id": "NTCI1201", "name": "台灣人壽新溢起健智特定傷病定期健康保險", "cat": "重大傷病", "cur": "台幣", "ageMin": null, "ageMax": null, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "怕重病後收入中斷、需要重大傷病保障", "watch": "重大疾病定義各家不同，需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/25693", "pd": "https://www.taiwanlife.com/product/48/NTCI1201"},
+  {"id": "NITU2301", "name": "台灣人壽臻鑽盈盈變額萬能壽險", "cat": "投資型", "cur": "台幣", "ageMin": 16, "ageMax": 85, "goals": ["投資", "保障"], "risk": "高", "liq": "中高", "fit": "有投資經驗、能承受淨值波動、想彈性定期投入", "watch": "淨值可能下跌；需看標的與各項費用", "dm": "https://www.taiwanlife.com/portal-api/File/25520", "pd": "https://www.taiwanlife.com/product/48/NITU2301", "tg": "https://www.taiwanlife.com/investment-target-info?id=NITU2301"},
+  {"id": "NIFU2301", "name": "台灣人壽臻鑽盈盈外幣變額萬能壽險", "cat": "投資型", "cur": "美元", "ageMin": 16, "ageMax": 85, "goals": ["投資", "保障"], "risk": "高", "liq": "中高", "fit": "有投資經驗、能承受淨值波動、想彈性定期投入", "watch": "淨值可能下跌；需看標的與各項費用", "dm": "https://www.taiwanlife.com/portal-api/File/25521", "pd": "https://www.taiwanlife.com/product/48/NIFU2301", "tg": "https://www.taiwanlife.com/investment-target-info?id=NIFU2301"},
+  {"id": "NUPW0901", "name": "台灣人壽美紅吉利美元分紅終身壽險", "cat": "分紅保單", "cur": "美元", "ageMin": 18, "ageMax": 80, "goals": ["傳承", "儲蓄"], "risk": "中", "liq": "低", "fit": "重視傳承、願長期持有", "watch": "紅利非保證；前期現金價值需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/25613", "pd": "https://www.taiwanlife.com/product/48/NUPW0901"},
+  {"id": "NUIW9201", "name": "台灣人壽臻得美美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 74, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/25452", "pd": "https://www.taiwanlife.com/product/48/NUIW9201"},
+  {"id": "NTPH2201", "name": "台灣人壽超寬心醫療99終身健康保險", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 65, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": "https://www.taiwanlife.com/portal-api/File/25338", "pd": "https://www.taiwanlife.com/product/48/NTPH2201"},
+  {"id": "NUIW9101", "name": "台灣人壽臻美傳愛美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 77, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/25308", "pd": "https://www.taiwanlife.com/product/48/NUIW9101"},
+  {"id": "NTCC1601", "name": "台灣人壽龍守愛防癌定期健康保險", "cat": "癌症險", "cur": "台幣", "ageMin": 18, "ageMax": 60, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "擔心癌症、想補癌症醫療與一次金", "watch": "癌症定義與等待期需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/25204", "pd": "https://www.taiwanlife.com/product/48/NTCC1601"},
+  {"id": "NTPA4001", "name": "台灣人壽i安心終身傷害暨兒童傷害失能保險【限本公司特定通路銷售】", "cat": "意外傷害", "cur": "台幣", "ageMin": 0, "ageMax": 65, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "主要擔心意外風險", "watch": "只保意外，不保疾病", "dm": "https://www.taiwanlife.com/portal-api/File/24161", "pd": "https://www.taiwanlife.com/product/48/NTPA4001"},
+  {"id": "NUEW0201", "name": "台灣人壽多美富美元養老保險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 88, "goals": ["保障", "儲蓄"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/23994", "pd": "https://www.taiwanlife.com/product/48/NUEW0201"},
+  {"id": "NTTL1201", "name": "台灣人壽福氣成家定期壽險", "cat": "壽險", "cur": "台幣", "ageMin": null, "ageMax": null, "goals": ["保障"], "risk": "低", "liq": "中", "fit": "需要身故保障、家庭責任期間", "watch": "定期險到期無返還；保費與保額需符合預算", "dm": "https://www.taiwanlife.com/portal-api/File/24606", "pd": "https://www.taiwanlife.com/product/48/NTTL1201"},
+  {"id": "NYCC0901", "name": "台灣人壽藥安心一年定期癌症精準醫療健康保險附約", "cat": "癌症險", "cur": "台幣", "ageMin": 0, "ageMax": 70, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "擔心癌症、想補癌症醫療與一次金", "watch": "癌症定義與等待期需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/23810", "pd": "https://www.taiwanlife.com/product/48/NYCC0901"},
+  {"id": "NYAH0701", "name": "台灣人壽意生平安實支實付型傷害醫療保險給付附加條款", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 70, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": null, "pd": "https://www.taiwanlife.com/product/48/NYAH0701"},
+  {"id": "NYAH0601", "name": "台灣人壽意生平安日額型傷害醫療保險給付附加條款", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 70, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": null, "pd": "https://www.taiwanlife.com/product/48/NYAH0601"},
+  {"id": "NTYA1001", "name": "台灣人壽意生平安一年定期傷害暨兒童傷害失能保險附約", "cat": "意外傷害", "cur": "台幣", "ageMin": 0, "ageMax": 70, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "主要擔心意外風險", "watch": "只保意外，不保疾病", "dm": "https://www.taiwanlife.com/portal-api/File/23820", "pd": "https://www.taiwanlife.com/product/48/NTYA1001"},
+  {"id": "NUPW0401", "name": "台灣人壽美紅勝利美元分紅終身壽險", "cat": "分紅保單", "cur": "美元", "ageMin": 0, "ageMax": 80, "goals": ["傳承", "儲蓄"], "risk": "中", "liq": "低", "fit": "重視傳承、願長期持有", "watch": "紅利非保證；前期現金價值需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/23671", "pd": "https://www.taiwanlife.com/product/48/NUPW0401"},
+  {"id": "NUPW0601", "name": "台灣人壽臻威豐美元分紅終身壽險", "cat": "分紅保單", "cur": "美元", "ageMin": 0, "ageMax": 74, "goals": ["傳承", "儲蓄"], "risk": "中", "liq": "低", "fit": "重視傳承、願長期持有", "watch": "紅利非保證；前期現金價值需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/24632", "pd": "https://www.taiwanlife.com/product/48/NUPW0601"},
+  {"id": "NYCC1002", "name": "台灣人壽愛滿溢一年定期癌症健康保險附約", "cat": "癌症險", "cur": "台幣", "ageMin": 0, "ageMax": 70, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "擔心癌症、想補癌症醫療與一次金", "watch": "癌症定義與等待期需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/23749", "pd": "https://www.taiwanlife.com/product/48/NYCC1002"},
+  {"id": "NTYH2002", "name": "台灣人壽真滿溢一年定期日額型住院手術健康保險附約", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 70, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": "https://www.taiwanlife.com/portal-api/File/23750", "pd": "https://www.taiwanlife.com/product/48/NTYH2002"},
+  {"id": "NUPW0301", "name": "台灣人壽美紅齊旺美元分紅終身壽險", "cat": "分紅保單", "cur": "美元", "ageMin": 0, "ageMax": 73, "goals": ["傳承", "儲蓄"], "risk": "中", "liq": "低", "fit": "重視傳承、願長期持有", "watch": "紅利非保證；前期現金價值需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/25314", "pd": "https://www.taiwanlife.com/product/48/NUPW0301"},
+  {"id": "NUPC0101", "name": "台灣人壽美紅鑽美元分紅終身還本保險", "cat": "分紅保單", "cur": "美元", "ageMin": 0, "ageMax": 78, "goals": ["傳承", "儲蓄"], "risk": "中", "liq": "低", "fit": "重視傳承、願長期持有", "watch": "紅利非保證；前期現金價值需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/23654", "pd": "https://www.taiwanlife.com/product/48/NUPC0101"},
+  {"id": "NUPW0501", "name": "台灣人壽珍豐收美元分紅終身壽險", "cat": "分紅保單", "cur": "美元", "ageMin": 0, "ageMax": 80, "goals": ["傳承", "儲蓄"], "risk": "中", "liq": "低", "fit": "重視傳承、願長期持有", "watch": "紅利非保證；前期現金價值需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/24633", "pd": "https://www.taiwanlife.com/product/48/NUPW0501"},
+  {"id": "NUPW0201", "name": "台灣人壽美世長紅美元分紅終身壽險", "cat": "分紅保單", "cur": "美元", "ageMin": 0, "ageMax": 75, "goals": ["傳承", "儲蓄"], "risk": "中", "liq": "低", "fit": "重視傳承、願長期持有", "watch": "紅利非保證；前期現金價值需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/23325", "pd": "https://www.taiwanlife.com/product/48/NUPW0201"},
+  {"id": "NTYH2101", "name": "台灣人壽保實在住院醫療健康保險附約", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 65, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": "https://www.taiwanlife.com/portal-api/File/23304", "pd": "https://www.taiwanlife.com/product/48/NTYH2101"},
+  {"id": "NTPH2001", "name": "台灣人壽加倍實在醫療95終身健康保險", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 60, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": "https://www.taiwanlife.com/portal-api/File/22922", "pd": "https://www.taiwanlife.com/product/48/NTPH2001"},
+  {"id": "NUIW8401", "name": "台灣人壽美利增鑫美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 15, "ageMax": 88, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/22961", "pd": "https://www.taiwanlife.com/product/48/NUIW8401"},
+  {"id": "NTTL1101", "name": "台灣人壽吉安心定期壽險", "cat": "壽險", "cur": "台幣", "ageMin": 15, "ageMax": 65, "goals": ["保障"], "risk": "低", "liq": "中", "fit": "需要身故保障、家庭責任期間", "watch": "定期險到期無返還；保費與保額需符合預算", "dm": "https://www.taiwanlife.com/portal-api/File/22785", "pd": "https://www.taiwanlife.com/product/48/NTTL1101"},
+  {"id": "NTLC0701", "name": "台灣人壽12強護溢生長期照顧定期健康保險", "cat": "長照", "cur": "台幣", "ageMin": 18, "ageMax": 70, "goals": ["長照", "保障"], "risk": "低", "liq": "中", "fit": "擔心長期照顧費用、想補現金流", "watch": "需符合條款定義的長照狀態；注意承保年齡與給付期間", "dm": "https://www.taiwanlife.com/portal-api/File/23226", "pd": "https://www.taiwanlife.com/product/48/NTLC0701"},
+  {"id": "NUIW8101", "name": "台灣人壽臻美福美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 72, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/22523", "pd": "https://www.taiwanlife.com/product/48/NUIW8101"},
+  {"id": "NTPW0101", "name": "台灣人壽紅利旺分紅終身壽險", "cat": "分紅保單", "cur": "台幣", "ageMin": 0, "ageMax": 80, "goals": ["傳承", "儲蓄"], "risk": "中", "liq": "低", "fit": "重視傳承、願長期持有", "watch": "紅利非保證；前期現金價值需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/22493", "pd": "https://www.taiwanlife.com/product/48/NTPW0101"},
+  {"id": "NUIW8301", "name": "台灣人壽美鑫利旺美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 18, "ageMax": 88, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/22412", "pd": "https://www.taiwanlife.com/product/48/NUIW8301"},
+  {"id": "NTCI1001", "name": "台灣人壽保重溢生重大傷病定期健康保險", "cat": "重大傷病", "cur": "台幣", "ageMin": 0, "ageMax": 60, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "怕重病後收入中斷、需要重大傷病保障", "watch": "重大疾病定義各家不同，需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/22243", "pd": "https://www.taiwanlife.com/product/48/NTCI1001"},
+  {"id": "NTCC1301", "name": "台灣人壽守愛溢生防癌定期健康保險", "cat": "癌症險", "cur": "台幣", "ageMin": 0, "ageMax": 60, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "擔心癌症、想補癌症醫療與一次金", "watch": "癌症定義與等待期需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/22226", "pd": "https://www.taiwanlife.com/product/48/NTCC1301"},
+  {"id": "NTIE0101", "name": "台灣人壽金利樂利率變動型養老保險", "cat": "利變壽險", "cur": "台幣", "ageMin": 0, "ageMax": 70, "goals": ["保障", "儲蓄"], "risk": "中", "liq": "低", "fit": "想要終身保障並兼顧儲蓄或傳承", "watch": "宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/22149", "pd": "https://www.taiwanlife.com/product/48/NTIE0101"},
+  {"id": "NUIC1101", "name": "台灣人壽美鑫樂退美元利率變動型還本終身保險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 76, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/22150", "pd": "https://www.taiwanlife.com/product/48/NUIC1101"},
+  {"id": "NUIW7901", "name": "台灣人壽吉美優美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 85, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/21965", "pd": "https://www.taiwanlife.com/product/48/NUIW7901"},
+  {"id": "NTPC0101", "name": "台灣人壽吉享紅分紅終身還本保險", "cat": "分紅保單", "cur": "台幣", "ageMin": 0, "ageMax": 70, "goals": ["傳承", "儲蓄"], "risk": "中", "liq": "低", "fit": "重視傳承、願長期持有", "watch": "紅利非保證；前期現金價值需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/21952", "pd": "https://www.taiwanlife.com/product/48/NTPC0101"},
+  {"id": "NUPW0101", "name": "台灣人壽美紅旺美元分紅終身壽險", "cat": "分紅保單", "cur": "美元", "ageMin": 0, "ageMax": 74, "goals": ["傳承", "儲蓄"], "risk": "中", "liq": "低", "fit": "重視傳承、願長期持有", "watch": "紅利非保證；前期現金價值需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/21873", "pd": "https://www.taiwanlife.com/product/48/NUPW0101"},
+  {"id": "NUEW0101", "name": "台灣人壽美利富美元養老保險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 85, "goals": ["保障", "儲蓄"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/21820", "pd": "https://www.taiwanlife.com/product/48/NUEW0101"},
+  {"id": "NUIW8001", "name": "台灣人壽美溢發美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 72, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/21721", "pd": "https://www.taiwanlife.com/product/48/NUIW8001"},
+  {"id": "NUIW7801", "name": "台灣人壽臻心美美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 74, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/21617", "pd": "https://www.taiwanlife.com/product/48/NUIW7801"},
+  {"id": "NTIC0801", "name": "台灣人壽多享利利率變動型還本終身保險", "cat": "利變壽險", "cur": "台幣", "ageMin": 0, "ageMax": 72, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "想要終身保障並兼顧儲蓄或傳承", "watch": "宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/21436", "pd": "https://www.taiwanlife.com/product/48/NTIC0801"},
+  {"id": "NTTH0101", "name": "台灣人壽心動溢生醫療定期健康保險", "cat": "醫療險", "cur": "台幣", "ageMin": 18, "ageMax": 65, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": "https://www.taiwanlife.com/portal-api/File/21240", "pd": "https://www.taiwanlife.com/product/48/NTTH0101"},
+  {"id": "NUIW7701", "name": "台灣人壽吉美世美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 88, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/21160", "pd": "https://www.taiwanlife.com/product/48/NUIW7701"},
+  {"id": "NTIW2501", "name": "台灣人壽金滿利利率變動型終身壽險", "cat": "利變壽險", "cur": "台幣", "ageMin": 0, "ageMax": 80, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "想要終身保障並兼顧儲蓄或傳承", "watch": "宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/21275", "pd": "https://www.taiwanlife.com/product/48/NTIW2501"},
+  {"id": "NTWC0201", "name": "台灣人壽金多沛還本終身保險", "cat": "壽險", "cur": "台幣", "ageMin": 0, "ageMax": 74, "goals": ["保障", "傳承"], "risk": "低", "liq": "中", "fit": "需要身故保障、家庭責任期間", "watch": "定期險到期無返還；保費與保額需符合預算", "dm": "https://www.taiwanlife.com/portal-api/File/20781", "pd": "https://www.taiwanlife.com/product/48/NTWC0201"},
+  {"id": "NUIW7601", "name": "台灣人壽美世多美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 76, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/20669", "pd": "https://www.taiwanlife.com/product/48/NUIW7601"},
+  {"id": "NTPH1901", "name": "台灣人壽安心醫療100終身健康保險", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 68, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": "https://www.taiwanlife.com/portal-api/File/21063", "pd": "https://www.taiwanlife.com/product/48/NTPH1901"},
+  {"id": "NUIW7501", "name": "台灣人壽臻豐盛美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 77, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/21308", "pd": "https://www.taiwanlife.com/product/48/NUIW7501"},
+  {"id": "NYAH0501", "name": "台灣人壽意本正經實支實付型傷害醫療保險附約", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 14, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": null, "pd": "https://www.taiwanlife.com/product/48/NYAH0501"},
+  {"id": "NUIC0901", "name": "台灣人壽美年有鑫美元利率變動型還本終身保險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 78, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/20226", "pd": "https://www.taiwanlife.com/product/48/NUIC0901"},
+  {"id": "NTIW2303", "name": "台灣人壽金勝利利率變動型增額終身壽險【限本公司特定通路銷售】", "cat": "利變壽險", "cur": "台幣", "ageMin": 0, "ageMax": 88, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "想要終身保障並兼顧儲蓄或傳承", "watch": "宣告利率非保證；前期解約成本需看DM", "dm": null, "pd": "https://www.taiwanlife.com/product/48/NTIW2303"},
+  {"id": "NTIW2102", "name": "台灣人壽金多利利率變動型增額終身壽險", "cat": "利變壽險", "cur": "台幣", "ageMin": 0, "ageMax": 85, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "想要終身保障並兼顧儲蓄或傳承", "watch": "宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/20028", "pd": "https://www.taiwanlife.com/product/48/NTIW2102"},
+  {"id": "NUIW7101", "name": "台灣人壽旺美勝美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 80, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/19694", "pd": "https://www.taiwanlife.com/product/48/NUIW7101"},
+  {"id": "NUIW7302", "name": "台灣人壽臻美滿美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 77, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/19783", "pd": "https://www.taiwanlife.com/product/48/NUIW7302"},
+  {"id": "NUIW7002", "name": "台灣人壽美鑫富利美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 74, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/19572", "pd": "https://www.taiwanlife.com/product/48/NUIW7002"},
+  {"id": "NUIW7201", "name": "台灣人壽金美勝美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 80, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/19750", "pd": "https://www.taiwanlife.com/product/48/NUIW7201"},
+  {"id": "NAIE0101", "name": "台灣人壽澳利樂澳幣利率變動型養老保險", "cat": "外幣保單", "cur": "澳幣", "ageMin": 0, "ageMax": 85, "goals": ["保障", "儲蓄"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/19485", "pd": "https://www.taiwanlife.com/product/48/NAIE0101"},
+  {"id": "NTYH1901", "name": "台灣人壽龍實在住院醫療健康保險附約", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 70, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": "https://www.taiwanlife.com/portal-api/File/19338", "pd": "https://www.taiwanlife.com/product/48/NTYH1901"},
+  {"id": "NTYA0901", "name": "台灣人壽全方位一年定期傷害保險附約", "cat": "意外傷害", "cur": "台幣", "ageMin": 15, "ageMax": 70, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "主要擔心意外風險", "watch": "只保意外，不保疾病", "dm": "https://www.taiwanlife.com/portal-api/File/18931", "pd": "https://www.taiwanlife.com/product/48/NTYA0901"},
+  {"id": "NUIW6801", "name": "台灣人壽智庫鑫美美元利率變動型終身保險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 65, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/19204", "pd": "https://www.taiwanlife.com/product/48/NUIW6801"},
+  {"id": "NYAH0401", "name": "台灣人壽龍好意日額型傷害醫療保險附約", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 75, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": null, "pd": "https://www.taiwanlife.com/product/48/NYAH0401"},
+  {"id": "NTYH1801", "name": "台灣人壽e樂活一年定期住院日額健康保險【限本公司特定通路銷售】", "cat": "醫療險", "cur": "台幣", "ageMin": 18, "ageMax": 55, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": null, "pd": "https://www.taiwanlife.com/product/48/NTYH1801"},
+  {"id": "NUIW6501", "name": "台灣人壽保利美美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 74, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/17823", "pd": "https://www.taiwanlife.com/product/48/NUIW6501"},
+  {"id": "NUIW6601", "name": "台灣人壽美鑫美利美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 74, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/17984", "pd": "https://www.taiwanlife.com/product/48/NUIW6601"},
+  {"id": "NTIC0701", "name": "台灣人壽超享利利率變動型還本終身保險", "cat": "利變壽險", "cur": "台幣", "ageMin": 16, "ageMax": 72, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "想要終身保障並兼顧儲蓄或傳承", "watch": "宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/17754", "pd": "https://www.taiwanlife.com/product/48/NTIC0701"},
+  {"id": "NRIW0101", "name": "台灣人壽四海飛揚人民幣利率變動型終身壽險", "cat": "外幣保單", "cur": "人民幣", "ageMin": 0, "ageMax": 87, "goals": ["保障", "儲蓄"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/17543", "pd": "https://www.taiwanlife.com/product/48/NRIW0101"},
+  {"id": "NTCI0801", "name": "台灣人壽閣卡安心100重大傷病終身健康保險", "cat": "重大傷病", "cur": "台幣", "ageMin": 0, "ageMax": 50, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "怕重病後收入中斷、需要重大傷病保障", "watch": "重大疾病定義各家不同，需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/17435", "pd": "https://www.taiwanlife.com/product/48/NTCI0801"},
+  {"id": "T01N4", "name": "台灣人壽鑫元氣重大疾病終身健康保險(乙型)", "cat": "重大傷病", "cur": "台幣", "ageMin": 0, "ageMax": 65, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "怕重病後收入中斷、需要重大傷病保障", "watch": "重大疾病定義各家不同，需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/14835", "pd": "https://www.taiwanlife.com/product/48/T01N4"},
+  {"id": "U09R0", "name": "台灣人壽超美利美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 74, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/14754", "pd": "https://www.taiwanlife.com/product/48/U09R0"},
+  {"id": "T09K0", "name": "台灣人壽百分百守護長期照顧終身健康保險", "cat": "長照", "cur": "台幣", "ageMin": 20, "ageMax": 70, "goals": ["長照", "保障"], "risk": "低", "liq": "中", "fit": "擔心長期照顧費用、想補現金流", "watch": "需符合條款定義的長照狀態；注意承保年齡與給付期間", "dm": "https://www.taiwanlife.com/portal-api/File/15179", "pd": "https://www.taiwanlife.com/product/48/T09K0"},
+  {"id": "U09E0", "name": "台灣人壽吉美富美元利率變動型終身壽險", "cat": "外幣保單", "cur": "美元", "ageMin": 0, "ageMax": 85, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "有外幣資產配置需求、有閒置資金", "watch": "匯率風險；宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/13834", "pd": "https://www.taiwanlife.com/product/48/U09E0"},
+  {"id": "NYCI0503", "name": "台灣人壽好滿溢一年定期重大疾病健康保險附約(甲型)", "cat": "重大傷病", "cur": "台幣", "ageMin": 0, "ageMax": 75, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "怕重病後收入中斷、需要重大傷病保障", "watch": "重大疾病定義各家不同，需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/12884", "pd": "https://www.taiwanlife.com/product/48/NYCI0503"},
+  {"id": "NYCC0803", "name": "台灣人壽好滿溢一年定期癌症醫療健康保險附約", "cat": "癌症險", "cur": "台幣", "ageMin": 0, "ageMax": 75, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "擔心癌症、想補癌症醫療與一次金", "watch": "癌症定義與等待期需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/12883", "pd": "https://www.taiwanlife.com/product/48/NYCC0803"},
+  {"id": "YDL", "name": "台灣人壽憶心溢意一年定期健康保險", "cat": "重大傷病", "cur": "台幣", "ageMin": 30, "ageMax": 65, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "怕重病後收入中斷、需要重大傷病保障", "watch": "重大疾病定義各家不同，需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/12881", "pd": "https://www.taiwanlife.com/product/48/YDL"},
+  {"id": "YMDL", "name": "台灣人壽全心全憶一年定期健康保險", "cat": "重大傷病", "cur": "台幣", "ageMin": 30, "ageMax": 65, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "怕重病後收入中斷、需要重大傷病保障", "watch": "重大疾病定義各家不同，需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/12451", "pd": "https://www.taiwanlife.com/product/48/YMDL"},
+  {"id": "T08Y0", "name": "台灣人壽年年添利利率變動型還本終身保險", "cat": "利變壽險", "cur": "台幣", "ageMin": 0, "ageMax": 74, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "想要終身保障並兼顧儲蓄或傳承", "watch": "宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/12078", "pd": "https://www.taiwanlife.com/product/48/T08Y0"},
+  {"id": "T08S0", "name": "台灣人壽珍多寶利率變動型增額終身壽險【限本公司特定通路銷售】", "cat": "利變壽險", "cur": "台幣", "ageMin": 16, "ageMax": 70, "goals": ["保障", "儲蓄", "傳承"], "risk": "中", "liq": "低", "fit": "想要終身保障並兼顧儲蓄或傳承", "watch": "宣告利率非保證；前期解約成本需看DM", "dm": "https://www.taiwanlife.com/portal-api/File/11615", "pd": "https://www.taiwanlife.com/product/48/T08S0"},
+  {"id": "ADBE", "name": "台灣人壽好扶氣一年定期重大傷害失能扶助保險給付附加條款", "cat": "意外傷害", "cur": "台幣", "ageMin": null, "ageMax": null, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "主要擔心意外風險", "watch": "只保意外，不保疾病", "dm": null, "pd": "https://www.taiwanlife.com/product/48/ADBE"},
+  {"id": "T08P0", "name": "台灣人壽守護85長期照顧定期健康保險", "cat": "長照", "cur": "台幣", "ageMin": 15, "ageMax": 70, "goals": ["長照", "保障"], "risk": "低", "liq": "中", "fit": "擔心長期照顧費用、想補現金流", "watch": "需符合條款定義的長照狀態；注意承保年齡與給付期間", "dm": "https://www.taiwanlife.com/portal-api/File/11268", "pd": "https://www.taiwanlife.com/product/48/T08P0"},
+  {"id": "T08N0", "name": "台灣人壽金放心85長期照顧定期健康保險", "cat": "長照", "cur": "台幣", "ageMin": 15, "ageMax": 70, "goals": ["長照", "保障"], "risk": "低", "liq": "中", "fit": "擔心長期照顧費用、想補現金流", "watch": "需符合條款定義的長照狀態；注意承保年齡與給付期間", "dm": "https://www.taiwanlife.com/portal-api/File/11269", "pd": "https://www.taiwanlife.com/product/48/T08N0"},
+  {"id": "CIR4", "name": "台灣人壽金卡安心一年定期重大傷病健康保險附約", "cat": "重大傷病", "cur": "台幣", "ageMin": 0, "ageMax": 70, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "怕重病後收入中斷、需要重大傷病保障", "watch": "重大疾病定義各家不同，需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/10088", "pd": "https://www.taiwanlife.com/product/48/CIR4"},
+  {"id": "T06V2", "name": "台灣人壽新愛無憂85防癌定期健康保險", "cat": "癌症險", "cur": "台幣", "ageMin": 0, "ageMax": 65, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "擔心癌症、想補癌症醫療與一次金", "watch": "癌症定義與等待期需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/9245", "pd": "https://www.taiwanlife.com/product/48/T06V2"},
+  {"id": "QCC1", "name": "台灣人壽金全愛守護防癌終身健康保險【限本公司特定通路銷售】", "cat": "癌症險", "cur": "台幣", "ageMin": 0, "ageMax": 50, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "擔心癌症、想補癌症醫療與一次金", "watch": "癌症定義與等待期需看條款", "dm": null, "pd": "https://www.taiwanlife.com/product/48/QCC1"},
+  {"id": "T05K2", "name": "台灣人壽珍愛守護防癌終身健康保險附約", "cat": "癌症險", "cur": "台幣", "ageMin": 0, "ageMax": 55, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "擔心癌症、想補癌症醫療與一次金", "watch": "癌症定義與等待期需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/9291", "pd": "https://www.taiwanlife.com/product/48/T05K2"},
+  {"id": "T04L3", "name": "台灣人壽新e點愛小額終身壽險(115)【限網路投保通路銷售】", "cat": "壽險", "cur": "台幣", "ageMin": 18, "ageMax": 72, "goals": ["保障", "傳承"], "risk": "低", "liq": "中", "fit": "需要身故保障、家庭責任期間", "watch": "定期險到期無返還；保費與保額需符合預算", "dm": null, "pd": "https://www.taiwanlife.com/product/48/T04L3"},
+  {"id": "T03K4", "name": "台灣人壽珍傳愛小額終身壽險(115)", "cat": "壽險", "cur": "台幣", "ageMin": 0, "ageMax": 84, "goals": ["保障", "傳承"], "risk": "低", "liq": "中", "fit": "需要身故保障、家庭責任期間", "watch": "定期險到期無返還；保費與保額需符合預算", "dm": "https://www.taiwanlife.com/portal-api/File/9238", "pd": "https://www.taiwanlife.com/product/48/T03K4"},
+  {"id": "4H5", "name": "台灣人壽新健康龍101終身醫療健康保險", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 65, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": "https://www.taiwanlife.com/portal-api/File/9243", "pd": "https://www.taiwanlife.com/product/48/4H5"},
+  {"id": "T05C0", "name": "台灣人壽與愛同行住院醫療終身健康保險", "cat": "醫療險", "cur": "台幣", "ageMin": 20, "ageMax": 60, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": "https://www.taiwanlife.com/portal-api/File/9075", "pd": "https://www.taiwanlife.com/product/48/T05C0"},
+  {"id": "T05G0", "name": "台灣人壽有愛無礙住院醫療終身健康保險", "cat": "醫療險", "cur": "台幣", "ageMin": 20, "ageMax": 60, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": "https://www.taiwanlife.com/portal-api/File/9076", "pd": "https://www.taiwanlife.com/product/48/T05G0"},
+  {"id": "T04Q3", "name": "台灣人壽新保安心住院醫療終身健康保險", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 65, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": "https://www.taiwanlife.com/portal-api/File/9248", "pd": "https://www.taiwanlife.com/product/48/T04Q3"},
+  {"id": "T04H3", "name": "台灣人壽新愛肝人生終身保險(弱體型)", "cat": "重大傷病", "cur": "台幣", "ageMin": 15, "ageMax": 55, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "怕重病後收入中斷、需要重大傷病保障", "watch": "重大疾病定義各家不同，需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/9294", "pd": "https://www.taiwanlife.com/product/48/T04H3"},
+  {"id": "BODD", "name": "台灣人壽保富通一年定期重大疾病健康保險(甲型)【限網路投保通路銷售】", "cat": "重大傷病", "cur": "台幣", "ageMin": 18, "ageMax": 64, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "怕重病後收入中斷、需要重大傷病保障", "watch": "重大疾病定義各家不同，需看條款", "dm": null, "pd": "https://www.taiwanlife.com/product/48/BODD"},
+  {"id": "T07P1", "name": "台灣人壽新保富通二十年定期重大疾病健康保險(甲型)【限網路投保通路銷售】", "cat": "重大傷病", "cur": "台幣", "ageMin": 18, "ageMax": 51, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "怕重病後收入中斷、需要重大傷病保障", "watch": "重大疾病定義各家不同，需看條款", "dm": null, "pd": "https://www.taiwanlife.com/product/48/T07P1"},
+  {"id": "YDB", "name": "台灣人壽一年期特定傷病健康保險附約", "cat": "重大傷病", "cur": "台幣", "ageMin": 0, "ageMax": 65, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "怕重病後收入中斷、需要重大傷病保障", "watch": "重大疾病定義各家不同，需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/8980", "pd": "https://www.taiwanlife.com/product/48/YDB"},
+  {"id": "T07I1", "name": "台灣人壽新意享人生終身保險", "cat": "意外傷害", "cur": "台幣", "ageMin": 16, "ageMax": 60, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "主要擔心意外風險", "watch": "只保意外，不保疾病", "dm": "https://www.taiwanlife.com/portal-api/File/9244", "pd": "https://www.taiwanlife.com/product/48/T07I1"},
+  {"id": "930G", "name": "台灣人壽新平安福海外突發疾病醫療健康保險附約", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 80, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": null, "pd": "https://www.taiwanlife.com/product/48/930G"},
+  {"id": "900", "name": "台灣人壽平安福旅行平安保險", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 90, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": null, "pd": "https://www.taiwanlife.com/product/48/900"},
+  {"id": "WMBR", "name": "台灣人壽Fun心生活燒燙傷傷害保險附約【限網路投保通路銷售】", "cat": "意外傷害", "cur": "台幣", "ageMin": 18, "ageMax": 64, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "主要擔心意外風險", "watch": "只保意外，不保疾病", "dm": null, "pd": "https://www.taiwanlife.com/product/48/WMBR"},
+  {"id": "WBBR", "name": "台灣人壽Fun心生活骨折傷害保險附約【限網路投保通路銷售】", "cat": "意外傷害", "cur": "台幣", "ageMin": 18, "ageMax": 65, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "主要擔心意外風險", "watch": "只保意外，不保疾病", "dm": null, "pd": "https://www.taiwanlife.com/product/48/WBBR"},
+  {"id": "WADD", "name": "台灣人壽唯e守護傷害保險【限網路投保通路銷售】", "cat": "意外傷害", "cur": "台幣", "ageMin": 18, "ageMax": 64, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "主要擔心意外風險", "watch": "只保意外，不保疾病", "dm": null, "pd": "https://www.taiwanlife.com/product/48/WADD"},
+  {"id": "WSADR", "name": "台灣人壽Fun心生活特定意外身故傷害保險附約【限網路投保通路銷售】", "cat": "意外傷害", "cur": "台幣", "ageMin": 18, "ageMax": 64, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "主要擔心意外風險", "watch": "只保意外，不保疾病", "dm": null, "pd": "https://www.taiwanlife.com/product/48/WSADR"},
+  {"id": "SADDR", "name": "台灣人壽特定意外事故傷害保險附約", "cat": "意外傷害", "cur": "台幣", "ageMin": 16, "ageMax": 65, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "主要擔心意外風險", "watch": "只保意外，不保疾病", "dm": "https://www.taiwanlife.com/portal-api/File/8982", "pd": "https://www.taiwanlife.com/product/48/SADDR"},
+  {"id": "BJ0", "name": "台灣人壽新傷害醫療保險金日額附約", "cat": "醫療險", "cur": "台幣", "ageMin": 0, "ageMax": 70, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "想補住院、手術等醫療費用", "watch": "實支實付或日額依條款給付；注意除外責任", "dm": null, "pd": "https://www.taiwanlife.com/product/48/BJ0"},
+  {"id": "MIPA", "name": "台灣人壽新扶愛微型傷害保險", "cat": "意外傷害", "cur": "台幣", "ageMin": 0, "ageMax": 85, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "主要擔心意外風險", "watch": "只保意外，不保疾病", "dm": "https://www.taiwanlife.com/portal-api/File/16835", "pd": "https://www.taiwanlife.com/product/48/MIPA"},
+  {"id": "YCA", "name": "台灣人壽一年期癌症健康保險附約", "cat": "癌症險", "cur": "台幣", "ageMin": 0, "ageMax": 65, "goals": ["健康"], "risk": "低", "liq": "中", "fit": "擔心癌症、想補癌症醫療與一次金", "watch": "癌症定義與等待期需看條款", "dm": "https://www.taiwanlife.com/portal-api/File/8984", "pd": "https://www.taiwanlife.com/product/48/YCA"},
+  {"id": "AP0", "name": "台灣人壽龍平安傷害保險附約", "cat": "意外傷害", "cur": "台幣", "ageMin": 16, "ageMax": 70, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "主要擔心意外風險", "watch": "只保意外，不保疾病", "dm": null, "pd": "https://www.taiwanlife.com/product/48/AP0"},
+  {"id": "TADR", "name": "台灣人壽安全保一年定期傷害保險附約", "cat": "意外傷害", "cur": "台幣", "ageMin": 18, "ageMax": 70, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "主要擔心意外風險", "watch": "只保意外，不保疾病", "dm": "https://www.taiwanlife.com/portal-api/File/9250", "pd": "https://www.taiwanlife.com/product/48/TADR"},
+  {"id": "TADR7", "name": "台灣人壽Fun心保傷害保險附約【限網路投保通路銷售】", "cat": "意外傷害", "cur": "台幣", "ageMin": 18, "ageMax": 64, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "主要擔心意外風險", "watch": "只保意外，不保疾病", "dm": null, "pd": "https://www.taiwanlife.com/product/48/TADR7"},
+  {"id": "ADD03", "name": "台灣人壽新彩意傷害保險附約【限本公司特定通路銷售】", "cat": "意外傷害", "cur": "台幣", "ageMin": 20, "ageMax": 90, "goals": ["意外"], "risk": "低", "liq": "中", "fit": "主要擔心意外風險", "watch": "只保意外，不保疾病", "dm": null, "pd": "https://www.taiwanlife.com/product/48/ADD03"},
+  {"id": "YTL1", "name": "台灣人壽e定保一年定期壽險(111)【限網路投保通路銷售】", "cat": "壽險", "cur": "台幣", "ageMin": 18, "ageMax": 55, "goals": ["保障"], "risk": "低", "liq": "中", "fit": "需要身故保障、家庭責任期間", "watch": "定期險到期無返還；保費與保額需符合預算", "dm": null, "pd": "https://www.taiwanlife.com/product/48/YTL1"},
+  {"id": "T02J1", "name": "台灣人壽新平準型定期壽險附約", "cat": "壽險", "cur": "台幣", "ageMin": 15, "ageMax": 65, "goals": ["保障"], "risk": "低", "liq": "中", "fit": "需要身故保障、家庭責任期間", "watch": "定期險到期無返還；保費與保額需符合預算", "dm": "https://www.taiwanlife.com/portal-api/File/9293", "pd": "https://www.taiwanlife.com/product/48/T02J1"},
+  {"id": "T07N1", "name": "台灣人壽新保富通定期壽險【限網路投保通路銷售】", "cat": "壽險", "cur": "台幣", "ageMin": 18, "ageMax": 64, "goals": ["保障"], "risk": "低", "liq": "中", "fit": "需要身故保障、家庭責任期間", "watch": "定期險到期無返還；保費與保額需符合預算", "dm": null, "pd": "https://www.taiwanlife.com/product/48/T07N1"}
+];
+
+const RISK={"低":1,"中":2,"高":3};
+const LIQ={"低":1,"中":2,"中高":3,"高":4};
+const st={cur:"",goals:new Set(),q:"",age:null,risk:"",sort:"order"};
+const $=id=>document.getElementById(id);
+
+function matches(p){
+  if(st.cur==="其他外幣"){ if(p.cur==="台幣"||p.cur==="美元") return false; }
+  else if(st.cur && p.cur!==st.cur) return false;
+  if(st.goals.size && ![...st.goals].every(g=>p.goals.includes(g))) return false;
+  if(st.risk && p.risk!==st.risk) return false;
+  if(st.age!==null && p.ageMin!==null && (st.age<p.ageMin || st.age>p.ageMax)) return false;
+  if(st.q){
+    const h=[p.name,p.cat,p.cur,p.fit,p.watch,...p.goals].join(" ").toLowerCase();
+    if(!h.includes(st.q.toLowerCase())) return false;
+  }
+  return true;
+}
+function sorted(list){
+  const a=[...list];
+  switch(st.sort){
+    case "name": return a.sort((x,y)=>x.name.localeCompare(y.name,"zh-Hant"));
+    case "ageMin": return a.sort((x,y)=>(x.ageMin??999)-(y.ageMin??999));
+    case "risk": return a.sort((x,y)=>RISK[x.risk]-RISK[y.risk]);
+    case "liq": return a.sort((x,y)=>LIQ[y.liq]-LIQ[x.liq]);
+    default: return a;
+  }
+}
+function card(p){
+  const curCls = p.cur==="美元" ? "b-usd" : "b-twd";
+  const age = p.ageMin===null ? `<span class="badge b-unk">年齡待確認</span>` : "";
+  const ageTxt = p.ageMin===null ? "未標示" : `${p.ageMin}–${p.ageMax}歲`;
+  const goals = p.goals.map(g=>`<span class="goal">${g}</span>`).join("");
+  return `
+  <article class="card">
+    <div class="top"><span class="badge b-cat">${p.cat}</span><span class="badge ${curCls}">${p.cur}</span></div>
+    <h2 class="name">${p.name}</h2>
+    <div class="goals">${goals}</div>
+    <div class="meta">
+      <div><span>承保年齡</span><b>${ageTxt}</b></div>
+      <div><span>風險</span><b>${p.risk}</b></div>
+      <div><span>流動性</span><b>${p.liq}</b></div>
+    </div>
+    <div class="fit"><b>適合：</b>${p.fit}</div>
+    <div class="watch">⚠ ${p.watch}</div>
+    <div class="links">
+      <a class="btn ${p.dm?"":"off"}" href="${p.dm||"#"}" target="_blank" rel="noopener">DM</a>
+      <a class="btn" href="${p.pd}" target="_blank" rel="noopener">商品頁</a>
+      ${p.tg?`<a class="btn" href="${p.tg}" target="_blank" rel="noopener">標的</a>`:""}
+    </div>
+  </article>`;
+}
+function render(){
+  $("sub").textContent=`共 ${P.length} 項（保障型商品列表，第 10 頁待補） · 點選卡片按鈕可看 DM / 商品頁`;
+  const list=sorted(P.filter(matches));
+  $("count").textContent=`符合 ${list.length} / ${P.length} 項`;
+  $("grid").innerHTML = list.length ? list.map(card).join("") : `<div class="empty">沒有符合條件的商品，試著放寬篩選</div>`;
+}
+
+document.querySelectorAll("#cur .chip").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#cur .chip").forEach(x=>x.setAttribute("aria-pressed","false"));
+  b.setAttribute("aria-pressed","true"); st.cur=b.dataset.v; render();
+}));
+document.querySelectorAll("#goal .chip").forEach(b=>b.addEventListener("click",()=>{
+  const on=b.getAttribute("aria-pressed")!=="true";
+  b.setAttribute("aria-pressed",String(on));
+  on?st.goals.add(b.dataset.v):st.goals.delete(b.dataset.v); render();
+}));
+$("q").addEventListener("input",e=>{st.q=e.target.value.trim();render();});
+$("age").addEventListener("input",e=>{st.age=e.target.value===""?null:Number(e.target.value);render();});
+$("risk").addEventListener("change",e=>{st.risk=e.target.value;render();});
+$("sort").addEventListener("change",e=>{st.sort=e.target.value;render();});
+render();
+</script>
+</body>
+</html>
