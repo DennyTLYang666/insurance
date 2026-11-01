@@ -1,0 +1,72 @@
+{
+ "schema": "twlife.ic.product/1",
+ "name": "概估模型範例（示意，非實際商品）",
+ "state": {
+  "productName": "概估模型範例（假設利率3.7%，示意）",
+  "dm": "用假設利率概估保價金的示意範例：不含任何真實商品數值，僅示範「無逐年表時」的粗估用法。",
+  "ccy": "USD",
+  "payYears": 3,
+  "stack": "add",
+  "discCap": 3,
+  "discounts": [
+   {
+    "name": "金融機構自動轉帳（首期併附自動轉帳授權書）",
+    "type": "pct",
+    "value": 1,
+    "basis": "prem",
+    "minPrem": 0,
+    "maxPrem": 0,
+    "scope": "all",
+    "on": true,
+    "tiers": []
+   },
+   {
+    "name": "高保費折扣",
+    "type": "tier",
+    "value": 0,
+    "basis": "prem",
+    "minPrem": 0,
+    "maxPrem": 0,
+    "scope": "all",
+    "on": true,
+    "tiers": [
+     {
+      "min": 18000,
+      "max": 38000,
+      "value": 1
+     },
+     {
+      "min": 38000,
+      "max": 0,
+      "value": 2
+     }
+    ]
+   }
+  ],
+  "mf": {
+   "annual": 1,
+   "semi": 1.04,
+   "quarter": 1.048,
+   "monthly": 1.056
+  },
+  "refSum": 0,
+  "refList": 0,
+  "minSum": 0,
+  "maxSum": 0,
+  "age1": 44,
+  "refAge": 0,
+  "ageNote": "",
+  "rows": [],
+  "extra": [],
+  "bene": 0,
+  "cvMode": "rate",
+  "paidMode": "calc",
+  "rate": {
+   "r": 3.7,
+   "load": 0,
+   "fee0": 12,
+   "feeYears": 6,
+   "maxYear": 30
+  }
+ }
+}

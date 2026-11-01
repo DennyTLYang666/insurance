@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>保單利率試算工具（單利／複利 IRR）</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+  <h1>保單利率試算工具</h1>
+  <p class="sub">商品範本一鍵套用・保額／表定保費／實繳保費隨時改・折扣階梯・單利／複利（IRR）・保障 vs 價值・可儲存、可匯出商品資料</p>
+</header>
+<main>
+
+<!-- 簡易調參：隱藏輸入區後顯示，固定在畫面頂端 -->
+<section class="card noprint" id="mini" hidden>
+  <div class="mini">
+    <b id="miniTitle"></b>
+    <label>年齡<input type="number" data-k="age1" min="0" max="110" step="1"></label>
+    <label>保額<input type="number" data-k="sumInsured" min="0" step="any"></label>
+    <span id="miniInfo"></span>
+    <button class="btn sm" id="btnShow">顯示輸入區</button>
+  </div>
+</section>
+
+<div id="inputs">
+<section class="card noprint">
+  <div class="toolbar">
+    <div style="flex:2"><label>情境名稱（儲存用）</label><input type="text" data-k="name" placeholder="例：美利33 3年期 客戶A"></div>
+    <button class="btn pri" id="btnSave">儲存情境</button>
+    <div><label>已儲存情境</label><select id="scList"></select></div>
+    <button class="btn" id="btnLoad">載入</button>
+    <button class="btn" id="btnDel">刪除</button>
+    <button class="btn" id="btnExport">匯出情境 JSON</button>
+    <button class="btn" id="btnImport">匯入情境 JSON</button>
+    <input type="file" id="fileImport" accept=".json,application/json" hidden>
+    <button class="btn" id="btnLink">複製分享連結</button>
+    <button class="btn" id="btnBlank">清空</button>
+    <button class="btn" id="btnHide">隱藏輸入區</button>
+  </div>
+  <div class="hint" id="saveMsg">情境＝一次試算的全部內容（含客戶年齡、金額）；商品範本＝可重複套用的商品資料（見下方）。情境與「我的範本」存在此瀏覽器，換電腦請用匯出。</div>
+</section>
+
+<section class="card noprint" id="quick">
+  <h2>快速試算</h2>
+  <div class="row">
+    <div style="grid-column:span 2"><label>套用商品範本（選了就套用）</label><select id="prodList"></select></div>
+    <div><label>年齡（第1年）</label><input type="number" data-k="age1" min="0" max="110" step="1"></div>
+    <div><label>繳別</label>
+      <select data-k="mode"><option value="annual">年繳</option><option value="semi">半年繳</option><option value="quarter">季繳</option><option value="monthly">月繳</option></select></div>
+  </div>
+  <div class="row">
+    <div><label>保額</label><input type="number" data-k="sumInsured" min="0" step="any"></div>
+    <div><label>表定年繳保費（折扣前）</label><input type="number" data-k="premium" min="0" step="any"></div>
+    <div><label>實繳年繳保費（折扣後）</label><input type="number" data-k="paidInput" min="0" step="any"></div>
+  </div>
+  <div class="chips"><span>以表定保費設定：</span><span id="chipList"></span></div>
+  <div class="chips"><span>以實繳保費設定：</span><span id="chipPaid"></span></div>
+  <div class="chips"><span>以保額設定：</span><span id="chipSum"></span></div>
+  <div class="hint">三個欄位擇一輸入，另外兩個依範本與折扣自動換算（綠底＝換算值）。<b>表定</b>＝折扣前（建議書「首期表定保險費」）；<b>實繳</b>＝折扣後（建議書「首期折扣後保險費」）。</div>
+  <div class="dchips" id="discChips"></div>
+  <div class="dsum" id="discSummary"></div>
+  <div id="quickWarn"></div>
+  <div id="premPreview" style="margin-top:6px"></div>
+  <div class="btns">
+    <button class="btn sm" id="btnProdSave">另存為商品範本</button>
+    <button class="btn sm" id="btnProdDel">刪除我的範本</button>
+    <button class="btn sm" id="btnProdExport">匯出商品資料</button>
+    <button class="btn sm" id="btnProdImport">匯入商品資料（可多選）</button>
+    <input type="file" id="fileProd" accept=".json,application/json" multiple hidden>
+  </div>
+</section>
+
+<div class="grid noprint" id="detail">
+  <section class="card full">
+    <h2>① 商品資料與逐年表</h2>
+    <div class="row">
+      <div style="grid-column:span 2"><label>商品名稱（另存範本用）</label><input type="text" data-k="productName"></div>
+      <div style="grid-column:span 2"><label>DM／備註</label><input type="text" data-k="dm"></div>
+      <div><label>幣別（顯示用）</label><input type="text" data-k="ccy" placeholder="USD"></div>
+      <div><label>實繳保費來源</label>
+        <select data-k="paidMode"><option value="calc">公式計算（表定保費－折扣）</option><option value="table">取自表格「累積實繳保費」欄</option></select></div>
+      <div><label>保價金來源</label>
+        <select data-k="cvMode"><option value="table">取自表格「年度末解約金」欄</option><option value="rate">用假設利率概估（僅供粗估）</option></select></div>
+    </div>
+    <div class="row">
+      <div><label>表格數值對應的保額（0＝不縮放）</label><input type="number" data-k="refSum" min="0" step="any"></div>
+      <div><label>對應的表定年繳保費（折扣前）</label><input type="number" data-k="refList" min="0" step="any"></div>
+      <div><label>最低投保金額（保額，選填）</label><input type="number" data-k="minSum" min="0" step="any"></div>
+      <div><label>最高投保金額（保額，選填）</label><input type="number" data-k="maxSum" min="0" step="any"></div>
+      <div><label>身故保障欄位（圖表用）</label><select data-k="bene" data-num="1" id="beneSel"></select></div>
+    </div>
+    <div class="hint">縮放原理：表格內金額（解約金、身故金、領回金）＝範本基準 × (你的保額 ÷ 基準保額)。這是概算，實際以保險公司建議書為準。</div>
+    <div id="panelTable">
+      <div class="pgw" id="planGrid"></div>
+      <div class="btns">
+        <button class="btn sm" id="btnAddYear">＋新增一年</button>
+        <button class="btn sm" id="btnAddCol">＋新增欄位（身故金、生存金…）</button>
+        <button class="btn sm" id="btnClearCv">清空表格</button>
+      </div>
+      <details>
+        <summary>從建議書貼上整張表（Excel／網頁／PDF 複製皆可）</summary>
+        <textarea id="pasteBox" placeholder="貼上資料列即可（標題列會自動略過），例：&#10;1  44  38,088.00  41,771.55  41,771.55  0.00  22,378.25&#10;2  45  76,176.00  101,333.03 ..."></textarea>
+        <div class="btns"><button class="btn sm pri" id="btnParse">解析欄位</button></div>
+        <div id="mapBox"></div>
+      </details>
+      <div class="hint">未填的中間年度，保價金會線性內插（斜體＊）。「年度末領回金」＝該年度末一次給付的生存金／滿期金／祝壽金（領回後保單可能終止，保價金為 0）。</div>
+    </div>
+    <div id="panelRate" hidden>
+      <div class="row">
+        <div><label>假設利率 %（年）</label><input type="number" data-k="rate.r" step="any"></div>
+        <div><label>保費附加費用率 %</label><input type="number" data-k="rate.load" step="any"></div>
+        <div><label>第1年解約費用 %</label><input type="number" data-k="rate.fee0" step="any"></div>
+        <div><label>解約費用遞減至 0 的年數</label><input type="number" data-k="rate.feeYears" step="1"></div>
+        <div><label>試算年數</label><input type="number" data-k="rate.maxYear" min="1" max="120" step="1"></div>
+      </div>
+      <div class="warn">概估模型：保價金＝(上年末價值＋表定保費×(1−附加費用率))×(1＋利率)×(1−當年解約費用)。真實商品的費用、死亡給付成本、利率機制都不同，請盡快改用建議書實際數值。</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>② 繳費與折扣</h2>
+    <div class="row">
+      <div><label>繳費年期（年）</label><input type="number" data-k="payYears" min="1" max="60" step="1"></div>
+      <div><label>多項折扣疊加方式</label>
+        <select data-k="stack"><option value="add">百分比相加</option><option value="seq">逐項連乘</option></select></div>
+      <div><label>合併折扣上限 %（0＝無）</label><input type="number" data-k="discCap" min="0" step="any"></div>
+    </div>
+    <details>
+      <summary>繳別加成係數（月繳較貴時設定）</summary>
+      <div class="row">
+        <div><label>年繳</label><input type="number" data-k="mf.annual" step="any"></div>
+        <div><label>半年繳</label><input type="number" data-k="mf.semi" step="any"></div>
+        <div><label>季繳</label><input type="number" data-k="mf.quarter" step="any"></div>
+        <div><label>月繳</label><input type="number" data-k="mf.monthly" step="any"></div>
+      </div>
+      <div class="hint">係數＝該繳別「全年總繳金額 ÷ 年繳金額」。年繳為 1，預設全為 1（＝不加價），請照費率表或建議書各繳別保費反推。月繳件首期須繳 2 個月，本工具未模擬。</div>
+    </details>
+    <div id="discList"></div>
+    <div class="btns">
+      <button class="btn sm" data-add="disc" data-preset="high">＋階梯折扣（如高保費）</button>
+      <button class="btn sm" data-add="disc" data-preset="bank">＋自動轉帳折扣</button>
+      <button class="btn sm" data-add="disc" data-preset="pay">＋年繳折扣</button>
+      <button class="btn sm" data-add="disc" data-preset="custom">＋自訂</button>
+    </div>
+    <div class="hint">「階梯」＝同一個折扣依保費（或保額）分段，例：1.8萬～3.8萬(不含) 1%、3.8萬以上 2%；工具只會套用「目前所在的那一段」，不會把各段疊加。「達」含、「未達」不含。</div>
+  </section>
+
+  <section class="card">
+    <h2>③ 里程碑設定</h2>
+    <div id="tgtList"></div>
+    <div class="btns">
+      <button class="btn sm" id="btnAddTgt">＋新增里程碑</button>
+      <button class="btn sm" id="btnResetTgt">還原預設</button>
+    </div>
+    <div class="hint">以保單年度末判斷「第一個達標的年度」，結果卡片依年度由早到晚排列。倍數＝(保價金＋已領回)÷累計實繳。</div>
+  </section>
+</div>
+
+</div>
+
+<section class="card">
+  <h2>試算結果 <span id="resTitle" style="font-weight:400;color:var(--muted);font-size:13px"></span></h2>
+  <div class="kpis" id="kpis"></div>
+  <div class="ms" id="ms"></div>
+  <div class="charts">
+    <div class="chart"><h3>金額：累計實繳 vs 身故保障 vs 保價金</h3><div class="legend" id="lg1"></div><div id="ch1"></div></div>
+    <div class="chart"><h3>倍數：身故保障／保價金 ÷ 累計實繳</h3><div class="legend" id="lg2"></div><div id="ch2"></div></div>
+  </div>
+  <div class="opts noprint">
+    <label>表格模式
+      <select data-k="tableMode" style="width:auto"><option value="profit">獲利狀況（精簡）</option><option value="full">完整</option></select></label>
+    <label><input type="checkbox" data-k="showBase"> 顯示「無折扣」對照欄（完整模式）</label>
+    <label><input type="checkbox" data-k="keyOnly"> 只顯示重點年度</label>
+    <span>底色每 5 個保單年度交替：<i class="sw" style="background:var(--b0)"></i><i class="sw" style="background:var(--b1)"></i></span>
+    <button class="btn sm" id="btnCsv">匯出 CSV</button>
+    <button class="btn sm" id="btnPrint">列印</button>
+  </div>
+  <div class="tw fit" id="tblwrap"><table id="tbl"></table></div>
+  <div class="hint"><b>單利</b>＝總報酬(年化單利)，例 50%(4.5%)；<b>複利IRR</b>＝年化複利報酬率（IRR 本身就是年化，所以只列年化）。粗體：10/20/30/40/50/60/65/70/80/90/100/110 歲，以及總報酬每達 50%／100%／150%… 的第一年；粗底線＝繳費期滿；底色每 5 年交替；灰色斜體＝內插估值（非建議書原值）。數值一律為無條件捨去。</div>
+</section>
+
+<section class="card">
+  <h2>名詞與假設（請先看）</h2>
+  <ul class="notes">
+    <li><b>表定年繳保費</b>＝折扣前；<b>實繳年繳保費</b>＝折扣後。例：建議書表定 39,266、折扣 3%（高保費 2% ＋ 自動轉帳 1%），實繳 38,088。</li>
+    <li><b>累計實繳</b>＝實際繳出（已含折扣）的保費累計。<b>總報酬率</b>＝(保價金＋已領回−累計實繳)÷累計實繳；<b>倍數</b>＝(保價金＋已領回)÷累計實繳（倍數 2.0＝「200%」，總報酬率 +100%）。</li>
+    <li><b>單利</b>＝總報酬(年化單利)，年化單利＝總報酬率÷保單年度數；<b>複利IRR</b>＝依每筆保費實際繳入／領回時點算出的年報酬率。前幾年為負是因為費用與解約費用，這段期間保單的價值在於<b>身故／失能保障</b>，請看「身故保障倍數」，不能只看報酬。</li>
+    <li><b>改保額／保費</b>：以範本等比例縮放，折扣依「表定年繳保費」所在階梯重新判斷；保費四捨五入到整數。實際保費、保價金以保險公司建議書為準。</li>
+    <li><b>改年齡</b>：本工具只會平移年齡標示，<b>不會重算</b>保費、保價金、身故金與祝壽年度（這些依年齡與性別而不同）。不同年齡／性別請各用建議書建立範本。</li>
+    <li>本工具<b>未計入</b>：匯率變動（外幣保單最大風險之一）、稅負、通膨、利率變動、保單借款、減額繳清。提前解約可能損失本金。</li>
+    <li>折扣條件、投保規則依各商品與公司最新公告為準；範本內建數值取自建議書／DM 範例，僅供教學試算，不是報價或承諾。</li>
+  </ul>
+</section>
+</main>
+
+<!-- 載入順序有相依：util → defaults → calc → storage → products → charts → view → paste → (商品 bundle) → app -->
+<script src="js/util.js"></script>
+<script src="js/defaults.js"></script>
+<script src="js/calc.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/products.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/view.js"></script>
+<script src="js/paste.js"></script>
+<script src="products/bundle.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
