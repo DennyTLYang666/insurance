@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>每週市場總覽</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="page-head">
+  <h1>每週市場總覽</h1>
+  <p class="meta-line">資料截止日：<span id="m-cutoff">—</span>　更新時間：<span id="m-updated">—</span></p>
+  <p class="notice" id="m-notice"></p>
+  <div class="history-bar no-print" id="history-bar" hidden>
+    <label>查看週次（資料截止日） <select id="history-select"></select></label>
+    <button type="button" id="history-latest">回到最新</button>
+  </div>
+  <p class="history-banner" id="history-banner" role="status" hidden></p>
+</header>
+
+<nav class="tabbar no-print" aria-label="頁面分頁">
+  <div class="tabbar-inner" id="tabbar">
+    <a class="tab" href="#s-summary">結論</a>
+    <a class="tab" href="#s-quotes">報價</a>
+    <a class="tab" href="#s-heat">熱度一覽</a>
+    <a class="tab" href="#s-rank">漲跌排行</a>
+    <a class="tab" href="#s-trend">趨勢比較</a>
+    <a class="tab" href="#s-news">新聞摘要</a>
+    <a class="tab" href="#s-cal">經濟日曆</a>
+    <a class="tab" href="#s-country">國家總經</a>
+    <a class="tab" href="#s-risk">風險事件</a>
+  </div>
+</nav>
+
+<div id="load-error" class="load-error" hidden></div>
+
+<main>
+  <section id="s-summary" aria-labelledby="h-summary">
+    <h2 id="h-summary">本週一句話結論</h2>
+    <p id="summary-text" class="summary-text"></p>
+    <p class="note" id="analysis-note" hidden></p>
+  </section>
+
+  <section id="s-quotes" aria-labelledby="h-quotes" hidden>
+    <h2 id="h-quotes">重要報價與趨勢</h2>
+    <div class="table-scroll"><table id="quotes-table"></table></div>
+    <p class="note" id="quotes-note"></p>
+    <figure id="fig-quote"></figure>
+  </section>
+
+  <section id="s-heat" aria-labelledby="h-heat">
+    <h2 id="h-heat">七維度熱度一覽</h2>
+    <div class="table-scroll"><table id="heat-table"></table></div>
+    <p class="note">格內標籤為該欄報酬在七個維度中的排名（前 2 強、中間 3 中、後 2 弱）；綜合熱度依三欄排名加總決定；相對強弱＝該維度三期報酬平均，減去七維度等權平均。</p>
+  </section>
+
+  <section id="s-rank" aria-labelledby="h-rank">
+    <h2 id="h-rank">上週漲跌排行</h2>
+    <figure id="fig-rank"></figure>
+  </section>
+
+  <section id="s-trend" aria-labelledby="h-trend">
+    <h2 id="h-trend">趨勢比較</h2>
+    <div class="controls no-print">
+      <label>維度 <select id="trend-a" aria-label="主要維度"></select></label>
+      <label>比較 1 <select id="trend-b" aria-label="比較維度 1"></select></label>
+      <label>比較 2 <select id="trend-c" aria-label="比較維度 2"></select></label>
+    </div>
+    <figure id="fig-trend"></figure>
+  </section>
+
+  <section id="s-news" aria-labelledby="h-news">
+    <h2 id="h-news">新聞摘要</h2>
+    <div id="news-list"></div>
+  </section>
+
+  <section id="s-cal" aria-labelledby="h-cal">
+    <h2 id="h-cal">本週經濟日曆</h2>
+    <div class="table-scroll"><table id="cal-table"></table></div>
+  </section>
+
+  <section id="s-country" aria-labelledby="h-country">
+    <h2 id="h-country">國家總經一覽</h2>
+    <figure id="fig-country"></figure>
+    <div class="table-scroll"><table id="country-table"></table></div>
+    <div id="rates-block" hidden>
+      <h3 class="sub">市場利率與匯率（週頻）</h3>
+      <div class="table-scroll"><table id="rates-table"></table></div>
+    </div>
+  </section>
+
+  <section id="s-risk" aria-labelledby="h-risk">
+    <h2 id="h-risk">風險事件監測</h2>
+    <div class="table-scroll"><table id="risk-table"></table></div>
+    <p class="note">僅統計近期新聞數量與趨勢，不預測事件發生時間。</p>
+  </section>
+</main>
+
+<footer class="page-foot">
+  <h2>風險揭露與資料說明</h2>
+  <ul>
+    <li>本頁區分「事實數據」、「分析判斷」與「個人建議」；事實數據來自所列來源，分析判斷為編輯推論，本頁不提供個人建議。</li>
+    <li>資料為週頻，不代表即時行情。</li>
+    <li>本頁僅供內部參考，不構成投資建議。</li>
+  </ul>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js" crossorigin="anonymous"></script>
+<script src="assets/js/format.js"></script>
+<script src="assets/js/loader.js"></script>
+<script src="assets/js/charts.js"></script>
+<script src="assets/js/sections.js"></script>
+<script src="assets/js/tabs.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
