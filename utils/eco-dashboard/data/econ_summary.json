@@ -1,0 +1,753 @@
+{
+  "generated_at": "2026-11-03T15:37:25+08:00",
+  "note": "供撰寫分析用，頁面不顯示。CPI／PCE 年增由季調指數估算，與 BLS／BEA 公布的未季調年增略有差異，引用官方數字時以官方為準。",
+  "series_latest": [
+    {
+      "id": "CPIAUCNS",
+      "name": "CPIAUCNS",
+      "date": "2026-09-01",
+      "value": 336.94,
+      "released": "2026-09-01"
+    },
+    {
+      "id": "CPIAUCSL",
+      "name": "CPIAUCSL",
+      "date": "2026-09-01",
+      "value": 336.298,
+      "released": "2026-10-14"
+    },
+    {
+      "id": "CPILFENS",
+      "name": "CPILFENS",
+      "date": "2026-09-01",
+      "value": 339.287,
+      "released": "2026-09-01"
+    },
+    {
+      "id": "CPILFESL",
+      "name": "CPILFESL",
+      "date": "2026-09-01",
+      "value": 338.896,
+      "released": "2026-10-14"
+    },
+    {
+      "id": "DEXUSUK",
+      "name": "DEXUSUK",
+      "date": "2026-10-30",
+      "value": 1.3398,
+      "released": "2026-10-31"
+    },
+    {
+      "id": "DFEDTARU",
+      "name": "DFEDTARU",
+      "date": "2026-11-02",
+      "value": 4.0,
+      "released": "2026-11-03"
+    },
+    {
+      "id": "DFF",
+      "name": "DFF",
+      "date": "2026-10-30",
+      "value": 3.88,
+      "released": "2026-10-31"
+    },
+    {
+      "id": "DFII10",
+      "name": "10 年實質殖利率",
+      "date": "2026-10-30",
+      "value": 2.6,
+      "released": "2026-10-31",
+      "dir_20d": -1,
+      "chg_20d": -0.28
+    },
+    {
+      "id": "DGS10",
+      "name": "DGS10",
+      "date": "2026-10-30",
+      "value": 4.94,
+      "released": "2026-10-31"
+    },
+    {
+      "id": "DGS2",
+      "name": "2 年美債殖利率",
+      "date": "2026-10-30",
+      "value": 4.56,
+      "released": "2026-10-31",
+      "dir_20d": -1,
+      "chg_20d": -0.22
+    },
+    {
+      "id": "DTWEXBGS",
+      "name": "美元指數（廣義）",
+      "date": "2026-10-30",
+      "value": 121.6656,
+      "released": "2026-10-31",
+      "dir_20d": 1,
+      "chg_20d": -0.1007
+    },
+    {
+      "id": "GBRCPIALLMINMEI",
+      "name": "GBRCPIALLMINMEI",
+      "date": "2025-03-01",
+      "value": 136.1,
+      "released": "2025-05-15"
+    },
+    {
+      "id": "IRLTLT01GBM156N",
+      "name": "IRLTLT01GBM156N",
+      "date": "2026-09-01",
+      "value": 5.2421,
+      "released": "2026-10-15"
+    },
+    {
+      "id": "PAYEMS",
+      "name": "PAYEMS",
+      "date": "2026-09-01",
+      "value": 159044.0,
+      "released": "2026-10-02"
+    },
+    {
+      "id": "PAYEMS_L",
+      "name": "PAYEMS_L",
+      "date": "2026-09-01",
+      "value": 159044.0,
+      "released": "2026-09-01"
+    },
+    {
+      "id": "PCEPI",
+      "name": "PCEPI",
+      "date": "2026-09-01",
+      "value": 132.257,
+      "released": "2026-10-29"
+    },
+    {
+      "id": "PPIFID",
+      "name": "PPIFID",
+      "date": "2026-09-01",
+      "value": 159.613,
+      "released": "2026-09-01"
+    },
+    {
+      "id": "T10YIE",
+      "name": "10 年預期通膨",
+      "date": "2026-11-02",
+      "value": 2.29,
+      "released": "2026-11-03",
+      "dir_20d": -1,
+      "chg_20d": -0.07
+    },
+    {
+      "id": "UNRATE",
+      "name": "UNRATE",
+      "date": "2026-09-01",
+      "value": 4.2,
+      "released": "2026-10-02"
+    },
+    {
+      "id": "VIXCLS",
+      "name": "VIX",
+      "date": "2026-10-30",
+      "value": 19.42,
+      "released": "2026-10-31",
+      "dir_20d": 1,
+      "chg_20d": 26.8452
+    }
+  ],
+  "releases": [
+    {
+      "id": "CPIAUCSL",
+      "name": "美國 CPI",
+      "period": "2026-09",
+      "released": "2026-10-14",
+      "value": 4.0,
+      "previous": 3.72,
+      "unit": "% 年增"
+    },
+    {
+      "id": "CPILFESL",
+      "name": "美國核心 CPI",
+      "period": "2026-09",
+      "released": "2026-10-14",
+      "value": 2.76,
+      "previous": 2.77,
+      "unit": "% 年增"
+    },
+    {
+      "id": "PCEPI",
+      "name": "美國 PCE 物價",
+      "period": "2026-09",
+      "released": "2026-10-29",
+      "value": 3.63,
+      "previous": 3.37,
+      "unit": "% 年增"
+    },
+    {
+      "id": "PAYEMS",
+      "name": "美國非農就業",
+      "period": "2026-09",
+      "released": "2026-10-02",
+      "value": -31.0,
+      "previous": 217.0,
+      "unit": "千人（單月變動）"
+    },
+    {
+      "id": "UNRATE",
+      "name": "美國失業率",
+      "period": "2026-09",
+      "released": "2026-10-02",
+      "value": 4.2,
+      "previous": 4.1,
+      "unit": "%"
+    }
+  ],
+  "environment": {
+    "as_of": "2026-10-30",
+    "factors": [
+      {
+        "id": "DTWEXBGS",
+        "name": "美元指數（廣義）",
+        "role": "美元強弱",
+        "kind": "pct",
+        "value": 121.6656,
+        "date": "2026-10-30",
+        "dir": 1,
+        "d20": -0.1007
+      },
+      {
+        "id": "DFII10",
+        "name": "10 年實質殖利率",
+        "role": "持有無息資產的機會成本",
+        "kind": "diff",
+        "value": 2.6,
+        "date": "2026-10-30",
+        "dir": -1,
+        "d20": -0.28
+      },
+      {
+        "id": "DGS2",
+        "name": "2 年美債殖利率",
+        "role": "近端利率預期",
+        "kind": "diff",
+        "value": 4.56,
+        "date": "2026-10-30",
+        "dir": -1,
+        "d20": -0.22
+      },
+      {
+        "id": "T10YIE",
+        "name": "10 年預期通膨",
+        "role": "市場定價的通膨預期",
+        "kind": "diff",
+        "value": 2.29,
+        "date": "2026-11-02",
+        "dir": -1,
+        "d20": -0.07
+      },
+      {
+        "id": "VIXCLS",
+        "name": "VIX",
+        "role": "避險情緒",
+        "kind": "pct",
+        "value": 19.42,
+        "date": "2026-10-30",
+        "dir": 1,
+        "d20": 26.8452
+      }
+    ],
+    "products": [
+      {
+        "id": "tw_equity",
+        "name": "台股",
+        "group": "指標",
+        "last_date": "2026-11-03",
+        "score": -1.0,
+        "label": "偏空",
+        "n_valid": 1,
+        "contrib": [
+          {
+            "id": "DTWEXBGS",
+            "imp": -1,
+            "corr250": -0.151,
+            "corr60": 0.118
+          },
+          {
+            "id": "DFII10",
+            "imp": 0,
+            "corr250": 0.129,
+            "corr60": 0.276
+          },
+          {
+            "id": "DGS2",
+            "imp": 0,
+            "corr250": 0.11,
+            "corr60": 0.19
+          },
+          {
+            "id": "T10YIE",
+            "imp": 0,
+            "corr250": 0.107,
+            "corr60": 0.336
+          },
+          {
+            "id": "VIXCLS",
+            "imp": 0,
+            "corr250": -0.12,
+            "corr60": -0.028
+          }
+        ]
+      },
+      {
+        "id": "us_equity",
+        "name": "美股",
+        "group": "指標",
+        "last_date": "2026-11-02",
+        "score": 0.0,
+        "label": "中性",
+        "n_valid": 4,
+        "contrib": [
+          {
+            "id": "DTWEXBGS",
+            "imp": -1,
+            "corr250": -0.392,
+            "corr60": -0.232
+          },
+          {
+            "id": "DFII10",
+            "imp": 1,
+            "corr250": -0.296,
+            "corr60": -0.088
+          },
+          {
+            "id": "DGS2",
+            "imp": 1,
+            "corr250": -0.226,
+            "corr60": -0.119
+          },
+          {
+            "id": "T10YIE",
+            "imp": 0,
+            "corr250": -0.122,
+            "corr60": -0.086
+          },
+          {
+            "id": "VIXCLS",
+            "imp": -1,
+            "corr250": -0.836,
+            "corr60": -0.825
+          }
+        ]
+      },
+      {
+        "id": "tech",
+        "name": "科技",
+        "group": "指標",
+        "last_date": "2026-11-02",
+        "score": 0.0,
+        "label": "中性",
+        "n_valid": 4,
+        "contrib": [
+          {
+            "id": "DTWEXBGS",
+            "imp": -1,
+            "corr250": -0.326,
+            "corr60": -0.152
+          },
+          {
+            "id": "DFII10",
+            "imp": 1,
+            "corr250": -0.22,
+            "corr60": 0.094
+          },
+          {
+            "id": "DGS2",
+            "imp": 1,
+            "corr250": -0.156,
+            "corr60": -0.003
+          },
+          {
+            "id": "T10YIE",
+            "imp": 0,
+            "corr250": -0.045,
+            "corr60": 0.038
+          },
+          {
+            "id": "VIXCLS",
+            "imp": -1,
+            "corr250": -0.759,
+            "corr60": -0.771
+          }
+        ]
+      },
+      {
+        "id": "bond",
+        "name": "美債",
+        "group": "指標",
+        "last_date": "2026-11-02",
+        "score": 0.2,
+        "label": "中性",
+        "n_valid": 5,
+        "contrib": [
+          {
+            "id": "DTWEXBGS",
+            "imp": -1,
+            "corr250": -0.192,
+            "corr60": -0.235
+          },
+          {
+            "id": "DFII10",
+            "imp": 1,
+            "corr250": -0.812,
+            "corr60": -0.852
+          },
+          {
+            "id": "DGS2",
+            "imp": 1,
+            "corr250": -0.598,
+            "corr60": -0.617
+          },
+          {
+            "id": "T10YIE",
+            "imp": 1,
+            "corr250": -0.53,
+            "corr60": -0.434
+          },
+          {
+            "id": "VIXCLS",
+            "imp": -1,
+            "corr250": -0.203,
+            "corr60": -0.116
+          }
+        ]
+      },
+      {
+        "id": "gold",
+        "name": "黃金",
+        "group": "指標",
+        "last_date": "2026-11-02",
+        "score": 0.0,
+        "label": "中性",
+        "n_valid": 4,
+        "contrib": [
+          {
+            "id": "DTWEXBGS",
+            "imp": -1,
+            "corr250": -0.441,
+            "corr60": -0.373
+          },
+          {
+            "id": "DFII10",
+            "imp": 1,
+            "corr250": -0.215,
+            "corr60": -0.188
+          },
+          {
+            "id": "DGS2",
+            "imp": 1,
+            "corr250": -0.281,
+            "corr60": -0.236
+          },
+          {
+            "id": "T10YIE",
+            "imp": 0,
+            "corr250": -0.065,
+            "corr60": -0.06
+          },
+          {
+            "id": "VIXCLS",
+            "imp": -1,
+            "corr250": -0.333,
+            "corr60": -0.563
+          }
+        ]
+      },
+      {
+        "id": "oil",
+        "name": "原油",
+        "group": "指標",
+        "last_date": "2026-11-02",
+        "score": -0.2,
+        "label": "中性",
+        "n_valid": 5,
+        "contrib": [
+          {
+            "id": "DTWEXBGS",
+            "imp": 1,
+            "corr250": 0.31,
+            "corr60": 0.061
+          },
+          {
+            "id": "DFII10",
+            "imp": -1,
+            "corr250": 0.2,
+            "corr60": 0.16
+          },
+          {
+            "id": "DGS2",
+            "imp": -1,
+            "corr250": 0.328,
+            "corr60": 0.221
+          },
+          {
+            "id": "T10YIE",
+            "imp": -1,
+            "corr250": 0.59,
+            "corr60": 0.479
+          },
+          {
+            "id": "VIXCLS",
+            "imp": 1,
+            "corr250": 0.343,
+            "corr60": 0.458
+          }
+        ]
+      },
+      {
+        "id": "usd",
+        "name": "美元",
+        "group": "指標",
+        "last_date": "2026-11-02",
+        "score": -0.2,
+        "label": "中性",
+        "n_valid": 5,
+        "contrib": [
+          {
+            "id": "DTWEXBGS",
+            "imp": 1,
+            "corr250": 0.711,
+            "corr60": 0.744
+          },
+          {
+            "id": "DFII10",
+            "imp": -1,
+            "corr250": 0.36,
+            "corr60": 0.425
+          },
+          {
+            "id": "DGS2",
+            "imp": -1,
+            "corr250": 0.434,
+            "corr60": 0.415
+          },
+          {
+            "id": "T10YIE",
+            "imp": -1,
+            "corr250": 0.152,
+            "corr60": 0.028
+          },
+          {
+            "id": "VIXCLS",
+            "imp": 1,
+            "corr250": 0.266,
+            "corr60": 0.191
+          }
+        ]
+      },
+      {
+        "id": "usdtwd",
+        "name": "美元／新台幣",
+        "group": "匯率",
+        "last_date": "2026-11-03",
+        "score": 1.0,
+        "label": "偏多",
+        "n_valid": 1,
+        "contrib": [
+          {
+            "id": "DTWEXBGS",
+            "imp": 1,
+            "corr250": 0.216,
+            "corr60": 0.14
+          },
+          {
+            "id": "DFII10",
+            "imp": 0,
+            "corr250": 0.003,
+            "corr60": -0.126
+          },
+          {
+            "id": "DGS2",
+            "imp": 0,
+            "corr250": 0.007,
+            "corr60": -0.105
+          },
+          {
+            "id": "T10YIE",
+            "imp": 0,
+            "corr250": -0.052,
+            "corr60": -0.263
+          },
+          {
+            "id": "VIXCLS",
+            "imp": 0,
+            "corr250": 0.111,
+            "corr60": 0.258
+          }
+        ]
+      },
+      {
+        "id": "eurusd",
+        "name": "歐元／美元",
+        "group": "匯率",
+        "last_date": "2026-11-03",
+        "score": 0.33,
+        "label": "中性",
+        "n_valid": 3,
+        "contrib": [
+          {
+            "id": "DTWEXBGS",
+            "imp": -1,
+            "corr250": -0.497,
+            "corr60": -0.653
+          },
+          {
+            "id": "DFII10",
+            "imp": 1,
+            "corr250": -0.256,
+            "corr60": -0.418
+          },
+          {
+            "id": "DGS2",
+            "imp": 1,
+            "corr250": -0.28,
+            "corr60": -0.338
+          },
+          {
+            "id": "T10YIE",
+            "imp": 0,
+            "corr250": 0.048,
+            "corr60": 0.163
+          },
+          {
+            "id": "VIXCLS",
+            "imp": 0,
+            "corr250": -0.056,
+            "corr60": -0.052
+          }
+        ]
+      },
+      {
+        "id": "usdjpy",
+        "name": "美元／日圓",
+        "group": "匯率",
+        "last_date": "2026-11-03",
+        "score": -0.33,
+        "label": "中性",
+        "n_valid": 3,
+        "contrib": [
+          {
+            "id": "DTWEXBGS",
+            "imp": 1,
+            "corr250": 0.358,
+            "corr60": 0.424
+          },
+          {
+            "id": "DFII10",
+            "imp": -1,
+            "corr250": 0.155,
+            "corr60": 0.266
+          },
+          {
+            "id": "DGS2",
+            "imp": -1,
+            "corr250": 0.182,
+            "corr60": 0.256
+          },
+          {
+            "id": "T10YIE",
+            "imp": 0,
+            "corr250": 0.053,
+            "corr60": 0.06
+          },
+          {
+            "id": "VIXCLS",
+            "imp": 0,
+            "corr250": 0.036,
+            "corr60": 0.229
+          }
+        ]
+      },
+      {
+        "id": "XAUUSD",
+        "name": "XAUUSD（MT5）",
+        "group": "商品",
+        "last_date": "2026-10-26",
+        "score": 0.0,
+        "label": "中性",
+        "n_valid": 4,
+        "contrib": [
+          {
+            "id": "DTWEXBGS",
+            "imp": -1,
+            "corr250": -0.432,
+            "corr60": -0.408
+          },
+          {
+            "id": "DFII10",
+            "imp": 1,
+            "corr250": -0.212,
+            "corr60": -0.235
+          },
+          {
+            "id": "DGS2",
+            "imp": 1,
+            "corr250": -0.27,
+            "corr60": -0.319
+          },
+          {
+            "id": "T10YIE",
+            "imp": 0,
+            "corr250": -0.054,
+            "corr60": -0.116
+          },
+          {
+            "id": "VIXCLS",
+            "imp": -1,
+            "corr250": -0.332,
+            "corr60": -0.502
+          }
+        ]
+      },
+      {
+        "id": "GBPUSD",
+        "name": "GBPUSD（MT5）",
+        "group": "匯率",
+        "last_date": "2026-10-26",
+        "score": 0.0,
+        "label": "中性",
+        "n_valid": 4,
+        "contrib": [
+          {
+            "id": "DTWEXBGS",
+            "imp": -1,
+            "corr250": -0.616,
+            "corr60": -0.724
+          },
+          {
+            "id": "DFII10",
+            "imp": 1,
+            "corr250": -0.293,
+            "corr60": -0.326
+          },
+          {
+            "id": "DGS2",
+            "imp": 1,
+            "corr250": -0.328,
+            "corr60": -0.259
+          },
+          {
+            "id": "T10YIE",
+            "imp": 0,
+            "corr250": -0.068,
+            "corr60": 0.038
+          },
+          {
+            "id": "VIXCLS",
+            "imp": -1,
+            "corr250": -0.295,
+            "corr60": -0.172
+          }
+        ]
+      }
+    ],
+    "note": "規則式（非預測）：因子 20 日趨勢 × 近 250 日實測相關方向；相關絕對值低於 0.15 的因子不計分。"
+  }
+}
