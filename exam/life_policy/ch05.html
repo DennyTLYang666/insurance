@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第五章 保險業務員：登錄、招攬行為與懲處（保險業務員管理規則）</title><style>:root{--bg:#f7f6f2;--card:#fff;--ink:#222;--sub:#666;--line:#e3e0d8;--brand:#1f5f8b;--brand2:#e8f1f7;--ok:#2e7d32;--okbg:#e8f5e9;--bad:#b3261e;--badbg:#fdecea;--warn:#8a5a00;--warnbg:#fff4de}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 "Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+a{color:var(--brand)}
+header{background:var(--brand);color:#fff;padding:12px 16px 14px}
+header a{color:#fff;text-decoration:none;font-size:14px;opacity:.9}
+header h1{margin:4px 0 0;font-size:20px;line-height:1.4}
+header p{margin:6px 0 0;font-size:14px;opacity:.95}
+.wrap{max-width:900px;margin:0 auto;padding:0 12px 60px}
+.banner{background:var(--warnbg);color:var(--warn);border:1px solid #f0d9a8;border-radius:8px;padding:10px 12px;margin:12px 0;font-size:14px}
+.banner b{margin-right:4px}
+nav{position:sticky;top:0;background:var(--bg);z-index:5;display:flex;gap:6px;padding:10px 0;overflow-x:auto;border-bottom:1px solid var(--line)}
+nav button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:15px;cursor:pointer;color:var(--ink)}
+nav button[aria-selected="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+section{display:none;padding-top:14px}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 12px}
+.card h3{margin:0 0 6px;font-size:17px}
+.no{display:inline-block;background:var(--brand);color:#fff;border-radius:6px;padding:0 8px;margin-right:8px;font-size:14px}
+.lab{display:inline-block;font-size:12px;border-radius:4px;padding:0 6px;margin-right:6px;vertical-align:1px}
+.lab.fact{background:#e3f2e5;color:#1b5e20}.lab.my{background:#e8eaf6;color:#283593}.lab.hint{background:var(--warnbg);color:var(--warn)}
+.mn{background:var(--brand2);border-radius:8px;padding:8px 10px;margin:8px 0}
+details{margin:8px 0}details summary{cursor:pointer;color:var(--brand);font-size:15px}
+.off{border-left:3px solid var(--brand);padding:2px 0 2px 10px;margin:8px 0;font-size:15px;color:#333}.off p{margin:4px 0}
+table{border-collapse:collapse;width:100%;font-size:15px;background:#fff}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}th{background:var(--brand2)}
+.tw{overflow-x:auto;margin-bottom:16px}
+.fc{min-height:210px;display:flex;flex-direction:column;justify-content:center;text-align:center;cursor:pointer;user-select:none}
+.fc .q{font-size:19px;font-weight:600}.fc .a{font-size:16px;text-align:left;margin-top:8px}.fc small{color:var(--sub)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.btn{border:1px solid var(--brand);background:#fff;color:var(--brand);border-radius:8px;padding:9px 16px;font-size:16px;cursor:pointer}
+.btn.pri{background:var(--brand);color:#fff}.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}.btn.bad{background:var(--bad);border-color:var(--bad);color:#fff}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:6px 0}.bar>i{display:block;height:100%;background:var(--ok)}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 12px;margin:6px 0;font-size:16px;cursor:pointer}
+.opt.right{background:var(--okbg);border-color:var(--ok)}.opt.wrong{background:var(--badbg);border-color:var(--bad)}
+.why{display:none;background:var(--brand2);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:15px}
+.stat{color:var(--sub);font-size:14px}
+footer{color:var(--sub);font-size:13px;margin-top:24px}
+.pager{display:flex;justify-content:space-between;gap:8px;margin-top:18px}.pager a{flex:1;text-align:center;border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px;text-decoration:none;font-size:14px}
+.hl{animation:hl 1.6s ease-out}@keyframes hl{0%{box-shadow:0 0 0 4px #ffd54f}100%{box-shadow:0 0 0 0 transparent}}
+mark{background:#fff0a8;padding:0 1px}
+.search{display:flex;gap:8px;margin:14px 0 6px}.search input{flex:1;font-size:17px;padding:10px 12px;border:1px solid var(--line);border-radius:10px}
+.res{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0;display:block;text-decoration:none;color:var(--ink)}
+.res small{color:var(--sub)}.res b{color:var(--brand)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.ch{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-decoration:none;color:var(--ink);display:block}
+.ch:hover{border-color:var(--brand)}.ch h3{margin:0 0 4px;font-size:16px;color:var(--brand)}.ch p{margin:4px 0;font-size:14px}
+.chip{display:inline-block;background:var(--brand2);color:#134;border-radius:999px;padding:0 9px;margin:2px 3px 2px 0;font-size:12.5px}
+.filter{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.filter button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 12px;font-size:14px;cursor:pointer}.filter button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+h2{font-size:18px;margin:24px 0 8px}
+
+.pw{margin:6px 0}.pw p{margin:4px 0}.pl{margin:6px 0 6px 0;padding-left:20px}.pl li{margin:5px 0;line-height:1.7}.pl ul{margin:4px 0;padding-left:18px;list-style:disc}.pl ul li{margin:2px 0}.pl>li>b{color:#283593}
+table.ft{font-size:14px;table-layout:fixed}table.ft td:first-child,table.ft th:first-child{font-weight:600;width:34%;word-break:break-all}table.ft td,table.ft th{word-break:break-word;padding:6px 7px}table.ft th{width:auto}
+</style></head>
+<body>
+<header><div class="wrap" style="padding:0"><a href="index.html">← 首頁（搜尋、總複習）</a><h1 id="h1"></h1><p id="intro"></p></div></header>
+<div class="wrap">
+<nav role="tablist" id="nav"></nav>
+<section id="s-read"></section><section id="s-table"></section><section id="s-cards"></section><section id="s-quiz"></section>
+<div class="pager"><a id="prev" href="#"></a><a id="next" href="#"></a></div>
+<footer id="foot"></footer>
+</div>
+<script id="data" type="application/json">{"chapter": "第五章", "title": "保險業務員：登錄、招攬行為與懲處（保險業務員管理規則）", "laws": [{"pcode": "G0390016", "name": "保險業務員管理規則", "amended": "民國114年1月2日", "url": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0390016", "source": "法務部全國法規資料庫", "retrieved": "2026-11-03", "mirrorDate": "20250102"}, {"pcode": "G0390002", "name": "保險法（第177條）", "amended": "民國114年6月18日", "url": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0390002", "source": "法務部全國法規資料庫", "retrieved": "2026-11-03", "mirrorDate": "20250618"}], "alerts": [{"t": "這章和你的日常工作最直接相關", "d": "第15條（親晤要保人及被保險人、要保書親簽）、第16條（文宣要標明所屬公司且要與核准內容相符）、第19條（17種停止招攬行為）都是實務上最常被檢查的地方。"}, {"t": "後果的提醒（風險）", "d": "違反第19條的處分是『一年以下停止招攬行為』；最近5年內停止招攬期間累計達2年，所屬公司『應』撤銷登錄。涉及犯罪嫌疑的還要移送偵辦。"}, {"t": "本章是行政命令", "d": "業務員管理規則是主管機關依保險法第177條授權訂定的命令，不是法律。它在民國114年1月2日修正過第19條。"}], "clauses": [{"no": "保177", "title": "授權訂定業務員管理規則", "plain": "保險業務員的資格取得、登錄、撤銷或廢止登錄、教育訓練、懲處及其他應遵行事項的管理規則，由主管機關訂定。", "mnemonic": "管理規則的母法依據：保險法第177條。", "official": ["保險業務員之資格取得、登錄、撤銷或廢止登錄、教育訓練、懲處及其他應遵行事項之管理規則，由主管機關定之。"], "has_official": true}, {"no": "規3", "title": "沒登錄、沒領登錄證，不能替所屬公司招攬", "plain": "業務員沒有依規則登錄、領到登錄證，不能替所屬公司招攬保險。業務員與所屬公司簽的勞務契約，依民法及相關法令辦理。", "mnemonic": "先登錄、領證，才能招攬。", "official": ["業務員非依本規則辦理登錄，領得登錄證，不得為其所屬公司招攬保險。", "業務員與所屬公司簽訂之勞務契約，依民法及相關法令規定辦理。"], "has_official": true}, {"no": "規5", "title": "取得業務員資格的條件", "plain": "要成年，具有高中（職）以上學校畢業或同等學歷，並且符合下列條件之一：參加各有關公會舉辦的業務員資格測驗合格；或曾依本規則登錄且沒有被撤銷登錄處分。資格測驗要依各有關公會的測驗要點報名。", "mnemonic": "成年＋高中職以上＋測驗合格（或曾登錄且未被撤銷）。", "tip": "曾因第11-1條、第13條、第19條第3項被撤銷登錄的人，要重新參加資格測驗合格才能再登錄（第6條）。", "official": ["保險業務員資格之取得，應成年，具有高中（職）以上學校畢業或同等學歷，並應符合下列條件之一：", "一、參加各有關公會舉辦之業務員資格測驗合格。", "二、曾依本規則辦理登錄且未受第十一條之一、第十三條或第十九條第三項撤銷登錄處分者。", "參加前項第一款資格測驗者，應依各有關公會所訂之業務員資格測驗要點規定報名。", "各有關公會得考量保險市場發展情形，於報經主管機關核准後，舉辦單一保險種類之業務員資格測驗。", "前二項業務員資格測驗要點由各有關公會訂定報主管機關備查。", "中華民國九十九年十二月三十一日前已依本規則辦理登錄且未受第十一條之一、第十三條或第十九條第三項撤銷登錄處分者，不受第一項有關學歷之限制。"], "has_official": true}, {"no": "規6", "title": "登錄程序；招攬時要出示登錄證、告知授權範圍", "plain": "具備資格的人填登錄申請書，由所屬公司向各有關公會辦理登錄。公會審查合格後通知所屬公司製發登錄證，所屬公司每月15日前，把上月製發登錄證的情形報各有關公會彙總。業務員招攬保險時，要出示登錄證並告知授權範圍；主管機關另有規定的不在此限。", "mnemonic": "公司代為登錄；招攬時出示登錄證、說明授權範圍。", "official": ["具備前條第一項資格者，得填妥登錄申請書，由所屬公司為其向各有關公會辦理登錄。", "各有關公會應將審查合格之業務員通知其所屬公司，以憑製發登錄證，所屬公司並應於每月十五日前，將上月製發登錄證情形報各有關公會彙總。", "登錄申請書、登錄程序及登錄證之格式與應記載事項，由各有關公會定之。", "已領有保險代理人、保險經紀人執業證照者，得向主管機關繳銷執業證照後，檢附繳銷執業證照證明，由其所屬公司為其辦理登錄。", "曾受第十一條之一、第十三條或第十九條第三項撤銷業務員登錄處分者，應重新參加前條第一項第一款所定資格測驗合格，始得辦理登錄。", "業務員於招攬保險時，應出示登錄證，並告知授權範圍。但主管機關另有規定者，不在此限。"], "has_official": true}, {"no": "規7", "title": "不予登錄或應註銷登錄的情形", "plain": "有下列情形之一，應不予登錄；已登錄者所屬公司要通知公會註銷登錄。", "facts": {"head": ["款", "情形"], "rows": [["一", "無行為能力、限制行為能力或受輔助宣告尚未撤銷"], ["二", "申請登錄文件有虛偽記載"], ["三", "曾犯組織犯罪防制條例之罪，有罪判決確定，尚未執行完畢，或執行完畢、緩刑期滿或赦免後尚未逾5年"], ["四", "曾犯偽造文書、侵占、詐欺、背信罪，宣告有期徒刑以上之刑確定，尚未執行完畢，或執行完畢、緩刑期滿或赦免後尚未逾3年"], ["五", "違反保險法、銀行法、洗錢防制法等金融管理法律，受刑之宣告確定，尚未執行完畢，或執行完畢、緩刑期滿或赦免後尚未逾3年"], ["六", "受破產宣告，尚未復權"], ["七", "有重大喪失債信情事尚未了結，或了結後尚未逾3年"], ["八", "依第19條規定，在受經營同類保險業務之公司停止招攬行為期限內"], ["九", "已登錄為其他經營同類保險業務之公司的業務員未註銷，而重複登錄"], ["十", "已領得保險代理人或保險經紀人執業證照，或擔任其他代理人、經紀人、公證人公司負責人"], ["十一", "最近3年有事實證明從事或涉及其他不誠信或不正當活動，顯示不適合擔任業務員"]]}, "mnemonic": "組織犯罪5年；偽造侵占詐欺背信、違反金融法令各3年；債信了結後3年。", "tip": "『5年』只有第三款（組織犯罪防制條例）；其他犯罪與債信都是3年。", "official": ["申請登錄之業務員有下列情事之一，應不予登錄；已登錄者，所屬公司應通知各有關公會註銷登錄：", "一、無行為能力、限制行為能力或受輔助宣告尚未撤銷者。", "二、申請登錄之文件有虛偽之記載者。", "三、曾犯組織犯罪防制條例規定之罪，經有罪判決確定，尚未執行完畢，或執行完畢、緩刑期滿或赦免後尚未逾五年者。", "四、曾犯偽造文書、侵占、詐欺、背信罪，經宣告有期徒刑以上之刑確定，尚未執行完畢，或執行完畢、緩刑期滿或赦免後尚未逾三年者。", "五、違反保險法、銀行法、金融控股公司法、信託業法、票券金融管理法、金融資產證券化條例、不動產證券化條例、證券交易法、期貨交易法、證券投資信託及顧問法、管理外匯條例、信用合作社法、洗錢防制法或其他金融管理法律，受刑之宣告確定，尚未執行完畢，或執行完畢、緩刑期滿或赦免後尚未逾三年者。", "六、受破產之宣告，尚未復權者。", "七、有重大喪失債信情事尚未了結或了結後尚未逾三年者。", "八、依第十九條規定在受經營同類保險業務之保險業、保險代理人公司、保險經紀人公司或銀行停止招攬行為期限內者。", "九、已登錄為其他經營同類保險業務之保險業、保險代理人公司、保險經紀人公司或銀行之業務員未予註銷，而重複登錄者。", "十、已領得保險代理人或保險經紀人執業證照，或充任其他保險代理人公司、保險經紀人公司或保險公證人公司之負責人者。", "十一、最近三年有事實證明從事或涉及其他不誠信或不正當之活動，顯示其不適合擔任業務員者。"], "has_official": true}, {"no": "規9", "title": "登錄證有效期間", "plain": "業務員登錄證的有效期間是5年，要在期滿前辦好換發登錄證手續；沒辦好前不能招攬保險。", "mnemonic": "登錄證五年，期滿前換證。", "official": ["業務員登錄證有效期間為五年，應於期滿前辦妥換發登錄證手續，未辦妥前不得為保險之招攬。", "業務員換證作業規範，由各有關公會訂定報主管機關備查。"], "has_official": true}, {"no": "規12", "title": "每年參加教育訓練", "plain": "業務員登錄後，每年都要參加所屬公司辦理的教育訓練。各有關公會要訂定教育訓練要點報主管機關備查，並依業務員招攬的保險種類訂定課程。", "mnemonic": "每年教育訓練。", "official": ["業務員應自登錄後每年參加所屬公司辦理之教育訓練。", "各有關公會應訂定教育訓練要點，並報主管機關備查後通知所屬會員公司辦理。", "前項教育訓練要點應依業務員招攬保險種類訂定相關課程。"], "has_official": true}, {"no": "規13", "title": "不參加或成績不合格的後果", "plain": "業務員不參加教育訓練的，所屬公司要撤銷其業務員登錄。參加教育訓練成績不合格，一年內再補訓成績仍不合格的，也一樣。", "mnemonic": "不參加：撤銷；不合格補訓一年內再不合格：撤銷。", "official": ["業務員不參加教育訓練者，所屬公司應撤銷其業務員登錄。", "參加教育訓練成績不合格，於一年內再行補訓成績仍不合格者，亦同。"], "has_official": true}, {"no": "規14", "title": "專屬招攬與例外的雙登錄", "plain": "業務員登錄後，應專為所屬公司招攬保險。保險業、保險代理人公司的業務員取得相關資格，可以登錄於另一家『非經營同類保險業務』的保險業或代理人公司，並以一家為限。經紀人公司的業務員，同樣可登錄於另一家非經營同類保險業務的經紀人公司，以一家為限。轉任他公司時要重新登錄。", "mnemonic": "原則專屬一家；例外：另一家要是『非同類』，且以一家為限。", "tip": "同類＝同為財產保險或同為人身保險（第2條第5款）。所以同一個人身保險業務員不能再登錄另一家人身保險公司。", "official": ["業務員經登錄後，應專為其所屬公司從事保險之招攬。", "保險業、保險代理人公司之業務員，取得相關資格，得登錄於另一家非經營同類保險業務之保險業或保險代理人公司，並以一家為限。", "保險經紀人公司之業務員取得相關資格，得登錄於另一家非經營同類保險業務之保險經紀人公司，並以一家為限。", "業務員轉任他公司時，應依第六條規定重新登錄；異動後再任原所屬公司之業務員者，亦同。"], "has_official": true}, {"no": "規15", "title": "招攬行為的界線與所屬公司的連帶責任", "plain": "業務員經授權從事的招攬行為，視為所屬公司授權範圍內的行為，公司要嚴加管理，並就招攬行為造成的損害依法負連帶責任。招攬行為指：解釋保險商品內容與保單條款；說明填寫要保書的注意事項；轉送要保文件及保險單；其他經公司授權的招攬行為。從事這些行為，要取得要保人及被保險人親簽的投保相關文件；招攬人身保險商品，要親晤要保人及被保險人；業務員要在所招攬的要保書上親自簽名並記載登錄字號（主管機關另有規定者除外）。", "facts": {"head": ["要求", "內容"], "rows": [["授權", "要以書面為之，並載明於登錄證上"], ["親簽", "取得要保人及被保險人親簽的投保相關文件"], ["親晤", "招攬涉及人身保險的商品，要親晤要保人及被保險人（主管機關另有規定者除外）"], ["要保書", "業務員要在要保書上親自簽名並記載登錄字號"], ["責任", "所屬公司就招攬行為所生損害負連帶責任"]]}, "mnemonic": "書面授權、親簽、人身險要親晤、要保書業務員簽名加登錄字號。", "official": ["業務員經授權從事保險招攬之行為，視為該所屬公司授權範圍之行為，所屬公司對其登錄之業務員應嚴加管理並就其業務員招攬行為所生之損害依法負連帶責任。業務員同時登錄為財產保險及人身保險業務員者，其分別登錄之所屬公司應依法負連帶責任。", "前項授權，應以書面為之，並載明於其登錄證上。", "第一項所稱保險招攬之行為，係指業務員從事下列之行為：", "一、解釋保險商品內容及保單條款。", "二、說明填寫要保書注意事項。", "三、轉送要保文件及保險單。", "四、其他經所屬公司授權從事保險招攬之行為。", "業務員從事前項所稱保險招攬之行為，應取得要保人及被保險人親簽之投保相關文件；業務員招攬涉及人身保險之商品者，應親晤要保人及被保險人。但主管機關另有規定者不在此限。", "業務員應於所招攬之要保書上親自簽名並記載其登錄字號。但主管機關另有規定者不在此限。"], "has_official": true}, {"no": "規16", "title": "文宣、廣告、建議書的要求", "plain": "招攬用的文宣、廣告、簡介、商品說明書、建議書等文書，要標明所屬公司名稱（所屬公司是代理人、經紀人或銀行時，還要標明往來保險業名稱），不能假借其他名義招攬。內容要與保險業報主管機關審查通過的保險單條款、費率、要保書等相符，並經所屬公司核可，也要符合資訊揭露規範。代理人、經紀人公司或銀行的業務員使用的文書，要經往來保險業提供或同意。", "mnemonic": "標明所屬公司；內容與核准版相符；公司核可。", "official": ["業務員從事保險招攬所用之文宣、廣告、簡介、商品說明書及建議書等文書，應標明所屬公司之名稱，所屬公司為代理人、經紀人或銀行者並應標明往來保險業名稱，並不得假借其他名義、方式為保險之招攬。", "前項文宣、廣告、簡介、商品說明書及建議書等文書之內容，應與保險業報經主管機關審查通過之保險單條款、費率及要保書等文件相符，且經所屬公司核可同意使用，其內容並應符合主管機關訂定之資訊揭露規範。", "保險代理人、經紀人公司或銀行所屬業務員使用之文宣、廣告、簡介、商品說明書及建議書等文書應經其往來保險業提供或同意方可使用。"], "has_official": true}, {"no": "規19", "title": "17種不得為的招攬行為與處分", "plain": "業務員有下列17種情形之一，除了有犯罪嫌疑要依法移送偵辦外，要依情節輕重，處以『一年以下停止招攬行為』。最近5年內受停止招攬行為處分期間累計達2年的，所屬公司應撤銷其業務員登錄。", "facts": {"head": ["款", "不得為的行為（精簡）"], "rows": [["一", "就影響要保人或被保險人權益的事項為不實說明或不為說明"], ["二", "唆使要保人或被保險人不告知或不實告知，或明知而故意隱匿"], ["三", "妨害要保人或被保險人告知"], ["四", "以錯價、放佣或其他不當折減保險費的方法招攬"], ["五", "以誇大不實的宣傳、廣告或其他不當方法招攬"], ["六", "未經所屬公司同意而招聘人員"], ["七", "代要保人或被保險人簽章，或未經同意或授權填寫保險契約文件"], ["八", "以不當方法或不實說明慫恿要保人終止有效契約，另投保新契約致使要保人受損害"], ["九", "未經授權代收保險費，或經授權代收卻挪用、侵占，或未依規定交付保險業開發的正式收據"], ["十", "以登錄證供他人使用或使用他人登錄證"], ["十一", "招攬或推介未經主管機關核准或備查的保險業務或其他金融商品"], ["十二", "為未經主管機關核准經營保險業務的法人或個人招攬保險"], ["十三", "以誇大不實的方式比較不同保險契約內容，或與銀行存款及其他金融商品作不當比較"], ["十四", "散播不實言論或文宣，擾亂金融秩序"], ["十五", "挪用款項，或代要保人保管保險單及印鑑"], ["十六", "違反第9條、第11條第2項、第14條第1項、第15條第4項、第5項或第16條"], ["十七", "其他利用業務員身分從事業務上不當行為"]]}, "mnemonic": "不實說明、唆使不告知、錯價放佣、代簽章、慫恿換約、挪用保費、借證、保管印鑑——都會被停止招攬一年以下。", "tip": "處分上限是『一年以下停止招攬』；『5年內累計達2年』就會被撤銷登錄。涉及犯罪嫌疑的，所屬公司還要依法移送偵辦。", "official": ["業務員有下列各款情事之一者，除有犯罪嫌疑，其行為時之所屬公司應依法移送偵辦外，並應按其情節輕重，予以一年以下停止招攬行為之處分：", "一、就影響要保人或被保險人權益之事項為不實之說明或不為說明。", "二、唆使要保人或被保險人對保險人為不告知或不實之告知；或明知要保人或被保險人不告知或為不實之告知而故意隱匿。", "三、妨害要保人或被保險人為告知。", "四、對要保人或被保險人以錯價、放佣或其他不當折減保險費之方法為招攬。", "五、對要保人、被保險人或第三人以誇大不實之宣傳、廣告或其他不當之方法為招攬。", "六、未經所屬公司同意而招聘人員。", "七、代要保人或被保險人簽章、或未經其同意或授權填寫有關保險契約文件。", "八、以威脅、利誘、隱匿、欺騙等不當之方法或不實之說明慫恿要保人終止有效契約而投保新契約致使要保人受損害。", "九、未經授權而代收保險費或經授權代收保險費而挪用、侵占所收保險費或代收保險費未依規定交付保險業開發之正式收據。", "十、以登錄證供他人使用或使用他人登錄證。", "十一、招攬或推介未經主管機關核准或備查之保險業務或其他金融商品。", "十二、為未經主管機關核准經營保險業務之法人或個人招攬保險。", "十三、以誇大不實之方式就不同保險契約內容，或與銀行存款及其他金融商品作不當之比較。", "十四、散播不實言論或文宣，擾亂金融秩序。", "十五、挪用款項或代要保人保管保險單及印鑑。", "十六、違反第九條、第十一條第二項、第十四條第一項、第十五條第四項、第五項或第十六條規定。", "十七、其他利用其業務員身分從事業務上不當行為。", "前項業務員行為時之所屬公司已解散或註銷公司執業證照者，由現行所登錄之所屬公司予以處分。", "最近五年內受停止招攬行為處分期間累計達二年者，所屬公司應予撤銷其業務員登錄處分。"], "has_official": true}, {"no": "規19-1", "title": "不服處分的救濟：申復與覆核", "plain": "業務員不服受停止招攬登錄、撤銷登錄處分，可以在處分通知到達之日起1個月內，用書面具明理由向原處分公司申復，以一次為限；原處分公司要在申復書面資料到達後1個月內，把復查結果用書面通知。對復查結果有異議的，可以在收到結果之日起3個月內，向各有關公會的申訴委員會申請覆核，也以一次為限。申訴委員會的成員要包含業務員代表。", "facts": {"head": ["階段", "向誰", "期限"], "rows": [["申復（一次為限）", "原處分公司", "處分通知到達之日起1個月內；公司在申復資料到達後1個月內書面回覆"], ["覆核（一次為限）", "各有關公會的申訴委員會", "收到復查結果之日起3個月內"]]}, "mnemonic": "申復一個月，覆核三個月。", "official": ["業務員不服受停止招攬登錄、撤銷登錄處分者，得於受處分之通知到達之日起一個月內，以書面具明理由向原處分公司提出申復，並以一次為限，原處分公司並應於申復書面資料到達一個月內將復查結果以書面通知業務員。", "業務員對前項復查結果有異議者，得於收到復查結果之日起三個月內以書面具明理由向各有關公會之申訴委員會申請覆核，並以一次為限。", "前項申訴委員會之組織，其成員應包含業務員代表，並由各有關公會訂定後報主管機關備查。"], "has_official": true}], "tables": [{"title": "數字速記：業務員管理規則", "head": ["條", "數字", "什麼事"], "rows": [["9", "5年", "登錄證有效期間"], ["10", "5日內", "業務員有異動，所屬公司應在異動後5日內向公會申報（第10條，本頁未收錄原文）"], ["7", "5年、3年", "組織犯罪防制條例之罪：尚未逾5年；偽造文書等、違反金融管理法律、債信了結後：尚未逾3年"], ["12", "每年", "教育訓練"], ["13", "1年內", "成績不合格，一年內補訓仍不合格，撤銷登錄"], ["19", "1年以下", "停止招攬行為"], ["19", "5年內累計2年", "所屬公司應撤銷業務員登錄"], ["19-1", "1個月、3個月", "申復、覆核"]]}, {"title": "停止招攬 vs 撤銷登錄：什麼情形會被哪種處分", "head": ["處分", "條", "情形"], "rows": [["停止招攬（一年以下）", "19", "17種不得為的行為"], ["撤銷登錄", "19 III", "最近5年內受停止招攬處分期間累計達2年"], ["撤銷登錄", "13", "不參加教育訓練；成績不合格且一年內補訓仍不合格"], ["撤銷登錄", "11-1", "參加資格測驗或特別測驗時發生重大違規、舞弊（本頁未收錄原文）"], ["不予登錄／註銷", "7", "限制行為能力、虛偽文件、特定犯罪、破產、債信等11種情形"]]}], "cards": [{"id": 1, "ref": "規3", "front": "沒登錄、沒領登錄證，能不能替所屬公司招攬保險？", "back": "不能。"}, {"id": 2, "ref": "規5", "front": "取得業務員資格的學歷條件？", "back": "成年，高中（職）以上學校畢業或同等學歷，並符合測驗合格等條件之一。"}, {"id": 3, "ref": "規6", "front": "招攬保險時業務員要先做什麼？", "back": "出示登錄證並告知授權範圍（主管機關另有規定者除外）。"}, {"id": 4, "ref": "規9", "front": "登錄證有效期間？", "back": "5年，期滿前要辦換發，未辦妥前不得招攬。"}, {"id": 5, "ref": "規13", "front": "業務員不參加教育訓練，會怎樣？", "back": "所屬公司要撤銷其業務員登錄。"}, {"id": 6, "ref": "規14", "front": "人身保險業務員可不可以另外登錄另一家人身保險公司？", "back": "不可以。可另外登錄的只限『非經營同類保險業務』的公司，且以一家為限。"}, {"id": 7, "ref": "規15", "front": "招攬人身保險商品，要親晤誰？", "back": "要保人及被保險人（主管機關另有規定者除外）。"}, {"id": 8, "ref": "規15", "front": "業務員在要保書上要做什麼？", "back": "親自簽名並記載登錄字號。"}, {"id": 9, "ref": "規16", "front": "文宣、建議書的內容要符合什麼？", "back": "與保險業報主管機關審查通過的保單條款、費率、要保書相符，且經所屬公司核可，並符合資訊揭露規範。"}, {"id": 10, "ref": "規19", "front": "第19條的處分是什麼？", "back": "依情節輕重，一年以下停止招攬行為；有犯罪嫌疑的要移送偵辦。"}, {"id": 11, "ref": "規19", "front": "最近5年內停止招攬期間累計達多久，要撤銷登錄？", "back": "累計達2年，所屬公司應撤銷其業務員登錄。"}, {"id": 12, "ref": "規19", "front": "『代要保人簽章』屬於第19條哪類行為？", "back": "第7款：代要保人或被保險人簽章，或未經同意或授權填寫有關保險契約文件。"}, {"id": 13, "ref": "規19-1", "front": "業務員不服處分，申復和覆核的期限？", "back": "申復：處分通知到達日起1個月內；覆核：收到復查結果日起3個月內。各以一次為限。"}, {"id": 14, "ref": "規7", "front": "第7條中，哪一款的犯罪期限是『5年』？", "back": "第3款：組織犯罪防制條例之罪。其他犯罪與債信都是3年。"}], "scenarios": [{"ref": "規19", "q": "業務員為了加快作業，代客戶在要保書上簽名。依管理規則第19條，這屬於？", "opts": ["不構成違規", "停止招攬行為處分的情形（第7款）", "只需口頭警告", "應註銷登錄，但不需處分"], "ans": 1, "why": "第19條第7款：代要保人或被保險人簽章，或未經其同意或授權填寫有關保險契約文件，屬於應處一年以下停止招攬行為的情形。"}, {"ref": "規19", "q": "業務員最近5年內，受停止招攬行為處分的期間累計達2年。所屬公司應？", "opts": ["給予口頭勸導", "撤銷其業務員登錄", "再停止招攬一年", "不得處分"], "ans": 1, "why": "第19條第3項：最近5年內受停止招攬行為處分期間累計達2年者，所屬公司應予撤銷其業務員登錄處分。"}, {"ref": "規15", "q": "招攬涉及人身保險的商品，業務員原則上要怎麼做？", "opts": ["只要電話確認即可", "親晤要保人及被保險人", "只要親晤要保人", "委託其他業務員代為面談"], "ans": 1, "why": "第15條第4項：業務員招攬涉及人身保險的商品，應親晤要保人及被保險人，主管機關另有規定者不在此限。"}, {"ref": "規14", "q": "甲是人身保險公司的業務員，想再登錄另一家人身保險公司。依第14條？", "opts": ["可以，不限家數", "可以，但以一家為限", "不可以，因為是同類保險業務", "須經要保人同意"], "ans": 2, "why": "第14條第2項：只能登錄於另一家『非經營同類保險業務』的公司，以一家為限。同為人身保險是同類（第2條第5款），所以不行。"}, {"ref": "規13", "q": "業務員教育訓練成績不合格，一年內再補訓成績仍不合格。依第13條？", "opts": ["繼續登錄", "所屬公司應撤銷其業務員登錄", "停止招攬一年", "罰款"], "ans": 1, "why": "第13條第2項：參加教育訓練成績不合格，於一年內再行補訓成績仍不合格者，也撤銷登錄。"}, {"ref": "規9", "q": "業務員登錄證的有效期間是？", "opts": ["1年", "3年", "5年", "10年"], "ans": 2, "why": "第9條：業務員登錄證有效期間為5年，應於期滿前辦妥換發。"}, {"ref": "規19-1", "q": "業務員不服撤銷登錄處分，第一步應在處分通知到達之日起多久內，向誰申復？", "opts": ["1個月內，向原處分公司", "3個月內，向公會", "1個月內，向主管機關", "6個月內，向法院"], "ans": 0, "why": "第19-1條第1項：處分通知到達之日起1個月內，以書面具明理由向原處分公司申復，以一次為限。對結果有異議再於3個月內向公會申訴委員會申請覆核。"}, {"ref": "規7", "q": "業務員曾犯組織犯罪防制條例之罪，有罪判決確定，執行完畢後尚未逾幾年，不得登錄？", "opts": ["1年", "3年", "5年", "10年"], "ans": 2, "why": "第7條第3款：組織犯罪防制條例之罪，執行完畢、緩刑期滿或赦免後尚未逾5年。偽造文書、侵占、詐欺、背信罪（第4款）才是3年。"}], "chNo": "05", "summary": "業務員怎麼登錄、不能做什麼、做了會怎樣：登錄證5年、每年教育訓練、親晤要保人及被保險人、17種停止招攬行為，以及申復與覆核。", "scope": "收錄保險業務員管理規則第3、5、6、7、9、12、13、14、15、16、19、19-1條，及保險法第177條。未收錄第10、11、11-1、17、18、20條原文。", "nav": {"prev": {"file": "ch04.html", "label": "第4章 健康保險、傷害保險、年金保險（保險法第125至135-4條）"}, "next": {"file": "ch06.html", "label": "第6章 金融消費者保護法"}}}</script>
+<script>const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=t=>{t=String(t||'');const ss=t.split(/(?<=。)/).map(x=>x.trim()).filter(Boolean);if(t.length<=90||ss.length<2&&t.indexOf('；')<0)return '<p>'+esc(t)+'</p>';
+  const li=s=>{s=s.replace(/。$/,'');const m=s.match(/^([^：；]{1,40})：(.+)$/);if(m&&m[2].split('；').length>=3)return '<li><b>'+esc(m[1])+'</b><ul>'+m[2].split('；').map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></li>';
+    const parts=s.split('；');if(parts.length>=3)return '<li>'+parts.map(x=>esc(x)).join('<br>')+'</li>';return '<li>'+esc(s)+'</li>'};
+  return '<ul class="pl">'+ss.map(li).join('')+'</ul>'};
+const factsT=f=>f?'<div class="tw"><table class="ft"><thead><tr>'+f.head.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+f.rows.map(r=>'<tr>'+r.map(x=>'<td>'+esc(x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>':'';
+const lab=x=>/^[保規]\d+(-\d+)?$/.test(x)?({'保':'保險法','規':'管理規則'}[x[0]])+'第'+x.slice(1)+'條':/^[一二三四五六七八九十]+(之[一二三四五六七八九十]+)?$/.test(x)?'第'+x+'點':/^[0-9]+(-[0-9]+)?$/.test(x)?'第'+x+'條':x;
+const mem={};
+const store={get(k){try{const v=localStorage.getItem(k);return v===null?mem[k]:v}catch(e){return mem[k]}},set(k,v){mem[k]=v;try{localStorage.setItem(k,v)}catch(e){}}};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const BOXKEY='twlife_boxes_v2';
+let boxes={};try{boxes=JSON.parse(store.get(BOXKEY)||'{}')}catch(e){boxes={}}
+const saveBoxes=()=>store.set(BOXKEY,JSON.stringify(boxes));
+function Flash(root,getCards){
+  let queue=[],cur=null,flipped=false;
+  function build(){const cs=getCards();queue=shuffle(cs.filter(c=>(boxes[c.key]||0)<1)).sort((a,b)=>(boxes[a.key]||0)-(boxes[b.key]||0));flipped=false}
+  function render(){
+    const cs=getCards(),n=cs.length,done=cs.filter(c=>(boxes[c.key]||0)>=1).length;
+    let h='<div class="stat">已熟練 '+done+' / '+n+' 張（答對 1 次視為熟練，進度存在這個瀏覽器）</div><div class="bar"><i style="width:'+(n?done/n*100:0)+'%"></i></div>';
+    if(!n){root.innerHTML=h+'<div class="card"><p>沒有可用的閃卡。</p></div>';return}
+    if(!queue.length){root.innerHTML=h+'<div class="card"><h3>全部熟練了</h3><p>可以去做情境題，或重設後再來一輪。</p></div><div class="row"><button class="btn" data-a="reset">重設進度</button></div>';return}
+    cur=queue[0];
+    h+='<div class="card fc" tabindex="0" role="button" data-a="flip"><small>'+(cur.tag?esc(cur.tag)+'｜':'')+esc(lab(cur.ref))+'｜剩 '+queue.length+' 張</small><div class="q">'+esc(cur.front)+'</div>'+(flipped?'<div class="a"><span class="lab fact">答案</span>'+esc(cur.back)+'</div>':'<small>點一下翻面</small>')+'</div>';
+    if(flipped)h+='<div class="row"><button class="btn bad" data-a="no">還不熟</button><button class="btn ok" data-a="yes">會了</button></div>';
+    h+='<div class="row"><button class="btn" data-a="reset">重設進度</button></div>';
+    root.innerHTML=h;
+  }
+  root.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a;
+    if(a==='flip'){flipped=!flipped;render()}
+    else if(a==='reset'){if(confirm('確定要清除這些閃卡的進度？')){getCards().forEach(c=>delete boxes[c.key]);saveBoxes();build();render()}}
+    else if(cur&&(a==='yes'||a==='no')){const ok=a==='yes';boxes[cur.key]=ok?Math.min(1,(boxes[cur.key]||0)+1):0;saveBoxes();queue.shift();if(!ok||boxes[cur.key]<1)queue.splice(queue.length?Math.max(1,Math.min(queue.length,ok?6:3)):0,0,cur);flipped=false;render()}});
+  root.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.fc')){e.preventDefault();flipped=!flipped;render()}});
+  return {refresh(){build();render()}};
+}
+function Quiz(root,getItems,perRound){
+  let items=[],score=0,answered=0,done=false;
+  function draw(){
+    const perms=items.map(s=>shuffle(s.opts.map((_,k)=>k)));
+    root.innerHTML='<div class="stat" id="sc"></div>'+items.map((s,i)=>'<div class="card" data-i="'+i+'"><b>'+(i+1)+'. </b><span class="lab my">'+(s.tag?esc(s.tag)+' ':'')+esc(lab(s.ref))+'</span>'+esc(s.q)+perms[i].map((k,pos)=>'<button class="opt" data-o="'+k+'">'+String.fromCharCode(65+pos)+'. '+esc(s.opts[k])+'</button>').join('')+'<div class="why"></div></div>').join('')+'<div id="qend"></div>';
+    score=0;answered=0;upd();
+  }
+  function upd(){const el=$('#sc',root);if(el)el.textContent='已作答 '+answered+' / '+items.length+'，答對 '+score+' 題';
+    if(perRound&&answered===items.length&&items.length){$('#qend',root).innerHTML='<div class="card"><h3>這一組：'+score+' / '+items.length+'</h3></div><div class="row"><button class="btn pri" data-a="again">再來一組</button></div>'}}
+  function again(){const all=getItems();items=perRound?shuffle(all).slice(0,perRound):all;draw()}
+  root.addEventListener('click',e=>{
+    const ag=e.target.closest('[data-a="again"]');if(ag){again();window.scrollTo(0,root.offsetTop-60);return}
+    const b=e.target.closest('.opt');if(!b)return;const box=b.closest('.card');if(box.dataset.done)return;
+    const s=items[+box.dataset.i],j=+b.dataset.o;box.dataset.done=1;answered++;if(j===s.ans)score++;
+    let right='';$$('.opt',box).forEach((x,pos)=>{const k=+x.dataset.o;if(k===s.ans){x.classList.add('right');right=String.fromCharCode(65+pos)}else if(k===j)x.classList.add('wrong')});
+    const w=$('.why',box);w.style.display='block';w.innerHTML=(j===s.ans?'答對了。':'答錯了，正解是 '+right+'。')+esc(s.why);upd()});
+  return {refresh:again};
+}
+</script>
+<script>
+const D=JSON.parse(document.getElementById('data').textContent);
+const LAWS=D.laws;
+$('#h1').textContent=D.chapter+'｜'+D.title;
+$('#intro').textContent=D.summary||'';
+document.title=D.chapter+' '+D.title;
+$('#foot').innerHTML='官方來源：'+LAWS.map(L=>esc(L.name)+'（'+esc(L.amended)+(L.kind==='press'?'發布':'修正')+'）'+(L.note?'｜'+esc(L.note)+'｜':'')+'<a href="'+esc(L.url)+'" target="_blank" rel="noopener">'+esc(L.url)+'</a>').join('<br>')+(D.scope?'<br>'+esc(D.scope):'')+'<br>條文原文取自全國法規資料庫；「白話」「口訣」「情境題」為編寫者整理，不是法條。法規可能再修正，請以官方最新公告為準；本內容不是法律意見。';
+const TABS=[['read','條文速讀'],['table','對照表'],['cards','閃卡'],['quiz','情境題']];
+const nav=$('#nav');
+TABS.forEach(([id,name])=>{const b=document.createElement('button');b.textContent=name;b.setAttribute('role','tab');b.dataset.id=id;b.onclick=()=>show(id);nav.appendChild(b)});
+let curTab='read';
+function show(id,anchor){curTab=id;TABS.forEach(([t])=>$('#s-'+t).classList.toggle('on',t===id));$$('button',nav).forEach(b=>b.setAttribute('aria-selected',b.dataset.id===id));
+  history.replaceState(null,'','#'+id+(anchor?'/'+anchor:''));
+  if(anchor){const el=document.getElementById(anchor);if(el){const d=el.querySelector('details');el.scrollIntoView({block:'start'});el.classList.add('hl')}}else window.scrollTo(0,0)}
+$('#s-read').innerHTML=(D.alerts||[]).map(a=>'<div class="banner"><b>'+esc(a.t)+'</b>'+esc(a.d)+'</div>').join('')+D.clauses.map(c=>{
+  const off=c.official.map(p=>'<p>'+esc(p)+'</p>').join('');
+  return '<div class="card" id="c'+esc(c.no)+'"><h3><span class="no">'+esc(lab(c.no))+'</span>'+esc(c.title)+'</h3>'
+   +'<div class="pw"><span class="lab my">白話</span>'+fmt(c.plain)+'</div>'+factsT(c.facts)
+   +(c.mnemonic?'<div class="mn"><span class="lab my">口訣</span>'+esc(c.mnemonic)+'</div>':'')
+   +(c.tip?'<p><span class="lab hint">提醒</span>'+esc(c.tip)+'</p>':'')
+   +(c.official.length?'<details><summary>展開官方條文原文</summary><div class="off"><span class="lab fact">原文</span>'+off+'</div></details>':'')+'</div>'}).join('');
+$('#s-table').innerHTML=D.tables.map((t,i)=>'<h3 id="t'+i+'">'+esc(t.title)+'</h3><div class="tw"><table><thead><tr>'+t.head.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+t.rows.map(r=>'<tr>'+r.map(x=>'<td>'+esc(x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>').join('');
+const cardsAll=D.cards.map(c=>({key:'ch'+D.chNo+':'+c.id,ref:c.ref,front:c.front,back:c.back}));
+const fl=Flash($('#s-cards'),()=>cardsAll);fl.refresh();
+const qz=Quiz($('#s-quiz'),()=>D.scenarios,0);qz.refresh();
+// 上下章
+const N=D.nav||{};
+function setLink(el,o,dir){if(o){el.href=o.file;el.textContent=dir==='p'?'← '+o.label:o.label+' →'}else{el.style.visibility='hidden'}}
+setLink($('#prev'),N.prev,'p');setLink($('#next'),N.next,'n');
+// 左右滑動：換分頁，到頭就換章
+function step(d){const i=TABS.findIndex(t=>t[0]===curTab)+d;
+  if(i<0){if(N.prev)location.href=N.prev.file+'#read';return}
+  if(i>=TABS.length){if(N.next)location.href=N.next.file+'#read';return}
+  show(TABS[i][0])}
+let sx=0,sy=0,skip=false;
+document.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;const el=e.target&&e.target.nodeType===1?e.target:(e.target&&e.target.parentElement);skip=!!(el&&el.closest('.tw,nav,input,.off'))},{passive:true});
+document.addEventListener('touchend',e=>{if(skip)return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>70&&Math.abs(dy)<45){step(dx<0?1:-1)}},{passive:true});
+document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1)});
+// 深層連結
+function route(){const h=(location.hash||'#read').slice(1).split('/');show(TABS.some(t=>t[0]===h[0])?h[0]:'read',h[1]?decodeURIComponent(h[1]):null)}
+window.addEventListener('hashchange',route);route();
+</script></body></html>

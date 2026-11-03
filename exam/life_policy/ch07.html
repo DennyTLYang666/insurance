@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第七章 個人資料保護法（保險業務最常用的條文）</title><style>:root{--bg:#f7f6f2;--card:#fff;--ink:#222;--sub:#666;--line:#e3e0d8;--brand:#1f5f8b;--brand2:#e8f1f7;--ok:#2e7d32;--okbg:#e8f5e9;--bad:#b3261e;--badbg:#fdecea;--warn:#8a5a00;--warnbg:#fff4de}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 "Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+a{color:var(--brand)}
+header{background:var(--brand);color:#fff;padding:12px 16px 14px}
+header a{color:#fff;text-decoration:none;font-size:14px;opacity:.9}
+header h1{margin:4px 0 0;font-size:20px;line-height:1.4}
+header p{margin:6px 0 0;font-size:14px;opacity:.95}
+.wrap{max-width:900px;margin:0 auto;padding:0 12px 60px}
+.banner{background:var(--warnbg);color:var(--warn);border:1px solid #f0d9a8;border-radius:8px;padding:10px 12px;margin:12px 0;font-size:14px}
+.banner b{margin-right:4px}
+nav{position:sticky;top:0;background:var(--bg);z-index:5;display:flex;gap:6px;padding:10px 0;overflow-x:auto;border-bottom:1px solid var(--line)}
+nav button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:15px;cursor:pointer;color:var(--ink)}
+nav button[aria-selected="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+section{display:none;padding-top:14px}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 12px}
+.card h3{margin:0 0 6px;font-size:17px}
+.no{display:inline-block;background:var(--brand);color:#fff;border-radius:6px;padding:0 8px;margin-right:8px;font-size:14px}
+.lab{display:inline-block;font-size:12px;border-radius:4px;padding:0 6px;margin-right:6px;vertical-align:1px}
+.lab.fact{background:#e3f2e5;color:#1b5e20}.lab.my{background:#e8eaf6;color:#283593}.lab.hint{background:var(--warnbg);color:var(--warn)}
+.mn{background:var(--brand2);border-radius:8px;padding:8px 10px;margin:8px 0}
+details{margin:8px 0}details summary{cursor:pointer;color:var(--brand);font-size:15px}
+.off{border-left:3px solid var(--brand);padding:2px 0 2px 10px;margin:8px 0;font-size:15px;color:#333}.off p{margin:4px 0}
+table{border-collapse:collapse;width:100%;font-size:15px;background:#fff}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}th{background:var(--brand2)}
+.tw{overflow-x:auto;margin-bottom:16px}
+.fc{min-height:210px;display:flex;flex-direction:column;justify-content:center;text-align:center;cursor:pointer;user-select:none}
+.fc .q{font-size:19px;font-weight:600}.fc .a{font-size:16px;text-align:left;margin-top:8px}.fc small{color:var(--sub)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.btn{border:1px solid var(--brand);background:#fff;color:var(--brand);border-radius:8px;padding:9px 16px;font-size:16px;cursor:pointer}
+.btn.pri{background:var(--brand);color:#fff}.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}.btn.bad{background:var(--bad);border-color:var(--bad);color:#fff}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:6px 0}.bar>i{display:block;height:100%;background:var(--ok)}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 12px;margin:6px 0;font-size:16px;cursor:pointer}
+.opt.right{background:var(--okbg);border-color:var(--ok)}.opt.wrong{background:var(--badbg);border-color:var(--bad)}
+.why{display:none;background:var(--brand2);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:15px}
+.stat{color:var(--sub);font-size:14px}
+footer{color:var(--sub);font-size:13px;margin-top:24px}
+.pager{display:flex;justify-content:space-between;gap:8px;margin-top:18px}.pager a{flex:1;text-align:center;border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px;text-decoration:none;font-size:14px}
+.hl{animation:hl 1.6s ease-out}@keyframes hl{0%{box-shadow:0 0 0 4px #ffd54f}100%{box-shadow:0 0 0 0 transparent}}
+mark{background:#fff0a8;padding:0 1px}
+.search{display:flex;gap:8px;margin:14px 0 6px}.search input{flex:1;font-size:17px;padding:10px 12px;border:1px solid var(--line);border-radius:10px}
+.res{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0;display:block;text-decoration:none;color:var(--ink)}
+.res small{color:var(--sub)}.res b{color:var(--brand)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.ch{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-decoration:none;color:var(--ink);display:block}
+.ch:hover{border-color:var(--brand)}.ch h3{margin:0 0 4px;font-size:16px;color:var(--brand)}.ch p{margin:4px 0;font-size:14px}
+.chip{display:inline-block;background:var(--brand2);color:#134;border-radius:999px;padding:0 9px;margin:2px 3px 2px 0;font-size:12.5px}
+.filter{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.filter button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 12px;font-size:14px;cursor:pointer}.filter button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+h2{font-size:18px;margin:24px 0 8px}
+
+.pw{margin:6px 0}.pw p{margin:4px 0}.pl{margin:6px 0 6px 0;padding-left:20px}.pl li{margin:5px 0;line-height:1.7}.pl ul{margin:4px 0;padding-left:18px;list-style:disc}.pl ul li{margin:2px 0}.pl>li>b{color:#283593}
+table.ft{font-size:14px;table-layout:fixed}table.ft td:first-child,table.ft th:first-child{font-weight:600;width:34%;word-break:break-all}table.ft td,table.ft th{word-break:break-word;padding:6px 7px}table.ft th{width:auto}
+</style></head>
+<body>
+<header><div class="wrap" style="padding:0"><a href="index.html">← 首頁（搜尋、總複習）</a><h1 id="h1"></h1><p id="intro"></p></div></header>
+<div class="wrap">
+<nav role="tablist" id="nav"></nav>
+<section id="s-read"></section><section id="s-table"></section><section id="s-cards"></section><section id="s-quiz"></section>
+<div class="pager"><a id="prev" href="#"></a><a id="next" href="#"></a></div>
+<footer id="foot"></footer>
+</div>
+<script id="data" type="application/json">{"chapter": "第七章", "title": "個人資料保護法（保險業務最常用的條文）", "laws": [{"pcode": "I0050021", "name": "個人資料保護法", "amended": "民國114年11月11日", "note": "該次修正的部分條文施行日由行政院另定，本頁只收錄不在修正範圍內的條文", "url": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=I0050021", "source": "法務部全國法規資料庫", "retrieved": "2026-11-03", "mirrorDate": "20251111"}, {"pcode": "G0390002", "name": "保險法（第177-1條）", "amended": "民國114年6月18日", "url": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0390002", "source": "法務部全國法規資料庫", "retrieved": "2026-11-03", "mirrorDate": "20250618"}], "alerts": [{"t": "版本警告（事實，2026-11-03 查全國法規資料庫沿革）", "d": "個資法在民國114年11月11日公布修正第1-1、12、18、21、22至26、41、47至49、52、53、55條，並增訂第20-1條等，但條文寫明『施行日期，由行政院定之』，截至資料庫整編截止日（民國115年10月22日）沿革沒有看到施行公告。所以本頁『不收錄』這些條文，包括事故通報（第12條）與罰則（第41、47、48條）；考前請到官網確認是否已施行，再核對新舊版罰則金額。"}, {"t": "本頁收錄的條文", "d": "第2、5、6、7、8、9、19、20、29、30條，加上保險法第177-1條。這些條文不在民國114年11月修正的範圍內。"}, {"t": "實務重點", "d": "保險業務一定會碰到病歷、健康檢查資料。這類資料原則上不得蒐集、處理、利用，但經當事人書面同意等例外成立（第6條），保險法第177-1條對保險業另有特別規定。"}], "clauses": [{"no": "2", "title": "用詞定義", "plain": "個人資料包括姓名、出生年月日、身分證統一編號、護照號碼、特徵、指紋、婚姻、家庭、教育、職業、病歷、醫療、基因、性生活、健康檢查、犯罪前科、聯絡方式、財務情況、社會活動，以及其他可以直接或間接識別個人的資料。蒐集是以任何方式取得個人資料；處理是為建立或利用個人資料檔案所做的記錄、輸入、儲存、編輯、更正、複製、檢索、刪除、輸出、連結或內部傳送；利用是把蒐集的個人資料做處理以外的使用。當事人是個人資料的本人。", "mnemonic": "蒐集＝取得；處理＝記錄到傳送；利用＝處理以外的使用。", "tip": "病歷、醫療、基因、性生活、健康檢查、犯罪前科這六類，是第6條特別限制的敏感資料。", "official": ["本法用詞，定義如下：", "一、個人資料：指自然人之姓名、出生年月日、國民身分證統一編號、護照號碼、特徵、指紋、婚姻、家庭、教育、職業、病歷、醫療、基因、性生活、健康檢查、犯罪前科、聯絡方式、財務情況、社會活動及其他得以直接或間接方式識別該個人之資料。", "二、個人資料檔案：指依系統建立而得以自動化機器或其他非自動化方式檢索、整理之個人資料之集合。", "三、蒐集：指以任何方式取得個人資料。", "四、處理：指為建立或利用個人資料檔案所為資料之記錄、輸入、儲存、編輯、更正、複製、檢索、刪除、輸出、連結或內部傳送。", "五、利用：指將蒐集之個人資料為處理以外之使用。", "六、國際傳輸：指將個人資料作跨國（境）之處理或利用。", "七、公務機關：指依法行使公權力之中央或地方機關或行政法人。", "八、非公務機關：指前款以外之自然人、法人或其他團體。", "九、當事人：指個人資料之本人。"], "has_official": true}, {"no": "5", "title": "蒐集、處理、利用的基本原則", "plain": "蒐集、處理或利用個人資料，要尊重當事人的權益，依誠實及信用方法為之，不能逾越特定目的的必要範圍，並且要與蒐集的目的有正當合理的關聯。", "mnemonic": "誠實信用、不逾特定目的、有正當合理關聯。", "official": ["個人資料之蒐集、處理或利用，應尊重當事人之權益，依誠實及信用方法為之，不得逾越特定目的之必要範圍，並應與蒐集之目的具有正當合理之關聯。"], "has_official": true}, {"no": "6", "title": "六類敏感資料：原則禁止，例外允許", "plain": "有關病歷、醫療、基因、性生活、健康檢查及犯罪前科的個人資料，原則上不得蒐集、處理或利用。但有下列情形之一的不在此限：法律明文規定；公務機關執行法定職務或非公務機關履行法定義務必要範圍內，且有適當安全維護措施；當事人自行公開或其他已合法公開；公務機關或學術研究機構基於醫療、衛生或犯罪預防目的，為統計或學術研究，且資料無從識別特定當事人；協助公務機關執行法定職務或非公務機關履行法定義務必要範圍內，且有適當安全維護措施；經當事人書面同意（但逾越特定目的必要範圍，或其他法律另有限制不得僅依書面同意者，不在此限）。依這些例外蒐集時，準用第8條、第9條的告知規定；書面同意準用第7條第1、2、4項，並以書面為之。", "mnemonic": "六類敏感資料：病歷、醫療、基因、性生活、健康檢查、犯罪前科；原則禁止；書面同意是例外之一。", "tip": "保險業務最常用的是『經當事人書面同意』。保險法第177-1條還有保險業專屬的規定（見下）。", "official": ["有關病歷、醫療、基因、性生活、健康檢查及犯罪前科之個人資料，不得蒐集、處理或利用。但有下列情形之一者，不在此限：", "一、法律明文規定。", "二、公務機關執行法定職務或非公務機關履行法定義務必要範圍內，且事前或事後有適當安全維護措施。", "三、當事人自行公開或其他已合法公開之個人資料。", "四、公務機關或學術研究機構基於醫療、衛生或犯罪預防之目的，為統計或學術研究而有必要，且資料經過提供者處理後或經蒐集者依其揭露方式無從識別特定之當事人。", "五、為協助公務機關執行法定職務或非公務機關履行法定義務必要範圍內，且事前或事後有適當安全維護措施。", "六、經當事人書面同意。但逾越特定目的之必要範圍或其他法律另有限制不得僅依當事人書面同意蒐集、處理或利用，或其同意違反其意願者，不在此限。", "依前項規定蒐集、處理或利用個人資料，準用第八條、第九條規定；其中前項第六款之書面同意，準用第七條第一項、第二項及第四項規定，並以書面為之。"], "has_official": true}, {"no": "7", "title": "什麼叫『同意』", "plain": "第15條第2款、第19條第1項第5款所稱的『同意』，是當事人經蒐集者告知本法所定應告知事項後，所做的允許的意思表示。第16條第7款、第20條第1項第6款所稱的『同意』（特定目的外利用），是當事人經蒐集者明確告知特定目的外的其他利用目的、範圍及同意與否對其權益的影響後，『單獨』所做的意思表示。蒐集者明確告知第8條第1項各款事項時，當事人如沒有表示拒絕，並已提供其個人資料，推定當事人已依第15條第2款、第19條第1項第5款表示同意。蒐集者對『經當事人同意』這件事要負舉證責任。", "facts": {"head": ["同意的類型", "要件"], "rows": [["一般同意（蒐集、處理）", "經蒐集者告知法定事項後，當事人所為允許的意思表示；已告知且沒表示拒絕並已提供資料，推定同意"], ["特定目的外利用的同意", "經明確告知其他利用目的、範圍及同意與否對權益的影響後，單獨所為之意思表示"], ["舉證責任", "蒐集者就『經當事人同意』的事實負舉證責任"]]}, "mnemonic": "先告知才算同意；目的外利用要『單獨』同意；同意的舉證責任在蒐集者。", "official": ["第十五條第二款及第十九條第一項第五款所稱同意，指當事人經蒐集者告知本法所定應告知事項後，所為允許之意思表示。", "第十六條第七款、第二十條第一項第六款所稱同意，指當事人經蒐集者明確告知特定目的外之其他利用目的、範圍及同意與否對其權益之影響後，單獨所為之意思表示。", "公務機關或非公務機關明確告知當事人第八條第一項各款應告知事項時，當事人如未表示拒絕，並已提供其個人資料者，推定當事人已依第十五條第二款、第十九條第一項第五款之規定表示同意。", "蒐集者就本法所稱經當事人同意之事實，應負舉證責任。"], "has_official": true}, {"no": "8", "title": "向當事人蒐集個資時的告知義務", "plain": "公務機關或非公務機關向當事人蒐集個人資料時，要明確告知六項事項：機關名稱；蒐集的目的；個人資料的類別；個人資料利用的期間、地區、對象及方式；當事人依第3條可行使的權利及方式；當事人可以自由選擇提供資料時，不提供將對其權益的影響。有六種情形可以免為告知，例如法律規定得免告知、告知會妨害公共利益、當事人明知應告知內容、蒐集非基於營利目的且對當事人顯無不利影響等。", "facts": {"head": ["款", "應告知事項"], "rows": [["一", "公務機關或非公務機關名稱"], ["二", "蒐集的目的"], ["三", "個人資料的類別"], ["四", "個人資料利用的期間、地區、對象及方式"], ["五", "當事人依第3條得行使的權利及方式"], ["六", "當事人可自由選擇提供資料時，不提供將對其權益的影響"]]}, "mnemonic": "名稱、目的、類別、期間地區對象方式、權利及方式、不提供的影響。", "official": ["公務機關或非公務機關依第十五條或第十九條規定向當事人蒐集個人資料時，應明確告知當事人下列事項：", "一、公務機關或非公務機關名稱。", "二、蒐集之目的。", "三、個人資料之類別。", "四、個人資料利用之期間、地區、對象及方式。", "五、當事人依第三條規定得行使之權利及方式。", "六、當事人得自由選擇提供個人資料時，不提供將對其權益之影響。", "有下列情形之一者，得免為前項之告知：", "一、依法律規定得免告知。", "二、個人資料之蒐集係公務機關執行法定職務或非公務機關履行法定義務所必要。", "三、告知將妨害公務機關執行法定職務。", "四、告知將妨害公共利益。", "五、當事人明知應告知之內容。", "六、個人資料之蒐集非基於營利之目的，且對當事人顯無不利之影響。"], "has_official": true}, {"no": "9", "title": "不是向當事人本人蒐集的個資：也要告知", "plain": "蒐集的個人資料不是由當事人提供的，要在處理或利用前，向當事人告知個人資料來源，以及第8條第1項第1至5款的事項。有免告知的情形，例如當事人自行公開、不能向當事人告知、為公共利益做統計或學術研究且無從識別等。這個告知，可以在首次對當事人利用時一併做。", "mnemonic": "非本人提供：處理或利用前，要告知來源＋第8條前五款；可在首次利用時一併告知。", "tip": "第8條是『向當事人蒐集』，要告知六項；第9條是『非由當事人提供』，要告知來源及前五項（沒有第六項）。", "official": ["公務機關或非公務機關依第十五條或第十九條規定蒐集非由當事人提供之個人資料，應於處理或利用前，向當事人告知個人資料來源及前條第一項第一款至第五款所列事項。", "有下列情形之一者，得免為前項之告知：", "一、有前條第二項所列各款情形之一。", "二、當事人自行公開或其他已合法公開之個人資料。", "三、不能向當事人或其法定代理人為告知。", "四、基於公共利益為統計或學術研究之目的而有必要，且該資料須經提供者處理後或蒐集者依其揭露方式，無從識別特定當事人者為限。", "五、大眾傳播業者基於新聞報導之公益目的而蒐集個人資料。", "第一項之告知，得於首次對當事人為利用時併同為之。"], "has_official": true}, {"no": "19", "title": "非公務機關蒐集、處理的合法依據", "plain": "非公務機關蒐集或處理個人資料（第6條第1項的敏感資料除外），要有特定目的，並符合下列情形之一：法律明文規定；與當事人有契約或類似契約的關係，且已採取適當的安全措施；當事人自行公開或其他已合法公開；學術研究機構基於公共利益做統計或學術研究，且無從識別；經當事人同意；為增進公共利益所必要；個人資料取自一般可得的來源（但當事人對該資料的禁止處理利用有更值得保護的重大利益者除外）；對當事人權益無侵害。", "facts": {"head": ["款", "合法依據"], "rows": [["一", "法律明文規定"], ["二", "與當事人有契約或類似契約關係，且已採取適當安全措施"], ["三", "當事人自行公開或其他已合法公開"], ["四", "學術研究機構基於公共利益做統計或學術研究，且無從識別"], ["五", "經當事人同意"], ["六", "為增進公共利益所必要"], ["七", "取自一般可得之來源（當事人禁止處理利用有更值得保護的重大利益者除外）"], ["八", "對當事人權益無侵害"]]}, "mnemonic": "法律、契約、公開、學術、同意、公益、可得來源、無侵害。", "tip": "保險契約的履行，常見依據是第2款（契約關係）與第5款（同意）。但敏感資料要回到第6條。", "official": ["非公務機關對個人資料之蒐集或處理，除第六條第一項所規定資料外，應有特定目的，並符合下列情形之一者：", "一、法律明文規定。", "二、與當事人有契約或類似契約之關係，且已採取適當之安全措施。", "三、當事人自行公開或其他已合法公開之個人資料。", "四、學術研究機構基於公共利益為統計或學術研究而有必要，且資料經過提供者處理後或經蒐集者依其揭露方式無從識別特定之當事人。", "五、經當事人同意。", "六、為增進公共利益所必要。", "七、個人資料取自於一般可得之來源。但當事人對該資料之禁止處理或利用，顯有更值得保護之重大利益者，不在此限。", "八、對當事人權益無侵害。", "蒐集或處理者知悉或經當事人通知依前項第七款但書規定禁止對該資料之處理或利用時，應主動或依當事人之請求，刪除、停止處理或利用該個人資料。"], "has_official": true}, {"no": "20", "title": "非公務機關的利用與行銷", "plain": "非公務機關對個人資料的利用，原則上要在蒐集的特定目的必要範圍內為之。有七種情形可以為特定目的外的利用：法律明文規定；為增進公共利益所必要；為免除當事人生命、身體、自由或財產上的危險；為防止他人權益的重大危害；公務機關或學術研究機構基於公共利益做統計或學術研究且無從識別；經當事人同意；有利於當事人權益。利用個人資料行銷時，當事人表示拒絕，要立即停止利用；首次行銷時，要提供當事人表示拒絕的方式，並支付所需費用。", "mnemonic": "原則：不超過蒐集目的；行銷：拒絕就停；首次行銷要提供拒絕方式、費用由行銷者出。", "tip": "這是業務員寄行銷訊息、打電話推廣的法律依據，當事人拒絕就必須停止。", "official": ["非公務機關對個人資料之利用，除第六條第一項所規定資料外，應於蒐集之特定目的必要範圍內為之。但有下列情形之一者，得為特定目的外之利用：", "一、法律明文規定。", "二、為增進公共利益所必要。", "三、為免除當事人之生命、身體、自由或財產上之危險。", "四、為防止他人權益之重大危害。", "五、公務機關或學術研究機構基於公共利益為統計或學術研究而有必要，且資料經過提供者處理後或經蒐集者依其揭露方式無從識別特定之當事人。", "六、經當事人同意。", "七、有利於當事人權益。", "非公務機關依前項規定利用個人資料行銷者，當事人表示拒絕接受行銷時，應即停止利用其個人資料行銷。", "非公務機關於首次行銷時，應提供當事人表示拒絕接受行銷之方式，並支付所需費用。"], "has_official": true}, {"no": "29", "title": "非公務機關違反個資法的損害賠償", "plain": "非公務機關違反本法規定，使個人資料遭不法蒐集、處理、利用或其他侵害當事人權利的，要負損害賠償責任。但能證明自己無故意或過失的，不在此限。", "mnemonic": "違反要賠；能證明無故意過失才免責。", "tip": "舉證責任在非公務機關，和金融消費者保護法第11條的結構相同。", "official": ["非公務機關違反本法規定，致個人資料遭不法蒐集、處理、利用或其他侵害當事人權利者，負損害賠償責任。但能證明其無故意或過失者，不在此限。", "依前項規定請求賠償者，適用前條第二項至第六項規定。"], "has_official": true}, {"no": "30", "title": "損害賠償請求權的時效", "plain": "損害賠償請求權，自請求權人知有損害及賠償義務人時起，因2年間不行使而消滅；自損害發生時起，逾5年者，也一樣。", "mnemonic": "知道起算2年；發生起算5年。", "official": ["損害賠償請求權，自請求權人知有損害及賠償義務人時起，因二年間不行使而消滅；自損害發生時起，逾五年者，亦同。"], "has_official": true}, {"no": "保177-1", "title": "保險業蒐集病歷、醫療、健康檢查資料：書面同意", "plain": "依保險法經營或執行業務的保險業、保險代理人、經紀人、公證人；協助保險契約義務確定或履行而受保險業委託的法人；辦理爭議處理、車禍受害人補償業務而經主管機關許可設立的保險事務財團法人，在經本人書面同意後，可以蒐集、處理或利用病歷、醫療、健康檢查的個人資料。書面同意的方式、第1款業務範圍等，由主管機關訂定辦法管理。保險業為執行核保或理賠作業需要，處理、利用依法所蒐集保險契約受益人的姓名、出生年月日、身分證統一編號及聯絡方式，可以免為個資法第9條第1項的告知。", "mnemonic": "病歷、醫療、健康檢查資料：保險業要本人書面同意；受益人基本資料用於核保理賠可免第9條告知。", "tip": "這是保險法對個資法第6條的『特別規定』版本。第1項只有三類主體與三類資料：病歷、醫療、健康檢查。", "official": ["符合下列各款規定之一者，於經本人書面同意，得蒐集、處理或利用病歷、醫療、健康檢查之個人資料：", "一、依本法經營或執行業務之保險業、保險代理人、經紀人、公證人。", "二、協助保險契約義務之確定或履行而受保險業委託之法人。", "三、辦理爭議處理、車禍受害人補償業務而經主管機關許可設立之保險事務財團法人。", "前項書面同意方式、第一款業務範圍及其他應遵行事項，由主管機關訂定辦法管理之。", "保險業為執行核保或理賠作業需要，處理、利用依法所蒐集保險契約受益人之姓名、出生年月日、國民身分證統一編號及聯絡方式，得免為個人資料保護法第九條第一項之告知。", "中華民國一百年六月十四日修正之本條文施行前，第一項各款之人已依法蒐集之病歷、醫療、健康檢查之個人資料，於修正施行後，得繼續處理及為符合蒐集之特定目的必要範圍內利用。"], "has_official": true}], "tables": [{"title": "第8條與第9條：告知義務對照", "head": ["項目", "第8條", "第9條"], "rows": [["適用情形", "向當事人本人蒐集個資", "蒐集的個資不是由當事人提供"], ["告知時點", "蒐集時", "處理或利用前（可在首次對當事人利用時一併）"], ["告知內容", "六項（含不提供的影響）", "個資來源＋第8條第1項第1至5款"], ["免告知", "六種情形", "含不能告知、當事人自行公開等"]]}, {"title": "第6條六類敏感資料與第6條例外", "head": ["敏感資料（原則禁止）", "例外之一", "保險業的特別規定"], "rows": [["病歷、醫療、基因、性生活、健康檢查、犯罪前科", "經當事人書面同意（準用第7條第1、2、4項，以書面為之）", "保險法第177-1條：病歷、醫療、健康檢查，經本人書面同意可蒐集、處理、利用"]]}, {"title": "數字速記：個資法", "head": ["條", "數字", "什麼事"], "rows": [["8", "6項", "向當事人蒐集個資應明確告知的事項"], ["6", "6類", "敏感資料：病歷、醫療、基因、性生活、健康檢查、犯罪前科"], ["30", "2年／5年", "損害賠償請求權時效：知有損害及賠償義務人時起2年；損害發生時起逾5年"]]}], "cards": [{"id": 1, "ref": "2", "front": "個資法的『蒐集』是什麼意思？", "back": "以任何方式取得個人資料。"}, {"id": 2, "ref": "2", "front": "個資法的『利用』是什麼意思？", "back": "把蒐集的個人資料做處理以外的使用。"}, {"id": 3, "ref": "5", "front": "蒐集、處理、利用個資的基本原則？", "back": "尊重當事人權益、誠實及信用方法、不逾特定目的必要範圍、與目的有正當合理關聯。"}, {"id": 4, "ref": "6", "front": "第6條限制的六類敏感資料？", "back": "病歷、醫療、基因、性生活、健康檢查、犯罪前科。"}, {"id": 5, "ref": "6", "front": "敏感資料原則上可不可以蒐集？有哪個例外和保險業務最相關？", "back": "原則不可以；例外之一是經當事人書面同意。"}, {"id": 6, "ref": "7", "front": "目的外利用的『同意』，有什麼特別要件？", "back": "要明確告知其他利用目的、範圍及同意與否對權益的影響後，『單獨』所為之意思表示。"}, {"id": 7, "ref": "7", "front": "『經當事人同意』的舉證責任在誰？", "back": "蒐集者。第7條第4項。"}, {"id": 8, "ref": "8", "front": "向當事人蒐集個資，要告知哪六項？", "back": "名稱、蒐集目的、個資類別、利用期間地區對象方式、當事人權利及行使方式、不提供的影響。"}, {"id": 9, "ref": "9", "front": "個資不是當事人提供的，要告知什麼？", "back": "個資來源，以及第8條第1項第1至5款事項；可在首次利用時一併告知。"}, {"id": 10, "ref": "19", "front": "非公務機關蒐集或處理個資，第2款的合法依據是？", "back": "與當事人有契約或類似契約的關係，且已採取適當的安全措施。"}, {"id": 11, "ref": "20", "front": "當事人表示拒絕接受行銷，非公務機關要怎麼做？", "back": "要立即停止利用其個人資料行銷。"}, {"id": 12, "ref": "29", "front": "非公務機關違反個資法致當事人受害，什麼情況可免賠償責任？", "back": "能證明其無故意或過失。"}, {"id": 13, "ref": "30", "front": "個資法損害賠償請求權的時效？", "back": "知有損害及賠償義務人時起2年；自損害發生時起逾5年亦消滅。"}, {"id": 14, "ref": "保177-1", "front": "保險業蒐集病歷、醫療、健康檢查資料，需要什麼？", "back": "本人書面同意。"}], "scenarios": [{"ref": "6", "q": "下列何者屬於個資法第6條原則上不得蒐集的資料？", "opts": ["聯絡電話", "職業", "健康檢查資料", "出生年月日"], "ans": 2, "why": "第6條列的六類：病歷、醫療、基因、性生活、健康檢查、犯罪前科。聯絡電話、職業、出生年月日屬第2條的一般個人資料，不是第6條的敏感資料。"}, {"ref": "保177-1", "q": "保險公司要蒐集被保險人的病歷作為核保依據。最符合保險法第177-1條的做法是？", "opts": ["不需同意，直接向醫院調閱", "經本人書面同意後蒐集", "由業務員口頭徵得同意即可", "向其家屬取得同意"], "ans": 1, "why": "保險法第177-1條第1項：經本人書面同意，得蒐集、處理或利用病歷、醫療、健康檢查的個人資料。"}, {"ref": "8", "q": "向當事人蒐集個資時，下列哪一項不在第8條第1項要明確告知的六項裡面？", "opts": ["蒐集的目的", "個人資料的類別", "當事人不提供個資對其權益的影響", "資料處理人員的薪資"], "ans": 3, "why": "第8條第1項六款：名稱、目的、類別、利用期間地區對象方式、權利及行使方式、不提供的影響。薪資不在內。"}, {"ref": "9", "q": "保險公司從第三方取得客戶資料。依第9條，應於何時告知當事人資料來源等事項？", "opts": ["蒐集後三個月內", "處理或利用前（可在首次利用時一併）", "客戶要求時", "不需告知"], "ans": 1, "why": "第9條第1項：處理或利用前告知；第3項：可於首次對當事人利用時併同為之。"}, {"ref": "20", "q": "客戶明確表示不再接受行銷訊息。業務員所屬公司依第20條第2項應？", "opts": ["可繼續行銷一年", "立即停止利用其個人資料行銷", "改由業務員私下聯絡", "徵詢主管同意"], "ans": 1, "why": "第20條第2項：當事人表示拒絕接受行銷時，應即停止利用其個人資料行銷。"}, {"ref": "7", "q": "個資法第7條對『經當事人同意』的舉證責任規定在？", "opts": ["當事人", "蒐集者", "法院", "主管機關"], "ans": 1, "why": "第7條第4項：蒐集者就本法所稱經當事人同意的事實，應負舉證責任。"}, {"ref": "30", "q": "個資法損害賠償請求權，從損害發生時起，超過幾年亦消滅？", "opts": ["2年", "3年", "5年", "10年"], "ans": 2, "why": "第30條：知有損害及賠償義務人時起2年；自損害發生時起逾5年者亦同。"}, {"ref": "29", "q": "非公務機關違反個資法致當事人受損害，哪種情況可免賠償？", "opts": ["當事人沒有請求", "能證明無故意或過失", "已道歉", "金額很小"], "ans": 1, "why": "第29條：能證明其無故意或過失者，不在此限。"}], "chNo": "07", "summary": "個資法中保險業務最常用的條文：個資定義、六類敏感資料（病歷、健康檢查等）、書面同意、蒐集時的告知義務、行銷拒絕，以及保險法第177-1條的特別規定。", "scope": "收錄個資法第2、5、6、7、8、9、19、20、29、30條及保險法第177-1條。民國114年11月修正尚待施行的條文（含第12、41、47、48條）不收錄。", "nav": {"prev": {"file": "ch06.html", "label": "第6章 金融消費者保護法"}, "next": {"file": "ch08.html", "label": "第8章 洗錢防制法（保險業務要記得的條文）"}}}</script>
+<script>const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=t=>{t=String(t||'');const ss=t.split(/(?<=。)/).map(x=>x.trim()).filter(Boolean);if(t.length<=90||ss.length<2&&t.indexOf('；')<0)return '<p>'+esc(t)+'</p>';
+  const li=s=>{s=s.replace(/。$/,'');const m=s.match(/^([^：；]{1,40})：(.+)$/);if(m&&m[2].split('；').length>=3)return '<li><b>'+esc(m[1])+'</b><ul>'+m[2].split('；').map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></li>';
+    const parts=s.split('；');if(parts.length>=3)return '<li>'+parts.map(x=>esc(x)).join('<br>')+'</li>';return '<li>'+esc(s)+'</li>'};
+  return '<ul class="pl">'+ss.map(li).join('')+'</ul>'};
+const factsT=f=>f?'<div class="tw"><table class="ft"><thead><tr>'+f.head.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+f.rows.map(r=>'<tr>'+r.map(x=>'<td>'+esc(x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>':'';
+const lab=x=>/^[保規]\d+(-\d+)?$/.test(x)?({'保':'保險法','規':'管理規則'}[x[0]])+'第'+x.slice(1)+'條':/^[一二三四五六七八九十]+(之[一二三四五六七八九十]+)?$/.test(x)?'第'+x+'點':/^[0-9]+(-[0-9]+)?$/.test(x)?'第'+x+'條':x;
+const mem={};
+const store={get(k){try{const v=localStorage.getItem(k);return v===null?mem[k]:v}catch(e){return mem[k]}},set(k,v){mem[k]=v;try{localStorage.setItem(k,v)}catch(e){}}};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const BOXKEY='twlife_boxes_v2';
+let boxes={};try{boxes=JSON.parse(store.get(BOXKEY)||'{}')}catch(e){boxes={}}
+const saveBoxes=()=>store.set(BOXKEY,JSON.stringify(boxes));
+function Flash(root,getCards){
+  let queue=[],cur=null,flipped=false;
+  function build(){const cs=getCards();queue=shuffle(cs.filter(c=>(boxes[c.key]||0)<1)).sort((a,b)=>(boxes[a.key]||0)-(boxes[b.key]||0));flipped=false}
+  function render(){
+    const cs=getCards(),n=cs.length,done=cs.filter(c=>(boxes[c.key]||0)>=1).length;
+    let h='<div class="stat">已熟練 '+done+' / '+n+' 張（答對 1 次視為熟練，進度存在這個瀏覽器）</div><div class="bar"><i style="width:'+(n?done/n*100:0)+'%"></i></div>';
+    if(!n){root.innerHTML=h+'<div class="card"><p>沒有可用的閃卡。</p></div>';return}
+    if(!queue.length){root.innerHTML=h+'<div class="card"><h3>全部熟練了</h3><p>可以去做情境題，或重設後再來一輪。</p></div><div class="row"><button class="btn" data-a="reset">重設進度</button></div>';return}
+    cur=queue[0];
+    h+='<div class="card fc" tabindex="0" role="button" data-a="flip"><small>'+(cur.tag?esc(cur.tag)+'｜':'')+esc(lab(cur.ref))+'｜剩 '+queue.length+' 張</small><div class="q">'+esc(cur.front)+'</div>'+(flipped?'<div class="a"><span class="lab fact">答案</span>'+esc(cur.back)+'</div>':'<small>點一下翻面</small>')+'</div>';
+    if(flipped)h+='<div class="row"><button class="btn bad" data-a="no">還不熟</button><button class="btn ok" data-a="yes">會了</button></div>';
+    h+='<div class="row"><button class="btn" data-a="reset">重設進度</button></div>';
+    root.innerHTML=h;
+  }
+  root.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a;
+    if(a==='flip'){flipped=!flipped;render()}
+    else if(a==='reset'){if(confirm('確定要清除這些閃卡的進度？')){getCards().forEach(c=>delete boxes[c.key]);saveBoxes();build();render()}}
+    else if(cur&&(a==='yes'||a==='no')){const ok=a==='yes';boxes[cur.key]=ok?Math.min(1,(boxes[cur.key]||0)+1):0;saveBoxes();queue.shift();if(!ok||boxes[cur.key]<1)queue.splice(queue.length?Math.max(1,Math.min(queue.length,ok?6:3)):0,0,cur);flipped=false;render()}});
+  root.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.fc')){e.preventDefault();flipped=!flipped;render()}});
+  return {refresh(){build();render()}};
+}
+function Quiz(root,getItems,perRound){
+  let items=[],score=0,answered=0,done=false;
+  function draw(){
+    const perms=items.map(s=>shuffle(s.opts.map((_,k)=>k)));
+    root.innerHTML='<div class="stat" id="sc"></div>'+items.map((s,i)=>'<div class="card" data-i="'+i+'"><b>'+(i+1)+'. </b><span class="lab my">'+(s.tag?esc(s.tag)+' ':'')+esc(lab(s.ref))+'</span>'+esc(s.q)+perms[i].map((k,pos)=>'<button class="opt" data-o="'+k+'">'+String.fromCharCode(65+pos)+'. '+esc(s.opts[k])+'</button>').join('')+'<div class="why"></div></div>').join('')+'<div id="qend"></div>';
+    score=0;answered=0;upd();
+  }
+  function upd(){const el=$('#sc',root);if(el)el.textContent='已作答 '+answered+' / '+items.length+'，答對 '+score+' 題';
+    if(perRound&&answered===items.length&&items.length){$('#qend',root).innerHTML='<div class="card"><h3>這一組：'+score+' / '+items.length+'</h3></div><div class="row"><button class="btn pri" data-a="again">再來一組</button></div>'}}
+  function again(){const all=getItems();items=perRound?shuffle(all).slice(0,perRound):all;draw()}
+  root.addEventListener('click',e=>{
+    const ag=e.target.closest('[data-a="again"]');if(ag){again();window.scrollTo(0,root.offsetTop-60);return}
+    const b=e.target.closest('.opt');if(!b)return;const box=b.closest('.card');if(box.dataset.done)return;
+    const s=items[+box.dataset.i],j=+b.dataset.o;box.dataset.done=1;answered++;if(j===s.ans)score++;
+    let right='';$$('.opt',box).forEach((x,pos)=>{const k=+x.dataset.o;if(k===s.ans){x.classList.add('right');right=String.fromCharCode(65+pos)}else if(k===j)x.classList.add('wrong')});
+    const w=$('.why',box);w.style.display='block';w.innerHTML=(j===s.ans?'答對了。':'答錯了，正解是 '+right+'。')+esc(s.why);upd()});
+  return {refresh:again};
+}
+</script>
+<script>
+const D=JSON.parse(document.getElementById('data').textContent);
+const LAWS=D.laws;
+$('#h1').textContent=D.chapter+'｜'+D.title;
+$('#intro').textContent=D.summary||'';
+document.title=D.chapter+' '+D.title;
+$('#foot').innerHTML='官方來源：'+LAWS.map(L=>esc(L.name)+'（'+esc(L.amended)+(L.kind==='press'?'發布':'修正')+'）'+(L.note?'｜'+esc(L.note)+'｜':'')+'<a href="'+esc(L.url)+'" target="_blank" rel="noopener">'+esc(L.url)+'</a>').join('<br>')+(D.scope?'<br>'+esc(D.scope):'')+'<br>條文原文取自全國法規資料庫；「白話」「口訣」「情境題」為編寫者整理，不是法條。法規可能再修正，請以官方最新公告為準；本內容不是法律意見。';
+const TABS=[['read','條文速讀'],['table','對照表'],['cards','閃卡'],['quiz','情境題']];
+const nav=$('#nav');
+TABS.forEach(([id,name])=>{const b=document.createElement('button');b.textContent=name;b.setAttribute('role','tab');b.dataset.id=id;b.onclick=()=>show(id);nav.appendChild(b)});
+let curTab='read';
+function show(id,anchor){curTab=id;TABS.forEach(([t])=>$('#s-'+t).classList.toggle('on',t===id));$$('button',nav).forEach(b=>b.setAttribute('aria-selected',b.dataset.id===id));
+  history.replaceState(null,'','#'+id+(anchor?'/'+anchor:''));
+  if(anchor){const el=document.getElementById(anchor);if(el){const d=el.querySelector('details');el.scrollIntoView({block:'start'});el.classList.add('hl')}}else window.scrollTo(0,0)}
+$('#s-read').innerHTML=(D.alerts||[]).map(a=>'<div class="banner"><b>'+esc(a.t)+'</b>'+esc(a.d)+'</div>').join('')+D.clauses.map(c=>{
+  const off=c.official.map(p=>'<p>'+esc(p)+'</p>').join('');
+  return '<div class="card" id="c'+esc(c.no)+'"><h3><span class="no">'+esc(lab(c.no))+'</span>'+esc(c.title)+'</h3>'
+   +'<div class="pw"><span class="lab my">白話</span>'+fmt(c.plain)+'</div>'+factsT(c.facts)
+   +(c.mnemonic?'<div class="mn"><span class="lab my">口訣</span>'+esc(c.mnemonic)+'</div>':'')
+   +(c.tip?'<p><span class="lab hint">提醒</span>'+esc(c.tip)+'</p>':'')
+   +(c.official.length?'<details><summary>展開官方條文原文</summary><div class="off"><span class="lab fact">原文</span>'+off+'</div></details>':'')+'</div>'}).join('');
+$('#s-table').innerHTML=D.tables.map((t,i)=>'<h3 id="t'+i+'">'+esc(t.title)+'</h3><div class="tw"><table><thead><tr>'+t.head.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+t.rows.map(r=>'<tr>'+r.map(x=>'<td>'+esc(x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>').join('');
+const cardsAll=D.cards.map(c=>({key:'ch'+D.chNo+':'+c.id,ref:c.ref,front:c.front,back:c.back}));
+const fl=Flash($('#s-cards'),()=>cardsAll);fl.refresh();
+const qz=Quiz($('#s-quiz'),()=>D.scenarios,0);qz.refresh();
+// 上下章
+const N=D.nav||{};
+function setLink(el,o,dir){if(o){el.href=o.file;el.textContent=dir==='p'?'← '+o.label:o.label+' →'}else{el.style.visibility='hidden'}}
+setLink($('#prev'),N.prev,'p');setLink($('#next'),N.next,'n');
+// 左右滑動：換分頁，到頭就換章
+function step(d){const i=TABS.findIndex(t=>t[0]===curTab)+d;
+  if(i<0){if(N.prev)location.href=N.prev.file+'#read';return}
+  if(i>=TABS.length){if(N.next)location.href=N.next.file+'#read';return}
+  show(TABS[i][0])}
+let sx=0,sy=0,skip=false;
+document.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;const el=e.target&&e.target.nodeType===1?e.target:(e.target&&e.target.parentElement);skip=!!(el&&el.closest('.tw,nav,input,.off'))},{passive:true});
+document.addEventListener('touchend',e=>{if(skip)return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>70&&Math.abs(dy)<45){step(dx<0?1:-1)}},{passive:true});
+document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1)});
+// 深層連結
+function route(){const h=(location.hash||'#read').slice(1).split('/');show(TABS.some(t=>t[0]===h[0])?h[0]:'read',h[1]?decodeURIComponent(h[1]):null)}
+window.addEventListener('hashchange',route);route();
+</script></body></html>

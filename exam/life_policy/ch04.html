@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第四章 健康保險、傷害保險、年金保險（保險法第125至135-4條）</title><style>:root{--bg:#f7f6f2;--card:#fff;--ink:#222;--sub:#666;--line:#e3e0d8;--brand:#1f5f8b;--brand2:#e8f1f7;--ok:#2e7d32;--okbg:#e8f5e9;--bad:#b3261e;--badbg:#fdecea;--warn:#8a5a00;--warnbg:#fff4de}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 "Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+a{color:var(--brand)}
+header{background:var(--brand);color:#fff;padding:12px 16px 14px}
+header a{color:#fff;text-decoration:none;font-size:14px;opacity:.9}
+header h1{margin:4px 0 0;font-size:20px;line-height:1.4}
+header p{margin:6px 0 0;font-size:14px;opacity:.95}
+.wrap{max-width:900px;margin:0 auto;padding:0 12px 60px}
+.banner{background:var(--warnbg);color:var(--warn);border:1px solid #f0d9a8;border-radius:8px;padding:10px 12px;margin:12px 0;font-size:14px}
+.banner b{margin-right:4px}
+nav{position:sticky;top:0;background:var(--bg);z-index:5;display:flex;gap:6px;padding:10px 0;overflow-x:auto;border-bottom:1px solid var(--line)}
+nav button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:15px;cursor:pointer;color:var(--ink)}
+nav button[aria-selected="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+section{display:none;padding-top:14px}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 12px}
+.card h3{margin:0 0 6px;font-size:17px}
+.no{display:inline-block;background:var(--brand);color:#fff;border-radius:6px;padding:0 8px;margin-right:8px;font-size:14px}
+.lab{display:inline-block;font-size:12px;border-radius:4px;padding:0 6px;margin-right:6px;vertical-align:1px}
+.lab.fact{background:#e3f2e5;color:#1b5e20}.lab.my{background:#e8eaf6;color:#283593}.lab.hint{background:var(--warnbg);color:var(--warn)}
+.mn{background:var(--brand2);border-radius:8px;padding:8px 10px;margin:8px 0}
+details{margin:8px 0}details summary{cursor:pointer;color:var(--brand);font-size:15px}
+.off{border-left:3px solid var(--brand);padding:2px 0 2px 10px;margin:8px 0;font-size:15px;color:#333}.off p{margin:4px 0}
+table{border-collapse:collapse;width:100%;font-size:15px;background:#fff}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}th{background:var(--brand2)}
+.tw{overflow-x:auto;margin-bottom:16px}
+.fc{min-height:210px;display:flex;flex-direction:column;justify-content:center;text-align:center;cursor:pointer;user-select:none}
+.fc .q{font-size:19px;font-weight:600}.fc .a{font-size:16px;text-align:left;margin-top:8px}.fc small{color:var(--sub)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.btn{border:1px solid var(--brand);background:#fff;color:var(--brand);border-radius:8px;padding:9px 16px;font-size:16px;cursor:pointer}
+.btn.pri{background:var(--brand);color:#fff}.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}.btn.bad{background:var(--bad);border-color:var(--bad);color:#fff}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:6px 0}.bar>i{display:block;height:100%;background:var(--ok)}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 12px;margin:6px 0;font-size:16px;cursor:pointer}
+.opt.right{background:var(--okbg);border-color:var(--ok)}.opt.wrong{background:var(--badbg);border-color:var(--bad)}
+.why{display:none;background:var(--brand2);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:15px}
+.stat{color:var(--sub);font-size:14px}
+footer{color:var(--sub);font-size:13px;margin-top:24px}
+.pager{display:flex;justify-content:space-between;gap:8px;margin-top:18px}.pager a{flex:1;text-align:center;border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px;text-decoration:none;font-size:14px}
+.hl{animation:hl 1.6s ease-out}@keyframes hl{0%{box-shadow:0 0 0 4px #ffd54f}100%{box-shadow:0 0 0 0 transparent}}
+mark{background:#fff0a8;padding:0 1px}
+.search{display:flex;gap:8px;margin:14px 0 6px}.search input{flex:1;font-size:17px;padding:10px 12px;border:1px solid var(--line);border-radius:10px}
+.res{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0;display:block;text-decoration:none;color:var(--ink)}
+.res small{color:var(--sub)}.res b{color:var(--brand)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.ch{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-decoration:none;color:var(--ink);display:block}
+.ch:hover{border-color:var(--brand)}.ch h3{margin:0 0 4px;font-size:16px;color:var(--brand)}.ch p{margin:4px 0;font-size:14px}
+.chip{display:inline-block;background:var(--brand2);color:#134;border-radius:999px;padding:0 9px;margin:2px 3px 2px 0;font-size:12.5px}
+.filter{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.filter button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 12px;font-size:14px;cursor:pointer}.filter button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+h2{font-size:18px;margin:24px 0 8px}
+
+.pw{margin:6px 0}.pw p{margin:4px 0}.pl{margin:6px 0 6px 0;padding-left:20px}.pl li{margin:5px 0;line-height:1.7}.pl ul{margin:4px 0;padding-left:18px;list-style:disc}.pl ul li{margin:2px 0}.pl>li>b{color:#283593}
+table.ft{font-size:14px;table-layout:fixed}table.ft td:first-child,table.ft th:first-child{font-weight:600;width:34%;word-break:break-all}table.ft td,table.ft th{word-break:break-word;padding:6px 7px}table.ft th{width:auto}
+</style></head>
+<body>
+<header><div class="wrap" style="padding:0"><a href="index.html">← 首頁（搜尋、總複習）</a><h1 id="h1"></h1><p id="intro"></p></div></header>
+<div class="wrap">
+<nav role="tablist" id="nav"></nav>
+<section id="s-read"></section><section id="s-table"></section><section id="s-cards"></section><section id="s-quiz"></section>
+<div class="pager"><a id="prev" href="#"></a><a id="next" href="#"></a></div>
+<footer id="foot"></footer>
+</div>
+<script id="data" type="application/json">{"chapter": "第四章", "title": "健康保險、傷害保險、年金保險（保險法第125至135-4條）", "laws": [{"pcode": "G0390002", "name": "保險法", "amended": "民國114年6月18日", "url": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0390002", "source": "法務部全國法規資料庫", "retrieved": "2026-11-03", "mirrorDate": "20250618"}], "alerts": [{"t": "本章的竅門：看『準用』", "d": "健康、傷害、年金三種保險，大量用『準用』第三章人壽保險的條文。考題常問：某條在這種保險能不能用。下面第一張對照表把準用範圍整理出來，請直接背表。"}, {"t": "近期新增（事實，取自官網沿革）", "d": "第129-1條（健康保險）、第132-1條（傷害保險）是民國114年6月18日新增：要保人為債務人的解約金債權不得作為扣押或強制執行標的。第130條同次修正。"}], "clauses": [{"no": "125", "title": "健康保險的給付責任", "plain": "健康保險人在被保險人因疾病、分娩，以及所導致的失能或死亡時，負給付保險金額的責任。所稱失能的內容，依各保險契約的約定。", "mnemonic": "疾病、分娩；導致的失能、死亡。", "official": ["健康保險人於被保險人疾病、分娩及其所致失能或死亡時，負給付保險金額之責。", "前項所稱失能之內容，依各保險契約之約定。"], "has_official": true}, {"no": "126", "title": "訂約前的健康檢查", "plain": "保險人在訂立契約前，可以對被保險人做健康檢查，檢查費用由保險人負擔。", "mnemonic": "體檢費，保險人出。", "official": ["保險人於訂立保險契約前，對於被保險人得施以健康檢查。", "前項檢查費用，由保險人負擔。"], "has_official": true}, {"no": "127", "title": "訂約時已在疾病或妊娠中", "plain": "契約訂立時，被保險人已經在疾病或妊娠的情況中，保險人對那項疾病或分娩，不負給付保險金額的責任。", "mnemonic": "訂約前就有的病、已懷孕的分娩，不賠。", "official": ["保險契約訂立時，被保險人已在疾病或妊娠情況中者，保險人對是項疾病或分娩，不負給付保險金額之責任。"], "has_official": true}, {"no": "128", "title": "故意自殺或墮胎", "plain": "被保險人故意自殺或墮胎所致的疾病、失能、流產或死亡，保險人不負給付責任。", "mnemonic": "自殺、墮胎：不賠。", "official": ["被保險人故意自殺或墮胎所致疾病、失能、流產或死亡，保險人不負給付保險金額之責。"], "has_official": true}, {"no": "129", "title": "被保險人與要保人不同人時的記載", "plain": "被保險人和要保人不是同一人時，契約除了第55條的事項，還要載明：被保險人的姓名、年齡及住所；被保險人與要保人的關係。", "official": ["被保險人不與要保人為同一人時，保險契約除載明第五十五條規定事項外，並應載明左列各款事項：", "一、被保險人之姓名、年齡及住所。", "二、被保險人與要保人之關係。"], "has_official": true}, {"no": "129-1", "title": "債務人的健康保險解約金不得扣押", "plain": "要保人是債務人的健康保險契約，其解約金債權不得作為扣押或強制執行的標的。", "mnemonic": "健康險解約金：不能扣押。", "tip": "民國114年6月18日新增。和人壽保險第123-1條不同：人壽保險有限額與公告條件，健康保險這條沒有限額。", "official": ["要保人為債務人之健康保險契約之解約金債權，不得作為扣押或強制執行之標的。"], "has_official": true}, {"no": "130", "title": "健康保險準用的人壽保險條文", "plain": "第102條至第105條、第115條、第116條、第122條、第123條、第124條，於健康保險準用。", "mnemonic": "健康險準用：102-105、115、116、122-124。", "tip": "沒有準用第106條、第107條、第109條到第114條、第117條至第121條。例如健康保險不能用第119條解約金四分之三。", "official": ["第一百零二條至第一百零五條、第一百十五條、第一百十六條、第一百二十二條、第一百二十三條及第一百二十四條，於健康保險準用之。"], "has_official": true}, {"no": "131", "title": "傷害保險的給付責任與『意外傷害』的定義", "plain": "傷害保險人在被保險人遭受意外傷害，以及所導致的失能或死亡時，負給付保險金額的責任。意外傷害指非由疾病引起的外來突發事故所致者。", "mnemonic": "意外傷害＝非疾病＋外來＋突發。", "tip": "意外傷害的三個要素：非由疾病引起、外來、突發。題目會用『疾病引起』『內在』『長期累積』來設陷阱。", "official": ["傷害保險人於被保險人遭受意外傷害及其所致失能或死亡時，負給付保險金額之責。", "前項意外傷害，指非由疾病引起之外來突發事故所致者。"], "has_official": true}, {"no": "132", "title": "傷害保險契約的特別記載事項", "plain": "傷害保險契約除了第55條的事項，還要載明：被保險人的姓名、年齡、住所及與要保人的關係；受益人的姓名及與被保險人的關係，或確定受益人的方法；請求保險金額的事故及時期。", "official": ["傷害保險契約，除記載第五十五條規定事項外，並應載明左列事項：", "一、被保險人之姓名、年齡、住所及與要保人之關係。", "二、受益人之姓名及與被保險人之關係或確定受益人之方法。", "三、請求保險金額之事故及時期。"], "has_official": true}, {"no": "132-1", "title": "債務人的傷害保險解約金不得扣押", "plain": "要保人是債務人的傷害保險契約，其解約金債權不得作為扣押或強制執行的標的。", "tip": "民國114年6月18日新增，與第129-1條同樣的結構。", "official": ["要保人為債務人之傷害保險契約之解約金債權，不得作為扣押或強制執行之標的。"], "has_official": true}, {"no": "133", "title": "自殺或犯罪行為", "plain": "被保險人故意自殺，或因犯罪行為所致的傷害、失能或死亡，保險人不負給付責任。", "mnemonic": "傷害險：自殺、犯罪行為，不賠。", "tip": "和人壽保險第109條對照：傷害保險這條沒有『返還保單價值準備金』的規定，也沒有『2年』的字樣。", "official": ["被保險人故意自殺，或因犯罪行為，所致傷害、失能或死亡，保險人不負給付保險金額之責任。"], "has_official": true}, {"no": "134", "title": "受益人故意傷害被保險人", "plain": "受益人故意傷害被保險人的，沒有請求保險金額的權利。如果受益人故意傷害被保險人但未遂，被保險人可以撤銷他的受益權利。", "mnemonic": "故意傷害：無請求權；未遂：被保險人可撤銷。", "tip": "對照第121條：人壽保險是受益人故意致被保險人於死『或雖未致死』就喪失受益權；傷害保險是已傷害則無請求權、未遂則由被保險人決定是否撤銷。", "official": ["受益人故意傷害被保險人者，無請求保險金額之權。", "受益人故意傷害被保險人未遂時，被保險人得撤銷其受益權利。"], "has_official": true}, {"no": "135", "title": "傷害保險準用的人壽保險條文", "plain": "第102條至第105條、第107條、第107-1條、第110條至第116條、第123條、第124條，及第125條第2項，於傷害保險準用。", "mnemonic": "傷害險準用：102-105、107、107-1、110-116、123、124、125II。", "tip": "傷害保險準用第107條與第107-1條（未成年人、受監護宣告者）；沒有準用第117條以後的減額、解約金、質借規定（第118至121條）。", "official": ["第一百零二條至第一百零五條、第一百零七條、第一百零七條之一、第一百十條至第一百十六條、第一百二十三條、第一百二十四條及第一百二十五條第二項，於傷害保險準用之。"], "has_official": true}, {"no": "135-1", "title": "年金保險的給付責任", "plain": "年金保險人在被保險人生存期間或特定期間內，依契約負一次或分期給付一定金額的責任。", "mnemonic": "生存期間或特定期間，一次或分期給付。", "official": ["年金保險人於被保險人生存期間或特定期間內，依照契約負一次或分期給付一定金額之責。"], "has_official": true}, {"no": "135-2", "title": "年金保險契約的特別記載事項", "plain": "年金保險契約除了第55條的事項，還要載明五項：被保險人的姓名、性別、年齡及住所；年金金額或確定年金金額的方法；受益人的姓名及與被保險人的關係；請求年金的期間、日期及給付方法；依第118條有減少年金的條件時，其條件。", "mnemonic": "被保人、年金金額、受益人、期間日期方法、減額條件。", "official": ["年金保險契約，除記載第五十五條規定事項外，並應載明左列事項：", "一、被保險人之姓名、性別、年齡及住所。", "二、年金金額或確定年金金額之方法。", "三、受益人之姓名及與被保險人之關係。", "四、請求年金之期間、日期及給付方法。", "五、依第一百十八條規定，有減少年金之條件者，其條件。"], "has_official": true}, {"no": "135-3", "title": "年金保險的受益人", "plain": "被保險人生存期間，受益人就是被保險人本人。契約如果載有被保險人死亡後仍給付年金，這個受益人準用第110條至第113條。", "mnemonic": "生存期間受益人＝被保險人本人。", "official": ["受益人於被保險人生存期間為被保險人本人。", "保險契約載有於被保險人死亡後給付年金者，其受益人準用第一百十條至第一百十三條規定。"], "has_official": true}, {"no": "135-4", "title": "年金保險準用的人壽保險條文", "plain": "第103條、第104條、第106條、第114條至第124條，於年金保險準用。但在年金給付期間，要保人不能終止契約，也不能用保險契約為質向保險人借款。", "mnemonic": "年金險準用：103、104、106、114-124；給付期間不能終止、不能質借。", "tip": "年金保險有準用第117條至第121條（減額、解約金、質借等），這是三種保險中準用最多的；但給付期間不得終止或質借。", "official": ["第一百零三條、第一百零四條、第一百零六條、第一百十四條至第一百二十四條規定，於年金保險準用之。但於年金給付期間，要保人不得終止契約或以保險契約為質，向保險人借款。"], "has_official": true}], "tables": [{"title": "準用對照表：哪些人壽保險條文可用在健康、傷害、年金保險", "head": ["人壽保險條文", "健康保險（130）", "傷害保險（135）", "年金保險（135-4）"], "rows": [["102 保險金額依契約", "準用", "準用", "未列"], ["103 不得代位", "準用", "準用", "準用"], ["104 本人或第三人訂立", "準用", "準用", "準用"], ["105 第三人訂死亡險須書面同意", "準用", "準用", "未列"], ["106 權利移轉或出質須書面承認", "未列", "未列", "準用"], ["107、107-1 未成年人、受監護宣告者", "未列", "準用", "未列"], ["110～113 受益人相關", "未列", "準用", "135-3 另行準用110～113"], ["114 受益人轉讓利益", "未列", "準用", "準用"], ["115 利害關係人代繳保費", "準用", "準用", "準用"], ["116 催告、停效、復效", "準用", "準用", "準用"], ["117～121 減額、解約金、質借等", "未列", "未列", "準用（給付期間不得終止或質借）"], ["122 年齡不實", "準用", "未列", "準用"], ["123 保險人破產等", "準用", "準用", "準用"], ["124 優先受償", "準用", "準用", "準用"]]}, {"title": "不賠的情形：三種保險對照", "head": ["保險", "條", "不賠情形"], "rows": [["健康保險", "127", "訂約時已在疾病或妊娠中，對該疾病或分娩不賠"], ["健康保險", "128", "故意自殺或墮胎所致疾病、失能、流產或死亡"], ["傷害保險", "133", "故意自殺，或因犯罪行為所致傷害、失能或死亡"], ["傷害保險", "134", "受益人故意傷害被保險人：該受益人無請求權"], ["人壽保險", "109", "故意自殺（返還準備金；自殺仍給付條款訂約2年後生效）；犯罪處死、拒捕、越獄致死"]]}], "cards": [{"id": 1, "ref": "125", "front": "健康保險人在哪些情況負給付責任？", "back": "被保險人疾病、分娩，以及所導致的失能或死亡。"}, {"id": 2, "ref": "126", "front": "訂約前的健康檢查費用由誰負擔？", "back": "保險人。第126條。"}, {"id": 3, "ref": "127", "front": "訂約時被保險人已在疾病或妊娠中，對那項疾病或分娩，保險人要賠嗎？", "back": "不賠。第127條。"}, {"id": 4, "ref": "131", "front": "意外傷害的定義？", "back": "非由疾病引起的外來突發事故所致者。"}, {"id": 5, "ref": "133", "front": "傷害保險不賠哪兩種情形？", "back": "被保險人故意自殺；因犯罪行為所致傷害、失能或死亡。"}, {"id": 6, "ref": "134", "front": "受益人故意傷害被保險人但未遂，被保險人可以做什麼？", "back": "撤銷他的受益權利。已傷害者則無請求保險金額的權利。"}, {"id": 7, "ref": "135-1", "front": "年金保險人的給付責任是什麼？", "back": "被保險人生存期間或特定期間內，依契約一次或分期給付一定金額。"}, {"id": 8, "ref": "135-3", "front": "年金保險中，被保險人生存期間的受益人是誰？", "back": "被保險人本人。"}, {"id": 9, "ref": "135-4", "front": "年金給付期間，要保人可以終止契約或質借嗎？", "back": "不可以。第135-4條但書。"}, {"id": 10, "ref": "130", "front": "健康保險準用人壽保險的哪些條文？", "back": "102至105、115、116、122、123、124。"}, {"id": 11, "ref": "135", "front": "傷害保險有沒有準用第107條（未滿15歲）？", "back": "有。第135條準用第107條與第107-1條。"}, {"id": 12, "ref": "129-1", "front": "債務人要保人的健康保險解約金債權，能不能被扣押？", "back": "不能。第129-1條（民國114年新增）。"}], "scenarios": [{"ref": "131", "q": "下列何者最符合保險法第131條的『意外傷害』？", "opts": ["因長期高血壓引起的中風", "非由疾病引起的外來突發事故所致的傷害", "因老化造成的關節退化", "因慢性病惡化而死亡"], "ans": 1, "why": "第131條第2項：意外傷害指非由疾病引起的外來突發事故所致者。其他選項都是疾病或內在因素。"}, {"ref": "127", "q": "甲投保健康保險時，已知自己有某項疾病。投保後該疾病住院。依第127條？", "opts": ["保險人須給付", "保險人對該項疾病不負給付責任", "契約自始無效", "保險人應退費並解除契約"], "ans": 1, "why": "第127條：契約訂立時被保險人已在疾病或妊娠情況中者，保險人對該疾病或分娩不負給付責任。"}, {"ref": "133", "q": "傷害保險的被保險人因犯罪行為受傷。依第133條？", "opts": ["保險人仍須給付", "保險人不負給付責任", "保險人應返還保單價值準備金", "減半給付"], "ans": 1, "why": "第133條：因犯罪行為所致傷害、失能或死亡，保險人不負給付責任。傷害保險這條沒有返還準備金的規定。"}, {"ref": "134", "q": "傷害保險的受益人故意傷害被保險人，但未遂。被保險人可以？", "opts": ["不能做任何事", "撤銷其受益權利", "終止保險契約", "要求保險人加倍賠償"], "ans": 1, "why": "第134條第2項：受益人故意傷害被保險人未遂時，被保險人得撤銷其受益權利。"}, {"ref": "135-4", "q": "年金保險在年金給付期間，要保人可以怎樣？", "opts": ["隨時終止契約", "不能終止契約，也不能質借", "可以質借但不能終止", "可以終止但不能質借"], "ans": 1, "why": "第135-4條但書：於年金給付期間，要保人不得終止契約或以保險契約為質向保險人借款。"}, {"ref": "130", "q": "下列哪一條人壽保險的規定，依保險法第130條，不在健康保險的準用範圍內？", "opts": ["第115條（利害關係人代繳保費）", "第116條（催告、停效、復效）", "第119條（解約金）", "第122條（年齡不實）"], "ans": 2, "why": "第130條準用102至105、115、116、122、123、124。第119條解約金不在內。"}, {"ref": "135", "q": "依第135條，傷害保險準用人壽保險的哪一組規定？", "opts": ["第107條與第107-1條（未成年人、受監護宣告者）", "第117條至第121條", "第122條（年齡不實）", "以上皆是"], "ans": 0, "why": "第135條準用102至105、107、107-1、110至116、123、124及125條第2項。第117條以後的減額、解約金、質借，以及第122條年齡不實，都不在內。"}], "chNo": "04", "summary": "健康保險、傷害保險、年金保險的給付責任、不賠情形，和各自『準用』人壽保險哪些條文。考題常拿準用範圍設陷阱。", "scope": "收錄保險法第125至135-4條（含129-1、132-1）。", "nav": {"prev": {"file": "ch03.html", "label": "第3章 人壽保險（保險法第101至124條）"}, "next": {"file": "ch05.html", "label": "第5章 保險業務員：登錄、招攬行為與懲處（保險業務員管理規則）"}}}</script>
+<script>const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=t=>{t=String(t||'');const ss=t.split(/(?<=。)/).map(x=>x.trim()).filter(Boolean);if(t.length<=90||ss.length<2&&t.indexOf('；')<0)return '<p>'+esc(t)+'</p>';
+  const li=s=>{s=s.replace(/。$/,'');const m=s.match(/^([^：；]{1,40})：(.+)$/);if(m&&m[2].split('；').length>=3)return '<li><b>'+esc(m[1])+'</b><ul>'+m[2].split('；').map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></li>';
+    const parts=s.split('；');if(parts.length>=3)return '<li>'+parts.map(x=>esc(x)).join('<br>')+'</li>';return '<li>'+esc(s)+'</li>'};
+  return '<ul class="pl">'+ss.map(li).join('')+'</ul>'};
+const factsT=f=>f?'<div class="tw"><table class="ft"><thead><tr>'+f.head.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+f.rows.map(r=>'<tr>'+r.map(x=>'<td>'+esc(x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>':'';
+const lab=x=>/^[保規]\d+(-\d+)?$/.test(x)?({'保':'保險法','規':'管理規則'}[x[0]])+'第'+x.slice(1)+'條':/^[一二三四五六七八九十]+(之[一二三四五六七八九十]+)?$/.test(x)?'第'+x+'點':/^[0-9]+(-[0-9]+)?$/.test(x)?'第'+x+'條':x;
+const mem={};
+const store={get(k){try{const v=localStorage.getItem(k);return v===null?mem[k]:v}catch(e){return mem[k]}},set(k,v){mem[k]=v;try{localStorage.setItem(k,v)}catch(e){}}};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const BOXKEY='twlife_boxes_v2';
+let boxes={};try{boxes=JSON.parse(store.get(BOXKEY)||'{}')}catch(e){boxes={}}
+const saveBoxes=()=>store.set(BOXKEY,JSON.stringify(boxes));
+function Flash(root,getCards){
+  let queue=[],cur=null,flipped=false;
+  function build(){const cs=getCards();queue=shuffle(cs.filter(c=>(boxes[c.key]||0)<1)).sort((a,b)=>(boxes[a.key]||0)-(boxes[b.key]||0));flipped=false}
+  function render(){
+    const cs=getCards(),n=cs.length,done=cs.filter(c=>(boxes[c.key]||0)>=1).length;
+    let h='<div class="stat">已熟練 '+done+' / '+n+' 張（答對 1 次視為熟練，進度存在這個瀏覽器）</div><div class="bar"><i style="width:'+(n?done/n*100:0)+'%"></i></div>';
+    if(!n){root.innerHTML=h+'<div class="card"><p>沒有可用的閃卡。</p></div>';return}
+    if(!queue.length){root.innerHTML=h+'<div class="card"><h3>全部熟練了</h3><p>可以去做情境題，或重設後再來一輪。</p></div><div class="row"><button class="btn" data-a="reset">重設進度</button></div>';return}
+    cur=queue[0];
+    h+='<div class="card fc" tabindex="0" role="button" data-a="flip"><small>'+(cur.tag?esc(cur.tag)+'｜':'')+esc(lab(cur.ref))+'｜剩 '+queue.length+' 張</small><div class="q">'+esc(cur.front)+'</div>'+(flipped?'<div class="a"><span class="lab fact">答案</span>'+esc(cur.back)+'</div>':'<small>點一下翻面</small>')+'</div>';
+    if(flipped)h+='<div class="row"><button class="btn bad" data-a="no">還不熟</button><button class="btn ok" data-a="yes">會了</button></div>';
+    h+='<div class="row"><button class="btn" data-a="reset">重設進度</button></div>';
+    root.innerHTML=h;
+  }
+  root.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a;
+    if(a==='flip'){flipped=!flipped;render()}
+    else if(a==='reset'){if(confirm('確定要清除這些閃卡的進度？')){getCards().forEach(c=>delete boxes[c.key]);saveBoxes();build();render()}}
+    else if(cur&&(a==='yes'||a==='no')){const ok=a==='yes';boxes[cur.key]=ok?Math.min(1,(boxes[cur.key]||0)+1):0;saveBoxes();queue.shift();if(!ok||boxes[cur.key]<1)queue.splice(queue.length?Math.max(1,Math.min(queue.length,ok?6:3)):0,0,cur);flipped=false;render()}});
+  root.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.fc')){e.preventDefault();flipped=!flipped;render()}});
+  return {refresh(){build();render()}};
+}
+function Quiz(root,getItems,perRound){
+  let items=[],score=0,answered=0,done=false;
+  function draw(){
+    const perms=items.map(s=>shuffle(s.opts.map((_,k)=>k)));
+    root.innerHTML='<div class="stat" id="sc"></div>'+items.map((s,i)=>'<div class="card" data-i="'+i+'"><b>'+(i+1)+'. </b><span class="lab my">'+(s.tag?esc(s.tag)+' ':'')+esc(lab(s.ref))+'</span>'+esc(s.q)+perms[i].map((k,pos)=>'<button class="opt" data-o="'+k+'">'+String.fromCharCode(65+pos)+'. '+esc(s.opts[k])+'</button>').join('')+'<div class="why"></div></div>').join('')+'<div id="qend"></div>';
+    score=0;answered=0;upd();
+  }
+  function upd(){const el=$('#sc',root);if(el)el.textContent='已作答 '+answered+' / '+items.length+'，答對 '+score+' 題';
+    if(perRound&&answered===items.length&&items.length){$('#qend',root).innerHTML='<div class="card"><h3>這一組：'+score+' / '+items.length+'</h3></div><div class="row"><button class="btn pri" data-a="again">再來一組</button></div>'}}
+  function again(){const all=getItems();items=perRound?shuffle(all).slice(0,perRound):all;draw()}
+  root.addEventListener('click',e=>{
+    const ag=e.target.closest('[data-a="again"]');if(ag){again();window.scrollTo(0,root.offsetTop-60);return}
+    const b=e.target.closest('.opt');if(!b)return;const box=b.closest('.card');if(box.dataset.done)return;
+    const s=items[+box.dataset.i],j=+b.dataset.o;box.dataset.done=1;answered++;if(j===s.ans)score++;
+    let right='';$$('.opt',box).forEach((x,pos)=>{const k=+x.dataset.o;if(k===s.ans){x.classList.add('right');right=String.fromCharCode(65+pos)}else if(k===j)x.classList.add('wrong')});
+    const w=$('.why',box);w.style.display='block';w.innerHTML=(j===s.ans?'答對了。':'答錯了，正解是 '+right+'。')+esc(s.why);upd()});
+  return {refresh:again};
+}
+</script>
+<script>
+const D=JSON.parse(document.getElementById('data').textContent);
+const LAWS=D.laws;
+$('#h1').textContent=D.chapter+'｜'+D.title;
+$('#intro').textContent=D.summary||'';
+document.title=D.chapter+' '+D.title;
+$('#foot').innerHTML='官方來源：'+LAWS.map(L=>esc(L.name)+'（'+esc(L.amended)+(L.kind==='press'?'發布':'修正')+'）'+(L.note?'｜'+esc(L.note)+'｜':'')+'<a href="'+esc(L.url)+'" target="_blank" rel="noopener">'+esc(L.url)+'</a>').join('<br>')+(D.scope?'<br>'+esc(D.scope):'')+'<br>條文原文取自全國法規資料庫；「白話」「口訣」「情境題」為編寫者整理，不是法條。法規可能再修正，請以官方最新公告為準；本內容不是法律意見。';
+const TABS=[['read','條文速讀'],['table','對照表'],['cards','閃卡'],['quiz','情境題']];
+const nav=$('#nav');
+TABS.forEach(([id,name])=>{const b=document.createElement('button');b.textContent=name;b.setAttribute('role','tab');b.dataset.id=id;b.onclick=()=>show(id);nav.appendChild(b)});
+let curTab='read';
+function show(id,anchor){curTab=id;TABS.forEach(([t])=>$('#s-'+t).classList.toggle('on',t===id));$$('button',nav).forEach(b=>b.setAttribute('aria-selected',b.dataset.id===id));
+  history.replaceState(null,'','#'+id+(anchor?'/'+anchor:''));
+  if(anchor){const el=document.getElementById(anchor);if(el){const d=el.querySelector('details');el.scrollIntoView({block:'start'});el.classList.add('hl')}}else window.scrollTo(0,0)}
+$('#s-read').innerHTML=(D.alerts||[]).map(a=>'<div class="banner"><b>'+esc(a.t)+'</b>'+esc(a.d)+'</div>').join('')+D.clauses.map(c=>{
+  const off=c.official.map(p=>'<p>'+esc(p)+'</p>').join('');
+  return '<div class="card" id="c'+esc(c.no)+'"><h3><span class="no">'+esc(lab(c.no))+'</span>'+esc(c.title)+'</h3>'
+   +'<div class="pw"><span class="lab my">白話</span>'+fmt(c.plain)+'</div>'+factsT(c.facts)
+   +(c.mnemonic?'<div class="mn"><span class="lab my">口訣</span>'+esc(c.mnemonic)+'</div>':'')
+   +(c.tip?'<p><span class="lab hint">提醒</span>'+esc(c.tip)+'</p>':'')
+   +(c.official.length?'<details><summary>展開官方條文原文</summary><div class="off"><span class="lab fact">原文</span>'+off+'</div></details>':'')+'</div>'}).join('');
+$('#s-table').innerHTML=D.tables.map((t,i)=>'<h3 id="t'+i+'">'+esc(t.title)+'</h3><div class="tw"><table><thead><tr>'+t.head.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+t.rows.map(r=>'<tr>'+r.map(x=>'<td>'+esc(x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>').join('');
+const cardsAll=D.cards.map(c=>({key:'ch'+D.chNo+':'+c.id,ref:c.ref,front:c.front,back:c.back}));
+const fl=Flash($('#s-cards'),()=>cardsAll);fl.refresh();
+const qz=Quiz($('#s-quiz'),()=>D.scenarios,0);qz.refresh();
+// 上下章
+const N=D.nav||{};
+function setLink(el,o,dir){if(o){el.href=o.file;el.textContent=dir==='p'?'← '+o.label:o.label+' →'}else{el.style.visibility='hidden'}}
+setLink($('#prev'),N.prev,'p');setLink($('#next'),N.next,'n');
+// 左右滑動：換分頁，到頭就換章
+function step(d){const i=TABS.findIndex(t=>t[0]===curTab)+d;
+  if(i<0){if(N.prev)location.href=N.prev.file+'#read';return}
+  if(i>=TABS.length){if(N.next)location.href=N.next.file+'#read';return}
+  show(TABS[i][0])}
+let sx=0,sy=0,skip=false;
+document.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;const el=e.target&&e.target.nodeType===1?e.target:(e.target&&e.target.parentElement);skip=!!(el&&el.closest('.tw,nav,input,.off'))},{passive:true});
+document.addEventListener('touchend',e=>{if(skip)return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>70&&Math.abs(dy)<45){step(dx<0?1:-1)}},{passive:true});
+document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1)});
+// 深層連結
+function route(){const h=(location.hash||'#read').slice(1).split('/');show(TABS.some(t=>t[0]===h[0])?h[0]:'read',h[1]?decodeURIComponent(h[1]):null)}
+window.addEventListener('hashchange',route);route();
+</script></body></html>
