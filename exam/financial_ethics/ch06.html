@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第六章 證券、期貨與基金從業人員：內線交易、操縱、誠信與投資人保護</title><style>:root{--bg:#f7f6f2;--card:#fff;--ink:#222;--sub:#666;--line:#e3e0d8;--brand:#1f5f8b;--brand2:#e8f1f7;--ok:#2e7d32;--okbg:#e8f5e9;--bad:#b3261e;--badbg:#fdecea;--warn:#8a5a00;--warnbg:#fff4de}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 "Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+a{color:var(--brand)}
+header{background:var(--brand);color:#fff;padding:12px 16px 14px}
+header a{color:#fff;text-decoration:none;font-size:14px;opacity:.9}
+header h1{margin:4px 0 0;font-size:20px;line-height:1.4}
+header p{margin:6px 0 0;font-size:14px;opacity:.95}
+.wrap{max-width:900px;margin:0 auto;padding:0 12px 60px}
+.banner{background:var(--warnbg);color:var(--warn);border:1px solid #f0d9a8;border-radius:8px;padding:10px 12px;margin:12px 0;font-size:14px}
+.banner b{margin-right:4px}
+nav{position:sticky;top:0;background:var(--bg);z-index:5;display:flex;gap:6px;padding:10px 0;overflow-x:auto;border-bottom:1px solid var(--line)}
+nav button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:15px;cursor:pointer;color:var(--ink)}
+nav button[aria-selected="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+section{display:none;padding-top:14px}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 12px}
+.card h3{margin:0 0 6px;font-size:17px}
+.no{display:inline-block;background:var(--brand);color:#fff;border-radius:6px;padding:0 8px;margin-right:8px;font-size:14px}
+.lab{display:inline-block;font-size:12px;border-radius:4px;padding:0 6px;margin-right:6px;vertical-align:1px}
+.lab.fact{background:#e3f2e5;color:#1b5e20}.lab.my{background:#e8eaf6;color:#283593}.lab.hint{background:var(--warnbg);color:var(--warn)}
+.mn{background:var(--brand2);border-radius:8px;padding:8px 10px;margin:8px 0}
+details{margin:8px 0}details summary{cursor:pointer;color:var(--brand);font-size:15px}
+.off{border-left:3px solid var(--brand);padding:2px 0 2px 10px;margin:8px 0;font-size:15px;color:#333}.off p{margin:4px 0}
+table{border-collapse:collapse;width:100%;font-size:15px;background:#fff}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}th{background:var(--brand2)}
+.tw{overflow-x:auto;margin-bottom:16px}
+.fc{min-height:210px;display:flex;flex-direction:column;justify-content:center;text-align:center;cursor:pointer;user-select:none}
+.fc .q{font-size:19px;font-weight:600}.fc .a{font-size:16px;text-align:left;margin-top:8px}.fc small{color:var(--sub)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.btn{border:1px solid var(--brand);background:#fff;color:var(--brand);border-radius:8px;padding:9px 16px;font-size:16px;cursor:pointer}
+.btn.pri{background:var(--brand);color:#fff}.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}.btn.bad{background:var(--bad);border-color:var(--bad);color:#fff}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:6px 0}.bar>i{display:block;height:100%;background:var(--ok)}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 12px;margin:6px 0;font-size:16px;cursor:pointer}
+.opt.right{background:var(--okbg);border-color:var(--ok)}.opt.wrong{background:var(--badbg);border-color:var(--bad)}
+.why{display:none;background:var(--brand2);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:15px}
+.stat{color:var(--sub);font-size:14px}
+footer{color:var(--sub);font-size:13px;margin-top:24px}
+.pager{display:flex;justify-content:space-between;gap:8px;margin-top:18px}.pager a{flex:1;text-align:center;border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px;text-decoration:none;font-size:14px}
+.hl{animation:hl 1.6s ease-out}@keyframes hl{0%{box-shadow:0 0 0 4px #ffd54f}100%{box-shadow:0 0 0 0 transparent}}
+mark{background:#fff0a8;padding:0 1px}
+.search{display:flex;gap:8px;margin:14px 0 6px}.search input{flex:1;font-size:17px;padding:10px 12px;border:1px solid var(--line);border-radius:10px}
+.res{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0;display:block;text-decoration:none;color:var(--ink)}
+.res small{color:var(--sub)}.res b{color:var(--brand)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.ch{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-decoration:none;color:var(--ink);display:block}
+.ch:hover{border-color:var(--brand)}.ch h3{margin:0 0 4px;font-size:16px;color:var(--brand)}.ch p{margin:4px 0;font-size:14px}
+.chip{display:inline-block;background:var(--brand2);color:#134;border-radius:999px;padding:0 9px;margin:2px 3px 2px 0;font-size:12.5px}
+.filter{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.filter button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 12px;font-size:14px;cursor:pointer}.filter button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+h2{font-size:18px;margin:24px 0 8px}
+
+.pw{margin:6px 0}.pw p{margin:4px 0}.pl{margin:6px 0 6px 0;padding-left:20px}.pl li{margin:5px 0;line-height:1.7}.pl ul{margin:4px 0;padding-left:18px;list-style:disc}.pl ul li{margin:2px 0}.pl>li>b{color:#283593}
+table.ft{font-size:14px;table-layout:fixed}table.ft td:first-child,table.ft th:first-child{font-weight:600;width:34%;word-break:break-all}table.ft td,table.ft th{word-break:break-word;padding:6px 7px}table.ft th{width:auto}
+</style></head>
+<body>
+<header><div class="wrap" style="padding:0"><a href="index.html">← 首頁（搜尋、總複習）</a><h1 id="h1"></h1><p id="intro"></p></div></header>
+<div class="wrap">
+<nav role="tablist" id="nav"></nav>
+<section id="s-read"></section><section id="s-table"></section><section id="s-cards"></section><section id="s-quiz"></section>
+<div class="pager"><a id="prev" href="#"></a><a id="next" href="#"></a></div>
+<footer id="foot"></footer>
+</div>
+<script id="data" type="application/json">{"chapter": "第六章", "title": "證券、期貨與基金從業人員：內線交易、操縱、誠信與投資人保護", "laws": [{"pcode": "G0400001", "name": "證券交易法", "amended": "民國113年8月7日", "url": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0400001", "source": "法務部全國法規資料庫（經 kong0107/mojLawSplitJSON 公開鏡像取得，鏡像更新日 20261016）", "retrieved": "2026-11-03", "mirrorDate": "20240807"}, {"pcode": "G0400020", "name": "證券商負責人與業務人員管理規則", "amended": "民國114年7月18日", "url": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0400020", "source": "法務部全國法規資料庫（經 kong0107/mojLawSplitJSON 公開鏡像取得，鏡像更新日 20261016）", "retrieved": "2026-11-03", "mirrorDate": "20250718"}, {"pcode": "G0400121", "name": "證券投資信託及顧問法", "amended": "民國112年6月28日", "url": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0400121", "source": "法務部全國法規資料庫（經 kong0107/mojLawSplitJSON 公開鏡像取得，鏡像更新日 20261016）", "retrieved": "2026-11-03", "mirrorDate": "20230628"}, {"pcode": "G0400038", "name": "證券投資人及期貨交易人保護法", "amended": "民國114年7月16日", "url": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0400038", "source": "法務部全國法規資料庫（經 kong0107/mojLawSplitJSON 公開鏡像取得，鏡像更新日 20261016）", "retrieved": "2026-11-03", "mirrorDate": "20250716"}], "alerts": [{"t": "重點是『誰』『什麼時候』『多重』", "d": "內線交易（證券交易法第157-1條）要記三件事：五種人（董監經理人、持股超過10%股東、基於職業或控制關係獲悉消息的人、喪失身分未滿6個月的人、從前四類人獲悉消息的人）；消息明確後、未公開前，或公開後18小時內；違反的刑責是3年以上10年以下有期徒刑（第171條）。"}, {"t": "後果的提醒（風險）", "d": "內線交易、操縱價格、虛偽詐欺，最重處3年以上10年以下有期徒刑，得併科1,000萬元至2億元罰金；犯罪所得達1億元以上，處7年以上有期徒刑。民事上，內線交易最高可能被判3倍損害賠償。注意：『從內部人聽來的人』也被規範，不是只有公司內部的人。"}, {"t": "兩個容易混淆的數字", "d": "證券投資信託及顧問法第9條的懲罰性賠償是『故意最高3倍、重大過失最高2倍』；金融消費者保護法第11-3條是『故意最高3倍、過失最高1倍』。兩個法的『過失』程度和倍數不同，考試很愛考。"}], "clauses": [{"title": "有價證券的募集、發行、買賣：不得虛偽、詐欺", "plain": "有價證券的募集、發行、私募或買賣，不得有虛偽、詐欺或其他足致他人誤信的行為。發行人申報或公告的財務報告及財務業務文件，內容不得有虛偽或隱匿。違反的，對善意取得人或出賣人因而所受損害，要負賠償責任；委託證券經紀商以行紀名義買賣的人，視為善意取得人或出賣人。", "mnemonic": "募集發行買賣，不得虛偽詐欺；違反要賠善意取得人。", "official": ["有價證券之募集、發行、私募或買賣，不得有虛偽、詐欺或其他足致他人誤信之行為。", "發行人依本法規定申報或公告之財務報告及財務業務文件，其內容不得有虛偽或隱匿之情事。", "違反第一項規定者，對於該有價證券之善意取得人或出賣人因而所受之損害，應負賠償責任。", "委託證券經紀商以行紀名義買入或賣出之人，視為前項之取得人或出賣人。"], "has_official": true, "no": "證20"}, {"title": "不得操縱上市有價證券價格", "plain": "對在證券交易所上市的有價證券，不得有下列行為：成交後不履行交割而足以影響市場秩序；意圖抬高或壓低價格，與他人通謀以約定價格自己出售或購買，並使對方同時為相對行為；意圖抬高或壓低價格，自行或以他人名義連續以高價買入或低價賣出，而有影響市場價格或秩序之虞；意圖造成交易活絡的表象，連續委託買賣而相對成交；意圖影響價格而散布流言或不實資料；其他影響交易價格的操縱行為。（刪除第2款）。證券商營業處所買賣準用。違反的，對善意買入或賣出者負賠償責任。", "mnemonic": "不履行交割、通謀對敲、連續高買低賣、製造交易活絡、散布流言、其他操縱。", "tip": "不只是自己做，『以他人名義』連續買賣也算。散布流言或不實資料影響價格，也是操縱。", "official": ["對於在證券交易所上市之有價證券，不得有下列各款之行為：", "一、在集中交易市場委託買賣或申報買賣，業經成交而不履行交割，足以影響市場秩序。", "二、（刪除）", "三、意圖抬高或壓低集中交易市場某種有價證券之交易價格，與他人通謀，以約定價格於自己出售，或購買有價證券時，使約定人同時為購買或出售之相對行為。", "四、意圖抬高或壓低集中交易市場某種有價證券之交易價格，自行或以他人名義，對該有價證券，連續以高價買入或以低價賣出，而有影響市場價格或市場秩序之虞。", "五、意圖造成集中交易市場某種有價證券交易活絡之表象，自行或以他人名義，連續委託買賣或申報買賣而相對成交。", "六、意圖影響集中交易市場有價證券交易價格，而散布流言或不實資料。", "七、直接或間接從事其他影響集中交易市場有價證券交易價格之操縱行為。", "前項規定，於證券商營業處所買賣有價證券準用之。", "違反前二項規定者，對於善意買入或賣出有價證券之人所受之損害，應負賠償責任。", "第二十條第四項規定，於前項準用之。"], "has_official": true, "no": "證155"}, {"title": "內線交易：五種人、18小時", "plain": "實際知悉發行股票公司有重大影響股票價格的消息時，在消息明確後、未公開前或公開後18小時內，不得對該公司上市或在證券商營業處所買賣的股票或其他股權性質有價證券，自行或以他人名義買入或賣出。適用的五種人：一、董事、監察人、經理人及法人代表人；二、持股超過10%的股東；三、基於職業或控制關係獲悉消息的人；四、喪失前三款身分後未滿6個月的人；五、從前四款人獲悉消息的人。重大影響支付本息能力的消息，不得賣出非股權性質的公司債。違反要對善意從事相反買賣的人負賠償責任；情節重大，法院可提高到3倍；第5款的人要與提供消息的人負連帶賠償責任（有正當理由相信消息已公開者除外）。", "mnemonic": "五種人：董監經理人、持股超過10%、職業或控制關係、喪失身分未滿6個月、聽來的人。消息明確後、公開後18小時。", "tip": "『從前四種人聽來的消息』也是內線交易的主體；業務員、理專從客戶（上市公司董事）聽到的消息就是『基於職業關係獲悉』。", "facts": {"head": ["款", "適用的人"], "rows": [["1", "董事、監察人、經理人及法人代表行使職務的自然人"], ["2", "持有該公司股份超過10%的股東"], ["3", "基於職業或控制關係獲悉消息的人"], ["4", "喪失前三款身分後未滿6個月的人"], ["5", "從前四款所列之人獲悉消息的人"]]}, "official": ["下列各款之人，實際知悉發行股票公司有重大影響其股票價格之消息時，在該消息明確後，未公開前或公開後十八小時內，不得對該公司之上市或在證券商營業處所買賣之股票或其他具有股權性質之有價證券，自行或以他人名義買入或賣出：", "一、該公司之董事、監察人、經理人及依公司法第二十七條第一項規定受指定代表行使職務之自然人。", "二、持有該公司之股份超過百分之十之股東。", "三、基於職業或控制關係獲悉消息之人。", "四、喪失前三款身分後，未滿六個月者。", "五、從前四款所列之人獲悉消息之人。", "前項各款所定之人，實際知悉發行股票公司有重大影響其支付本息能力之消息時，在該消息明確後，未公開前或公開後十八小時內，不得對該公司之上市或在證券商營業處所買賣之非股權性質之公司債，自行或以他人名義賣出。", "違反第一項或前項規定者，對於當日善意從事相反買賣之人買入或賣出該證券之價格，與消息公開後十個營業日收盤平均價格之差額，負損害賠償責任；其情節重大者，法院得依善意從事相反買賣之人之請求，將賠償額提高至三倍；其情節輕微者，法院得減輕賠償金額。", "第一項第五款之人，對於前項損害賠償，應與第一項第一款至第四款提供消息之人，負連帶賠償責任。但第一項第一款至第四款提供消息之人有正當理由相信消息已公開者，不負賠償責任。", "第一項所稱有重大影響其股票價格之消息，指涉及公司之財務、業務或該證券之市場供求、公開收購，其具體內容對其股票價格有重大影響，或對正當投資人之投資決定有重要影響之消息；其範圍及公開方式等相關事項之辦法，由主管機關定之。", "第二項所定有重大影響其支付本息能力之消息，其範圍及公開方式等相關事項之辦法，由主管機關定之。", "第二十二條之二第三項規定，於第一項第一款、第二款，準用之；其於身分喪失後未滿六個月者，亦同。第二十條第四項規定，於第三項從事相反買賣之人準用之。"], "has_official": true, "no": "證157-1"}, {"title": "內線交易、操縱、虛偽詐欺的刑責", "plain": "違反第20條第1、2項、第155條第1、2項、第157-1條第1、2項的，處3年以上10年以下有期徒刑，得併科1,000萬元以上2億元以下罰金。因犯罪獲取的財物或利益達1億元以上的，處7年以上有期徒刑，得併科2,500萬元以上5億元以下罰金。犯罪後自首並繳交全部所得，減輕或免除其刑；偵查中自白並繳交，減輕其刑。", "mnemonic": "內線、操縱、虛偽詐欺：3年到10年；所得1億以上：7年以上。", "facts": {"head": ["情形", "刑責"], "rows": [["違反第20、155、157-1條", "3年以上10年以下有期徒刑，得併科1,000萬至2億元罰金"], ["犯罪所得達1億元以上", "7年以上有期徒刑，得併科2,500萬至5億元罰金"], ["自首並繳交全部所得", "減輕或免除其刑"], ["偵查中自白並繳交全部所得", "減輕其刑"]]}, "official": ["有下列情事之一者，處三年以上十年以下有期徒刑，得併科新臺幣一千萬元以上二億元以下罰金：", "一、違反第二十條第一項、第二項、第一百五十五條第一項、第二項、第一百五十七條之一第一項或第二項規定。", "二、已依本法發行有價證券公司之董事、監察人、經理人或受僱人，以直接或間接方式，使公司為不利益之交易，且不合營業常規，致公司遭受重大損害。", "三、已依本法發行有價證券公司之董事、監察人或經理人，意圖為自己或第三人之利益，而為違背其職務之行為或侵占公司資產，致公司遭受損害達新臺幣五百萬元。", "犯前項之罪，其因犯罪獲取之財物或財產上利益金額達新臺幣一億元以上者，處七年以上有期徒刑，得併科新臺幣二千五百萬元以上五億元以下罰金。", "有第一項第三款之行為，致公司遭受損害未達新臺幣五百萬元者，依刑法第三百三十六條及第三百四十二條規定處罰。", "犯前三項之罪，於犯罪後自首，如自動繳交全部犯罪所得者，減輕或免除其刑；並因而查獲其他正犯或共犯者，免除其刑。", "犯第一項至第三項之罪，在偵查中自白，如自動繳交全部犯罪所得者，減輕其刑；並因而查獲其他正犯或共犯者，減輕其刑至二分之一。", "犯第一項或第二項之罪，其因犯罪獲取之財物或財產上利益超過罰金最高額時，得於犯罪獲取之財物或財產上利益之範圍內加重罰金；如損及證券市場穩定者，加重其刑至二分之一。", "犯第一項至第三項之罪，犯罪所得屬犯罪行為人或其以外之自然人、法人或非法人團體因刑法第三十八條之一第二項所列情形取得者，除應發還被害人、第三人或得請求損害賠償之人外，沒收之。", "違反第一百六十五條之一或第一百六十五條之二準用第二十條第一項、第二項、第一百五十五條第一項、第二項、第一百五十七條之一第一項或第二項規定者，依第一項第一款及第二項至前項規定處罰。", "第一項第二款、第三款及第二項至第七項規定，於外國公司之董事、監察人、經理人或受僱人適用之。"], "has_official": true, "no": "證171"}, {"title": "業務人員不得兼任他家證券商、受託買賣人員不得兼辦收付款券等", "plain": "證券商業務人員不得兼任國內外其他證券商任何職務（法令遵循、內部稽核、風險管理、主辦會計人員兼任國外證券關係企業相同性質職務的例外）。辦理自行買賣的人員、內部稽核人員、風險管理人員，不得辦理登記範圍以外的業務或由其他人員兼辦。辦理受託買賣、或負責資產配置、財務規劃等顧問諮詢或金融商品銷售的人員，不得兼辦開戶、結算交割、款券收付、保管、融資融券、承銷、主辦會計、代辦股務。業務員不得執行或兼為高級業務員的業務。", "mnemonic": "不兼他家；受託買賣不兼辦收付保管；業務員不當高級業務員。", "tip": "這是利益衝突防範：賣的人不能同時經手錢和券，避免挪用、舞弊。你的筆記提到的『稽核不得兼任櫃檯、交易員不得兼…』就是同一個概念。", "official": ["證券商業務人員，不得兼任國內外其他證券商任何職務。但證券商法令遵循人員、內部稽核人員、風險管理人員及主辦會計人員兼任國外證券關係企業相同性質職務者，不在此限。", "前項所稱關係企業，適用公司法關係企業章之規定。", "證券商之下列業務人員不得辦理登記範圍以外之業務或由其他業務人員兼辦，但其他法令另有規定者，從其規定：", "一、辦理有價證券自行買賣業務之人員。", "二、內部稽核人員。", "三、風險管理人員。", "證券商辦理受託買賣有價證券業務之人員，及負責資產配置或財務規劃等顧問諮詢或金融商品銷售服務之人員，不得兼辦有價證券開戶、結算交割、款券收付、保管、融資融券、承銷、主辦會計、代辦股務等職務。", "期貨商兼營證券業務，其業務人員如具有證券及期貨業務人員資格者，於辦理登記範圍之開戶、受託買賣、自行買賣、結算交割、法令遵循、內部稽核、自行查核、風險管理及主辦會計業務時，得同時辦理證券及期貨之相同性質業務。", "期貨商兼營證券業務者，其辦理受託買賣、自行買賣及結算交割業務部門之經理人，得由其辦理相同性質業務之期貨部門經理人且符合第八條及第十條規定之資格條件者兼任。", "第五項及前項規定，除其他法令另有規定者外，於期貨商以外之金融機構兼營證券業務者準用之。", "證券商之業務員不得執行或兼為高級業務員之業務。", "證券商業務人員之兼任與兼辦職務行為，證券商應建立內部審核控管機制，以確保業務人員本職及兼任或兼辦職務之有效執行，並維持證券商業務之正常運作，不得涉有利益衝突、違反證券相關規定或內部控制制度情事，且應確保客戶及股東權益。"], "has_official": true, "no": "證商4"}, {"title": "業務人員要先登記，才能執行業務", "plain": "證券商負責人及業務人員，執行職務前，要由所屬證券商向證券交易所、證券商業同業公會或櫃買中心辦理登記，沒有登記不能執行業務。有特定情事的，不予登記；已登記的要撤銷。", "mnemonic": "先登記，才能執行業務。", "official": ["證券商負責人及業務人員於執行職務前，應由所屬證券商向證券交易所、證券商業同業公會或證券櫃檯買賣中心辦理登記，非經登記不得執行業務。", "證券商僱用經本會依本法規定命令解除職務未滿三年之人員，從事第二條第二項各款以外業務者，應向證券交易所申報登記後，始得為之。", "證券交易所、證券商業同業公會或證券櫃檯買賣中心，對有下列情事之一者，應不予登記；已登記者，應予撤銷：", "一、證券商負責人有公司法第三十條或本法第五十三條規定之情事者。", "二、證券商業務人員有本法第五十四條第一項規定之情事或不符合第五條及第六條所定之資格條件者。", "證券交易所、證券商業同業公會或證券櫃檯買賣中心對於前三項之登記，應於每月十五日前將上月之登記情形彙總轉報本會備查。"], "has_official": true, "no": "證商12"}, {"title": "業務人員的行為，視為證券商授權範圍內的行為", "plain": "證券商的業務人員，在從事承銷、自行買賣、受託買賣等業務所為的行為，視為該證券商授權範圍內的行為。", "mnemonic": "業務人員的業務行為，算證券商授權範圍。", "tip": "『視為授權範圍』所以客戶可以向證券商主張；不是只有業務員個人的責任。", "official": ["證券商之業務人員，於從事第二條第二項各款業務所為之行為，視為該證券商授權範圍內之行為。"], "has_official": true, "no": "證商20"}, {"title": "投信投顧：善良管理人、忠實義務、保密", "plain": "證券投資信託事業、投顧事業、基金保管機構、全權委託保管機構及其董事、監察人、經理人或受僱人，要依法令及契約，以善良管理人的注意義務及忠實義務，本誠實信用原則執行業務。對受益人或客戶的個資、往來交易資料及其他相關資料，除其他法律或主管機關另有規定外，應保守秘密。違反的，要賠償受益人或契約相對人所受損害。", "mnemonic": "善管、忠實、誠信；客戶資料要保密。", "official": ["證券投資信託事業、證券投資顧問事業、基金保管機構、全權委託保管機構及其董事、監察人、經理人或受僱人，應依本法、本法授權訂定之命令及契約之規定，以善良管理人之注意義務及忠實義務，本誠實信用原則執行業務。", "前項事業、機構或人員對於受益人或客戶個人資料、往來交易資料及其他相關資料，除其他法律或主管機關另有規定外，應保守秘密。", "違反前二項規定者，就證券投資信託基金受益人或契約之相對人因而所受之損害，應負賠償之責。"], "has_official": true, "no": "投顧7"}, {"title": "投信投顧：不得虛偽、詐欺、足致誤信", "plain": "經營證券投資信託、投顧、全權委託投資、基金保管等業務的人，不得有虛偽行為、詐欺行為、其他足致他人誤信的行為。申報或公告的財務報告及其他業務文件，不得有虛偽或隱匿。違反的，要賠償受益人或契約相對人所受損害。", "mnemonic": "虛偽、詐欺、足致誤信，都不行。", "official": ["經營證券投資信託業務、證券投資顧問業務、全權委託投資業務、基金保管業務、全權委託保管業務或其他本法所定業務者，不得有下列情事：", "一、虛偽行為。", "二、詐欺行為。", "三、其他足致他人誤信之行為。", "證券投資信託事業、證券投資顧問事業、基金保管機構及全權委託保管機構申報或公告之財務報告及其他相關業務文件，其內容不得有虛偽或隱匿之情事。", "違反前二項規定者，就證券投資信託基金受益人或契約之相對人因而所受之損害，應負賠償之責。"], "has_official": true, "no": "投顧8"}, {"title": "懲罰性賠償：故意3倍、重大過失2倍；時效2年、5年", "plain": "違反本法規定應負損害賠償責任的人，對於故意所致損害，法院得依被害人請求，酌定損害額3倍以下懲罰性賠償；因重大過失所致損害，得酌定2倍以下。損害賠償請求權，自知有得受賠償之原因時起2年間不行使而消滅；自賠償原因發生之日起逾5年者，亦同。", "mnemonic": "故意3倍、重大過失2倍；知2年、5年絕。", "tip": "和金融消費者保護法第11-3條比較：金保法是『故意3倍、過失1倍』，投顧法是『故意3倍、重大過失2倍』。", "facts": {"head": ["法律", "故意", "過失程度", "時效"], "rows": [["金融消費者保護法第11-3條", "損害額3倍以下", "過失：1倍以下", "知2年、發生5年"], ["證券投資信託及顧問法第9條", "損害額3倍以下", "重大過失：2倍以下", "知2年、發生5年"]]}, "official": ["違反本法規定應負損害賠償責任之人，對於故意所致之損害，法院得因被害人之請求，依侵害情節，酌定損害額三倍以下之懲罰性賠償；因重大過失所致之損害，得酌定損害額二倍以下之懲罰性賠償。", "本法規定之損害賠償請求權，自有請求權人知有得受賠償之原因時起二年間不行使而消滅；自賠償原因發生之日起逾五年者，亦同。"], "has_official": true, "no": "投顧9"}, {"title": "保護基金償付：券商或期貨商失去清償能力而違約", "plain": "證券投資人委託的證券商因財務困難失去清償能力而違約時，投資人在證券交易市場買賣有價證券並已完成交割義務，卻沒有取得應得的有價證券或價款，保護機構（證券投資人及期貨交易人保護中心）得動用保護基金償付。期貨交易人亦同（針對保證金、權利金及結算後利得）。償付的上限金額、程序，由主管機關定之。", "mnemonic": "券商倒了、已交割沒拿到券款，保護基金償付；有上限。", "tip": "『一定額度』與償付程序在主管機關的辦法裡，這裡不要記數字，用的時候查最新公告。", "official": ["證券投資人及期貨交易人有下列情形時，保護機構得動用保護基金償付之：", "一、證券投資人於所委託之證券商因財務困難失卻清償能力而違約時，其於證券交易市場買賣有價證券並已完成交割義務，或委託該證券商向認購（售）權證之發行人請求履約並已給付應繳之價款或有價證券，而未取得其應得之有價證券或價款。", "二、期貨交易人於所委託之期貨商因財務困難失卻清償能力而違約時，其於期貨交易市場從事期貨交易，而未取得其應得之保證金、權利金，及經期貨結算機構完成結算程序後之利得。", "保護基金依前項規定，償付每一證券投資人或期貨交易人之金額上限、對每一證券商或期貨商之全體證券投資人或期貨交易人之償付總額上限、償付程序及償付辦法，由主管機關定之。", "保護機構依第一項規定償付後，於其償付之限度內承受證券投資人或期貨交易人對於違約證券商或期貨商之權利。", "第三十四條至第三十六條規定，於保護機構依前項規定承受權利而對違約證券商或期貨商提起訴訟、上訴或聲請保全程序、執行程序時，準用之。"], "has_official": true, "no": "投保21"}, {"title": "證券期貨民事爭議可向保護機構申請調處", "plain": "證券投資人或期貨交易人與發行人、證券商、證券服務事業、期貨業、交易所、櫃買中心、結算機構或其他利害關係人間，因有價證券募集、發行、買賣或期貨交易所生的民事爭議，可向保護機構申請調處。", "mnemonic": "證券期貨的民事爭議：找投保中心調處。", "official": ["證券投資人或期貨交易人與發行人、證券商、證券服務事業、期貨業、交易所、櫃檯買賣中心、結算機構或其他利害關係人間，因有價證券之募集、發行、買賣或期貨交易及其他相關事宜所生民事爭議，得向保護機構申請調處。", "保護機構為處理調處事項，應設調處委員會，置委員七人至十五人；其組織及調處辦法，由主管機關定之。"], "has_official": true, "no": "投保22"}], "tables": [{"title": "內線交易速記：五種人與兩個關鍵時點", "head": ["項目", "重點"], "rows": [["哪五種人", "董監經理人；持股超過10%股東；基於職業或控制關係獲悉消息；喪失身分未滿6個月；從前四種人聽到消息的人"], ["消息明確後", "未公開前不得買賣"], ["公開後", "18小時內不得買賣"], ["民事賠償", "差額（與消息公開後10個營業日收盤平均價的差額）；情節重大可提高到3倍"], ["刑責", "3年以上10年以下有期徒刑，得併科1,000萬至2億元罰金"]]}, {"title": "操縱價格行為速記（第155條）", "head": ["類型", "例子"], "rows": [["不履行交割", "委託成交卻不交割，足以影響市場秩序"], ["通謀對敲", "與他人通謀，以約定價格賣出或買進，並使對方同時為相對行為"], ["連續高買低賣", "自行或以他人名義，連續以高價買入或低價賣出，影響市場價格或秩序之虞"], ["製造交易活絡假象", "連續委託買賣而相對成交"], ["散布流言", "為影響價格，散布流言或不實資料"], ["其他", "其他影響集中交易市場價格的操縱行為"]]}, {"title": "數字速記：證券、基金", "head": ["條", "數字", "什麼事"], "rows": [["證157-1", "10%", "持股超過此比例的股東屬內線交易主體"], ["證157-1", "6個月", "喪失董監經理人等身分後，仍受規範的期間"], ["證157-1", "18小時", "消息公開後，仍不得買賣的時間"], ["證171", "3年以上10年以下；7年以上", "內線、操縱、虛偽詐欺刑責（所得達1億元以上：7年以上）"], ["投顧9", "3倍、2倍", "懲罰性賠償：故意；重大過失"], ["投顧9", "2年、5年", "損害賠償請求權時效"]]}], "cards": [{"ref": "證157-1", "front": "內線交易的五種人，第五種是誰？", "back": "從前四種人（董監經理人、持股超過10%股東、基於職業或控制關係獲悉消息者、喪失身分未滿6個月者）獲悉消息的人。", "id": 1}, {"ref": "證157-1", "front": "內線交易：消息公開後，還要等多久才能買賣？", "back": "公開後18小時內，不得買賣。", "id": 2}, {"ref": "證157-1", "front": "董監經理人離職後多久，還受內線交易規範？", "back": "喪失身分後未滿6個月。", "id": 3}, {"ref": "證157-1", "front": "持股超過多少比例的股東，屬於內線交易的規範對象？", "back": "超過10%。", "id": 4}, {"ref": "證171", "front": "內線交易、操縱、虛偽詐欺的刑責？", "back": "3年以上10年以下有期徒刑，得併科1,000萬以上2億元以下罰金；所得達1億元以上，7年以上有期徒刑。", "id": 5}, {"ref": "證155", "front": "以他人名義連續高價買入影響價格，算不算操縱？", "back": "算，只要意圖抬高或壓低價格，而有影響市場價格或秩序之虞。", "id": 6}, {"ref": "證155", "front": "散布流言或不實資料影響股價，是什麼行為？", "back": "屬於證券交易法第155條第1項第6款的操縱行為。", "id": 7}, {"ref": "證20", "front": "有價證券募集、發行、買賣，不得有什麼行為？", "back": "虛偽、詐欺或其他足致他人誤信的行為。", "id": 8}, {"ref": "證商4", "front": "受託買賣的證券商業務人員，能不能兼辦款券收付、保管、結算交割？", "back": "不能。", "id": 9}, {"ref": "證商12", "front": "證券商業務人員沒登記，能不能執行業務？", "back": "不能，非經登記不得執行業務。", "id": 10}, {"ref": "證商20", "front": "證券商業務人員從事法定業務所為的行為，法律上視為誰的行為？", "back": "視為該證券商授權範圍內的行為。", "id": 11}, {"ref": "投顧7", "front": "投信投顧業對客戶資料要怎麼處理？", "back": "要保守秘密（其他法律或主管機關另有規定者除外）。", "id": 12}, {"ref": "投顧9", "front": "投信投顧法的懲罰性賠償：故意？重大過失？", "back": "故意：3倍以下；重大過失：2倍以下。", "id": 13}, {"ref": "投保21", "front": "證券商失去清償能力而違約時，哪個機構可動用保護基金償付投資人？", "back": "證券投資人及期貨交易人保護機構（投保中心）。", "id": 14}, {"ref": "投保22", "front": "證券、期貨民事爭議，可向哪裡申請調處？", "back": "證券投資人及期貨交易人保護機構。", "id": 15}], "scenarios": [{"ref": "證157-1", "q": "某上市公司的董事得知公司即將公布重大虧損的消息，消息尚未公開。依證券交易法第157-1條，該董事可不可以賣出該公司股票？", "opts": ["可以，因為是自己的股票", "不可以，在消息明確後、未公開前，或公開後18小時內，不得買入或賣出", "只要不用自己名義就可以", "只要持股不超過10%就可以"], "ans": 1, "why": "第157-1條：董事等實際知悉重大影響股價消息，在消息明確後、未公開前或公開後18小時內，不得自行或以他人名義買賣。以他人名義也不行。"}, {"ref": "證157-1", "q": "小華從在上市公司擔任經理人的朋友那裡，得知公司即將併購的消息，而這消息尚未公開。小華拿這消息買了該公司股票。小華屬於內線交易五種人的哪一類？", "opts": ["不屬於，因為他不是公司內部人", "第5款：從前四款所列之人獲悉消息的人", "第2款：持股超過10%股東", "第4款：喪失身分未滿6個月者"], "ans": 1, "why": "第157-1條第1項第5款：從前四款所列之人（含經理人）獲悉消息的人，也是規範對象；在消息明確後、未公開前買賣，同樣違法。"}, {"ref": "證157-1", "q": "某前董事剛離職3個月，依證券交易法第157-1條，仍然要遵守內線交易規定嗎？", "opts": ["不需要，因為已離職", "需要，喪失董事身分後未滿6個月仍受規範", "需要，但只限離職滿1年內", "只有持股超過10%才需要"], "ans": 1, "why": "第157-1條第1項第4款：喪失前三款身分後未滿6個月者，仍在規範範圍內。"}, {"ref": "證171", "q": "內線交易違反證券交易法第157-1條，刑責最主要的規定是？", "opts": ["處1年以下有期徒刑", "處3年以上10年以下有期徒刑，得併科罰金", "只處罰鍰", "只需賠償"], "ans": 1, "why": "第171條第1項：違反第157-1條等，處3年以上10年以下有期徒刑，得併科1,000萬元以上2億元以下罰金。"}, {"ref": "證155", "q": "某人意圖抬高某檔上市股票價格，以多個人頭帳戶連續以高價買入該股票。依證券交易法第155條，這屬於？", "opts": ["合法投資行為", "操縱價格行為", "只是技術操作", "不會影響價格所以沒問題"], "ans": 1, "why": "第155條第1項第4款：意圖抬高或壓低價格，自行或以他人名義，連續以高價買入或以低價賣出，而有影響市場價格或秩序之虞，屬操縱行為。"}, {"ref": "證商4", "q": "證券商辦理受託買賣的業務人員，同時兼辦客戶款券收付與保管，依證券商負責人與業務人員管理規則第4條，這樣的安排？", "opts": ["可以，可以提高效率", "不可以，受託買賣人員不得兼辦開戶、結算交割、款券收付、保管等職務", "只要主管同意就可以", "只要客戶同意就可以"], "ans": 1, "why": "第4條第4項：辦理受託買賣的人員及負責資產配置、顧問、金融商品銷售的人員，不得兼辦開戶、結算交割、款券收付、保管等職務，目的是防止利益衝突與舞弊。"}, {"ref": "證商12", "q": "某人剛通過證券商業務員測驗，但所屬證券商尚未向公會辦理登記，他能否直接執行受託買賣業務？", "opts": ["可以，測驗合格就行", "不可以，非經登記不得執行業務", "可以，但只能做一半", "可以，只要客戶同意"], "ans": 1, "why": "第12條第1項：證券商業務人員於執行職務前，應由所屬證券商辦理登記；非經登記不得執行業務。"}, {"ref": "證商20", "q": "證券商業務人員因受託買賣業務所為的行為，法律上如何看待？", "opts": ["純屬業務人員個人行為，與證券商無關", "視為該證券商授權範圍內的行為", "需要法院個案判定", "只有董事長簽核才算公司行為"], "ans": 1, "why": "證券商負責人與業務人員管理規則第20條：業務人員從事法定業務所為的行為，視為該證券商授權範圍內的行為。"}, {"ref": "投顧9", "q": "證券投資信託及顧問法第9條，對於『重大過失』所致損害，法院得酌定多少倍以下的懲罰性賠償？", "opts": ["1倍", "2倍", "3倍", "5倍"], "ans": 1, "why": "第9條第1項：故意所致損害3倍以下；因重大過失所致損害，2倍以下。注意金融消費者保護法是故意3倍、過失1倍。"}, {"ref": "投保21", "q": "某證券商因財務困難失去清償能力而違約，投資人已完成交割義務卻沒有取得應得的股票，可以向誰尋求保護基金償付？", "opts": ["金融消費評議中心", "證券投資人及期貨交易人保護機構", "證券交易所", "地方法院"], "ans": 1, "why": "證券投資人及期貨交易人保護法第21條：證券商因財務困難失卻清償能力而違約時，保護機構得動用保護基金償付，並有主管機關訂定的上限。"}], "chNo": "06", "summary": "證券與基金相關的法條：不得虛偽詐欺、不得操縱價格、不得內線交易（哪五種人、18小時、刑責）、證券商業務人員的登記與兼任限制、投信投顧的善良管理人與忠實義務，以及證券投資人保護基金。職業道德科的證券、基金題多從這裡出。", "scope": "收錄證券交易法第20、155、157-1、171條；證券商負責人與業務人員管理規則第4、12、20條；證券投資信託及顧問法第7、8、9條；證券投資人及期貨交易人保護法第21、22條。", "nav": {"prev": {"file": "ch05.html", "label": "第5章 洗錢防制：確認客戶身分、申報與刑責"}, "next": {"file": "ch07.html", "label": "第7章 利益衝突與忠實義務：信託、銀行與不得保證獲利"}}}</script>
+<script>const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=t=>{t=String(t||'');const ss=t.split(/(?<=。)/).map(x=>x.trim()).filter(Boolean);if(t.length<=90||ss.length<2&&t.indexOf('；')<0)return '<p>'+esc(t)+'</p>';
+  const li=s=>{s=s.replace(/。$/,'');const m=s.match(/^([^：；]{1,40})：(.+)$/);if(m&&m[2].split('；').length>=3)return '<li><b>'+esc(m[1])+'</b><ul>'+m[2].split('；').map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></li>';
+    const parts=s.split('；');if(parts.length>=3)return '<li>'+parts.map(x=>esc(x)).join('<br>')+'</li>';return '<li>'+esc(s)+'</li>'};
+  return '<ul class="pl">'+ss.map(li).join('')+'</ul>'};
+const factsT=f=>f?'<div class="tw"><table class="ft"><thead><tr>'+f.head.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+f.rows.map(r=>'<tr>'+r.map(x=>'<td>'+esc(x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>':'';
+const LAWMAP={"金保": "金融消費者保護法", "適": "適合度辦法", "說": "說明揭露辦法", "廣": "廣告辦法", "個": "個資法", "洗": "洗錢防制法", "洗辦": "金融機構防制洗錢辦法", "保": "保險法", "規": "業務員管理規則", "招": "招攬核保理賠辦法", "證": "證券交易法", "證商": "證券商負責人與業務人員管理規則", "期商": "期貨商負責人及業務員管理規則", "投顧": "投信投顧法", "投保": "投保法", "信": "信託法", "信業": "信託業法", "銀": "銀行法", "刑": "刑法", "貪": "貪污治罪條例", "獎": "檢舉貪污獎勵辦法"};
+const lab=x=>{const m=String(x).match(/^([^0-9]+)([0-9]+(?:-[0-9]+)?)$/);return m&&LAWMAP[m[1]]?LAWMAP[m[1]]+'第'+m[2]+'條':x};
+const mem={};
+const store={get(k){try{const v=localStorage.getItem(k);return v===null?mem[k]:v}catch(e){return mem[k]}},set(k,v){mem[k]=v;try{localStorage.setItem(k,v)}catch(e){}}};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const BOXKEY='twlife_ethics_boxes_v1';
+let boxes={};try{boxes=JSON.parse(store.get(BOXKEY)||'{}')}catch(e){boxes={}}
+const saveBoxes=()=>store.set(BOXKEY,JSON.stringify(boxes));
+function Flash(root,getCards){
+  let queue=[],cur=null,flipped=false;
+  function build(){const cs=getCards();queue=shuffle(cs.filter(c=>(boxes[c.key]||0)<1)).sort((a,b)=>(boxes[a.key]||0)-(boxes[b.key]||0));flipped=false}
+  function render(){
+    const cs=getCards(),n=cs.length,done=cs.filter(c=>(boxes[c.key]||0)>=1).length;
+    let h='<div class="stat">已熟練 '+done+' / '+n+' 張（答對 1 次視為熟練，進度存在這個瀏覽器）</div><div class="bar"><i style="width:'+(n?done/n*100:0)+'%"></i></div>';
+    if(!n){root.innerHTML=h+'<div class="card"><p>沒有可用的閃卡。</p></div>';return}
+    if(!queue.length){root.innerHTML=h+'<div class="card"><h3>全部熟練了</h3><p>可以去做情境題，或重設後再來一輪。</p></div><div class="row"><button class="btn" data-a="reset">重設進度</button></div>';return}
+    cur=queue[0];
+    h+='<div class="card fc" tabindex="0" role="button" data-a="flip"><small>'+(cur.tag?esc(cur.tag)+'｜':'')+esc(lab(cur.ref))+'｜剩 '+queue.length+' 張</small><div class="q">'+esc(cur.front)+'</div>'+(flipped?'<div class="a"><span class="lab fact">答案</span>'+esc(cur.back)+'</div>':'<small>點一下翻面</small>')+'</div>';
+    if(flipped)h+='<div class="row"><button class="btn bad" data-a="no">還不熟</button><button class="btn ok" data-a="yes">會了</button></div>';
+    h+='<div class="row"><button class="btn" data-a="reset">重設進度</button></div>';
+    root.innerHTML=h;
+  }
+  root.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a;
+    if(a==='flip'){flipped=!flipped;render()}
+    else if(a==='reset'){if(confirm('確定要清除這些閃卡的進度？')){getCards().forEach(c=>delete boxes[c.key]);saveBoxes();build();render()}}
+    else if(cur&&(a==='yes'||a==='no')){const ok=a==='yes';boxes[cur.key]=ok?Math.min(1,(boxes[cur.key]||0)+1):0;saveBoxes();queue.shift();if(!ok||boxes[cur.key]<1)queue.splice(queue.length?Math.max(1,Math.min(queue.length,ok?6:3)):0,0,cur);flipped=false;render()}});
+  root.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.fc')){e.preventDefault();flipped=!flipped;render()}});
+  return {refresh(){build();render()}};
+}
+function Quiz(root,getItems,perRound){
+  let items=[],score=0,answered=0,done=false;
+  function draw(){
+    const perms=items.map(s=>shuffle(s.opts.map((_,k)=>k)));
+    root.innerHTML='<div class="stat" id="sc"></div>'+items.map((s,i)=>'<div class="card" data-i="'+i+'"><b>'+(i+1)+'. </b><span class="lab my">'+(s.tag?esc(s.tag)+' ':'')+esc(lab(s.ref))+'</span>'+esc(s.q)+perms[i].map((k,pos)=>'<button class="opt" data-o="'+k+'">'+String.fromCharCode(65+pos)+'. '+esc(s.opts[k])+'</button>').join('')+'<div class="why"></div></div>').join('')+'<div id="qend"></div>';
+    score=0;answered=0;upd();
+  }
+  function upd(){const el=$('#sc',root);if(el)el.textContent='已作答 '+answered+' / '+items.length+'，答對 '+score+' 題';
+    if(perRound&&answered===items.length&&items.length){$('#qend',root).innerHTML='<div class="card"><h3>這一組：'+score+' / '+items.length+'</h3></div><div class="row"><button class="btn pri" data-a="again">再來一組</button></div>'}}
+  function again(){const all=getItems();items=perRound?shuffle(all).slice(0,perRound):all;draw()}
+  root.addEventListener('click',e=>{
+    const ag=e.target.closest('[data-a="again"]');if(ag){again();window.scrollTo(0,root.offsetTop-60);return}
+    const b=e.target.closest('.opt');if(!b)return;const box=b.closest('.card');if(box.dataset.done)return;
+    const s=items[+box.dataset.i],j=+b.dataset.o;box.dataset.done=1;answered++;if(j===s.ans)score++;
+    let right='';$$('.opt',box).forEach((x,pos)=>{const k=+x.dataset.o;if(k===s.ans){x.classList.add('right');right=String.fromCharCode(65+pos)}else if(k===j)x.classList.add('wrong')});
+    const w=$('.why',box);w.style.display='block';w.innerHTML=(j===s.ans?'答對了。':'答錯了，正解是 '+right+'。')+esc(s.why);upd()});
+  return {refresh:again};
+}
+</script>
+<script>
+const D=JSON.parse(document.getElementById('data').textContent);
+const LAWS=D.laws;
+$('#h1').textContent=D.chapter+'｜'+D.title;
+$('#intro').textContent=D.summary||'';
+document.title=D.chapter+' '+D.title;
+$('#foot').innerHTML='官方來源：'+LAWS.map(L=>esc(L.name)+'（'+esc(L.amended)+(L.kind==='press'?'發布':'修正')+'）'+(L.note?'｜'+esc(L.note)+'｜':'')+'<a href="'+esc(L.url)+'" target="_blank" rel="noopener">'+esc(L.url)+'</a>').join('<br>')+(D.scope?'<br>'+esc(D.scope):'')+'<br>條文原文取自法務部全國法規資料庫的公開資料鏡像（更新日 2026-10-16），尚未逐條與官網現行頁面比對；「白話」「口訣」「情境題」為編寫者整理，不是法條。法規可能再修正，請以官方最新公告為準；本內容不是法律意見。';
+const TABS=[['read','條文速讀'],['table','對照表'],['cards','閃卡'],['quiz','情境題']];
+const nav=$('#nav');
+TABS.forEach(([id,name])=>{const b=document.createElement('button');b.textContent=name;b.setAttribute('role','tab');b.dataset.id=id;b.onclick=()=>show(id);nav.appendChild(b)});
+let curTab='read';
+function show(id,anchor){curTab=id;TABS.forEach(([t])=>$('#s-'+t).classList.toggle('on',t===id));$$('button',nav).forEach(b=>b.setAttribute('aria-selected',b.dataset.id===id));
+  history.replaceState(null,'','#'+id+(anchor?'/'+anchor:''));
+  if(anchor){const el=document.getElementById(anchor);if(el){const d=el.querySelector('details');el.scrollIntoView({block:'start'});el.classList.add('hl')}}else window.scrollTo(0,0)}
+$('#s-read').innerHTML=(D.alerts||[]).map(a=>'<div class="banner"><b>'+esc(a.t)+'</b>'+esc(a.d)+'</div>').join('')+D.clauses.map(c=>{
+  const off=c.official.map(p=>'<p>'+esc(p)+'</p>').join('');
+  return '<div class="card" id="c'+esc(c.no)+'"><h3><span class="no">'+esc(lab(c.no))+'</span>'+esc(c.title)+'</h3>'
+   +'<div class="pw"><span class="lab my">白話</span>'+fmt(c.plain)+'</div>'+factsT(c.facts)
+   +(c.mnemonic?'<div class="mn"><span class="lab my">口訣</span>'+esc(c.mnemonic)+'</div>':'')
+   +(c.tip?'<p><span class="lab hint">提醒</span>'+esc(c.tip)+'</p>':'')
+   +(c.official.length?'<details><summary>展開官方條文原文</summary><div class="off"><span class="lab fact">原文</span>'+off+'</div></details>':'')+'</div>'}).join('');
+$('#s-table').innerHTML=D.tables.map((t,i)=>'<h3 id="t'+i+'">'+esc(t.title)+'</h3><div class="tw"><table><thead><tr>'+t.head.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+t.rows.map(r=>'<tr>'+r.map(x=>'<td>'+esc(x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>').join('');
+const cardsAll=D.cards.map(c=>({key:'ch'+D.chNo+':'+c.id,ref:c.ref,front:c.front,back:c.back}));
+const fl=Flash($('#s-cards'),()=>cardsAll);fl.refresh();
+const qz=Quiz($('#s-quiz'),()=>D.scenarios,0);qz.refresh();
+// 上下章
+const N=D.nav||{};
+function setLink(el,o,dir){if(o){el.href=o.file;el.textContent=dir==='p'?'← '+o.label:o.label+' →'}else{el.style.visibility='hidden'}}
+setLink($('#prev'),N.prev,'p');setLink($('#next'),N.next,'n');
+// 左右滑動：換分頁，到頭就換章
+function step(d){const i=TABS.findIndex(t=>t[0]===curTab)+d;
+  if(i<0){if(N.prev)location.href=N.prev.file+'#read';return}
+  if(i>=TABS.length){if(N.next)location.href=N.next.file+'#read';return}
+  show(TABS[i][0])}
+let sx=0,sy=0,skip=false;
+document.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;const el=e.target&&e.target.nodeType===1?e.target:(e.target&&e.target.parentElement);skip=!!(el&&el.closest('.tw,nav,input,.off'))},{passive:true});
+document.addEventListener('touchend',e=>{if(skip)return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>70&&Math.abs(dy)<45){step(dx<0?1:-1)}},{passive:true});
+document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1)});
+// 深層連結
+function route(){const h=(location.hash||'#read').slice(1).split('/');show(TABS.some(t=>t[0]===h[0])?h[0]:'read',h[1]?decodeURIComponent(h[1]):null)}
+window.addEventListener('hashchange',route);route();
+</script></body></html>
