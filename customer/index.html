@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>保險客戶管理</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top">
+  <h1>客戶管理</h1>
+  <span id="modeBadge" class="badge"></span>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="list" class="on">要保人</button>
+    <button role="tab" data-tab="insured">被保險人</button>
+    <button role="tab" data-tab="cover">保障</button>
+    <button role="tab" data-tab="policy">保單</button>
+    <button role="tab" data-tab="stats">統計</button>
+    <button role="tab" data-tab="schedule">排程</button>
+    <button role="tab" data-tab="todo">待補充</button>
+  </nav>
+  <div class="tools">
+    <label class="chk" title="開啟時隱藏身分證、電話、門牌號碼，適合與主管討論或螢幕分享"><input type="checkbox" id="maskToggle"> 遮蔽個資</label>
+    <button id="btnLoad" title="載入客戶資料：資料檔（.cbundle），或本機伺服器">載入資料檔</button>
+    <button id="btnLock" title="把客戶資料從畫面與記憶體清掉，回到空白">鎖定</button>
+    <button id="btnExport" title="下載補填資料與排程的備份 JSON">匯出備份</button>
+    <button id="btnImport" title="還原備份 JSON">匯入備份</button>
+    <input type="file" id="fileImport" accept=".json,application/json" hidden>
+    <button id="btnPrint">列印</button>
+  </div>
+</header>
+<div id="notice" class="notice" hidden></div>
+<div id="blank" class="blank">尚未載入客戶資料。請按上方「載入資料檔」（手機：選 .cbundle 並輸入密碼；電腦用 serve.bat 開啟時可按「從本機載入」）。</div>
+<main class="empty">
+  <section id="tab-list" class="tab on"></section>
+  <section id="tab-insured" class="tab"></section>
+  <section id="tab-cover" class="tab"></section>
+  <section id="tab-policy" class="tab"></section>
+  <section id="tab-stats" class="tab"></section>
+  <section id="tab-schedule" class="tab"></section>
+  <section id="tab-todo" class="tab"></section>
+</main>
+<aside id="drawer" class="drawer" hidden></aside>
+<div id="toast" class="toast" hidden></div>
+<div id="pdfDlg" class="dlgwrap" hidden></div>
+<div id="loadPanel" class="dlgwrap" hidden>
+  <div class="dlg">
+    <h3>載入資料檔</h3>
+    <p class="muted">頁面預設是空白的，要載入客戶資料才能使用。選擇電腦匯出的 <b>.cbundle</b> 檔（單一檔案，已壓縮加密）；不會上傳到任何地方。商品保障等系統資料不用另外載入。</p>
+    <p id="lpWarn" class="notice2" hidden></p>
+    <label class="filebtn"><input type="file" id="lpFile"> 選擇資料檔…</label>
+    <button id="lpServer" hidden title="只有用 scripts\serve.bat 開啟時可用：直接讀本機資料資料夾的 adoc">從本機載入（不需密碼）</button>
+    <p class="muted">不會存到手機：關閉或重新整理頁面後資料就清掉，下次要重新選檔、輸入密碼。</p>
+    <div id="lpOld" hidden>
+      <p class="muted">這個瀏覽器裡還有舊版留下的補填資料。</p>
+      <button id="lpClear">清除這個瀏覽器的舊資料</button>
+    </div>
+    <p id="lpMsg" class="muted"></p>
+    <div style="text-align:right"><button id="lpClose">關閉</button></div>
+  </div>
+</div>
+<div id="pwDlg" class="dlgwrap" hidden>
+  <div class="dlg">
+    <h3>輸入密碼</h3>
+    <p id="pwMsg" class="muted"></p>
+    <input type="password" id="pwInput" autocomplete="off" autocapitalize="off" spellcheck="false" style="width:100%;font-size:16px">
+    <div style="text-align:right;margin-top:10px"><button id="pwCancel">取消</button> <button id="pwOk" class="primary">解開</button></div>
+  </div>
+</div>
+<script src="data/coverage.js" onerror="window.COVERAGE_DATA_MISSING=true"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/bundle.js"></script>
+<script src="assets/js/coverage.js"></script>
+<script src="assets/js/claim.js"></script>
+<script src="assets/js/drill.js"></script>
+<script src="assets/js/list.js"></script>
+<script src="assets/js/export.js"></script>
+<script src="assets/js/insured.js"></script>
+<script src="assets/js/cover.js"></script>
+<script src="assets/js/policy.js"></script>
+<script src="assets/js/todo.js"></script>
+<script src="assets/js/dims.js"></script>
+<script src="assets/js/treemap.js"></script>
+<script src="assets/js/stats.js"></script>
+<script src="assets/js/schedule.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
