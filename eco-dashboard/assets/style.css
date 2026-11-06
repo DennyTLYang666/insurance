@@ -127,7 +127,7 @@ main { padding-top: 16px; padding-bottom: 8px; }
 
 @media (max-width: 860px) { .hero { grid-template-columns: 1fr; } .charts { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 640px) {
-  .wrap { padding: 0 12px; } .brand .sub { display: none; } .tabs { margin-left: 0; }
+  .wrap { padding: 0 12px; } .brand .sub { display: none; } .tabs { margin-left: 0; } .tabs a { padding: 6px 11px; }
   .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .val { font-size: 18px; } .tile { padding: 9px 10px; }
   .hide-s { display: none; } .mood-v { font-size: 34px; } .when { width: 78px; } .points li { flex-direction: column; gap: 2px; }
    .cv { height: 210px; }
@@ -328,3 +328,15 @@ button:disabled { opacity: .4; cursor: default; }
 .msrc { font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 7px; }
 .macbar .seg { flex-wrap: wrap; }
 .macbar + .hint { margin: -4px 0 14px; flex: none; }
+
+/* ===== 概覽「表格」 ===== */
+.tfilters { align-items: center; }
+.tfilters .tnumlb { font-size: 13.5px; color: var(--muted); white-space: nowrap; }
+.tfilters .tnum { flex: none; width: 76px; }
+.tchips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+.tchips button { border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 999px; padding: 3px 11px; font-size: 13px; font-weight: 600; }
+.tchips button.on { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.otable td.mut a { font-weight: 400; }
+.otable th.sorted button { color: var(--ink); }
+.tfilters .seg { flex: none; } .tfilters .seg button { padding: 4px 11px; white-space: nowrap; }
+@media (max-width: 640px) { .otable th, .otable td { padding: 7px 6px; } }

@@ -2,7 +2,7 @@
 (function () {
   const F = ECO.fmt, esc = F.esc, $ = (id) => document.getElementById(id);
   const NAMES = ["meta", "overview", "trends", "macro", "lights", "calendar"];
-  const PAGES = { overview: ["all", "stocks", "fx", "rates", "cmd", "funds"], trends: ["stocks", "fx", "rates", "risk", "cmd", "table", "macro", "cal"], funds: ["nanshan", "tlife", "common"] };
+  const PAGES = { overview: ["all", "stocks", "fx", "rates", "cmd", "funds"], table: ["all"], trends: ["stocks", "fx", "rates", "risk", "cmd", "macro", "cal"], funds: ["nanshan", "tlife", "common"] };
   const RANGE_SUBS = { trends: ["stocks", "fx", "rates", "risk", "cmd"], funds: [] };
   let data = null, genKey = null, cur = { tab: "overview", sub: "all" };
 

@@ -21,6 +21,7 @@
     </div>
     <nav class="tabs" id="tabs" aria-label="主要頁面">
       <a href="#overview" data-tab="overview" class="on">概覽</a>
+      <a href="#table" data-tab="table">表格</a>
       <a href="#trends" data-tab="trends">趨勢</a>
       <a href="#funds" data-tab="funds">基金</a>
     </nav>
@@ -60,6 +61,12 @@
     </div>
   </section>
 
+  <!-- ========== 表格 ========== -->
+  <section id="page-table" class="page" hidden>
+    <nav id="sub-table" hidden></nav>
+    <div class="sub-panel" data-sub="all"><section class="block" id="ov-table"></section></div>
+  </section>
+
   <!-- ========== 趨勢 ========== -->
   <section id="page-trends" class="page" hidden>
     <nav class="subtabs" id="sub-trends" aria-label="趨勢分類" data-page="trends">
@@ -68,7 +75,6 @@
       <a href="#trends/rates" data-sub="rates">利率</a>
       <a href="#trends/risk" data-sub="risk">風險</a>
       <a href="#trends/cmd" data-sub="cmd">商品</a>
-      <a href="#trends/table" data-sub="table">市場表</a>
       <a href="#trends/macro" data-sub="macro">總經</a>
       <a href="#trends/cal" data-sub="cal">行事曆</a>
     </nav>
@@ -85,9 +91,6 @@
     <div class="sub-panel" data-sub="rates"><div id="charts-rates" class="charts"></div></div>
     <div class="sub-panel" data-sub="risk"><div id="charts-risk" class="charts"></div></div>
     <div class="sub-panel" data-sub="cmd"><div id="charts-cmd" class="charts"></div></div>
-    <div class="sub-panel" data-sub="table">
-      <section class="block"><h2>全球市場一張表</h2><div class="tablewrap"><table id="mtable" class="mtable"></table></div></section>
-    </div>
     <div class="sub-panel" data-sub="macro">
       <section class="block" id="macro-block" hidden><h2>總經數據（依國家）</h2><div id="macro" class="macro"></div></section>
       <section class="block" id="lights-block" hidden><h2>宏觀環境</h2><div id="lights"></div></section>
@@ -129,6 +132,7 @@
 <script src="assets/js/fmt.js"></script>
 <script src="assets/js/news.js"></script>
 <script src="assets/js/overview.js"></script>
+<script src="assets/js/table.js"></script>
 <script src="assets/js/charts.js"></script>
 <script src="assets/js/calendar.js"></script>
 <script src="assets/js/trends.js"></script>

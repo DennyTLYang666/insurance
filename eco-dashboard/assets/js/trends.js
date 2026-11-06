@@ -1,4 +1,4 @@
-/* 趨勢頁：分類折線圖（含殖利率曲線）、全球市場表、總經數據、宏觀環境。行事曆在 calendar.js。 */
+/* 趨勢頁：分類折線圖（含殖利率曲線）、總經數據、宏觀環境。行事曆在 calendar.js；全市場表格在概覽的「表格」（table.js）。 */
 (function () {
   const F = ECO.fmt, esc = F.esc;
   const S = { data: null, sort: { key: null, asc: false } };
@@ -17,37 +17,6 @@
       trends.charts.filter((c) => c.cat === cat).forEach((c) => ECO.charts.add(box, c));
       if (!box.children.length) box.innerHTML = '<p class="mut">這個分類的圖表還沒有資料，等下一次排程更新。</p>';
     });
-  }
-
-  /* ---------- 全球市場表 ---------- */
-  const COLS = [["name", "市場", false], ["value", "最新", true], ["chg", "日", true], ["w1", "週", true], ["m1", "月", true], ["from_high", "距近一年高點", true]];
-
-  function table(ov) {
-    const th = COLS.map((c) => '<th class="' + (c[2] ? "r " : "") + (S.sort.key === c[0] ? "sorted" : "") + '"><button type="button" data-k="' + c[0] + '">' + c[1] +
-      (S.sort.key === c[0] ? (S.sort.asc ? " ▲" : " ▼") : "") + "</button></th>").join("") + '<th class="r hide-s">走勢</th>';
-    let body = "";
-    ov.groups.forEach((g) => {
-      const rows = g.tiles.slice();
-      if (S.sort.key) {
-        const k = S.sort.key, sg = S.sort.asc ? 1 : -1;
-        rows.sort((a, b) => k === "name" ? sg * a.name.localeCompare(b.name, "zh-Hant") : sg * (((a[k] == null ? -Infinity : a[k])) - ((b[k] == null ? -Infinity : b[k]))));
-      }
-      body += '<tr class="grp"><td colspan="' + (COLS.length + 1) + '">' + esc(g.name) + "</td></tr>";
-      rows.forEach((t) => {
-        const cell = (v) => v == null ? '<td class="r">—</td>' : '<td class="r ' + F.dir(v) + '">' + F.chg(t, v) + "</td>";
-        body += "<tr" + (t.stale ? ' class="stale"' : "") + '><td class="nm"><button type="button" class="linkish" data-news="' + esc(t.id) + '" data-title="' + esc(t.name) + '" data-yq="' + esc(t.yq || "") + '" title="看新聞">' + esc(t.name) + "</button>" + (t.stale ? ' <span class="badge warn">舊資料</span>' : t.show_date ? ' <span class="badge">' + F.md(t.date) + "</span>" : "") +
-          '</td><td class="r">' + F.num(t.value, t.dec) + (t.kind === "rate" ? "%" : "") + "</td>" + cell(t.chg) + cell(t.w1) + cell(t.m1) +
-          (t.from_high == null ? '<td class="r">—</td>' : '<td class="r ' + F.dir(t.from_high) + '">' + F.sign(t.from_high, 1, "%") + "</td>") +
-          '<td class="r hide-s">' + F.spark(t.spark, 64, 22) + "</td></tr>";
-      });
-    });
-    const el = document.getElementById("mtable");
-    el.innerHTML = "<thead><tr>" + th + "</tr></thead><tbody>" + body + "</tbody>";
-    el.querySelectorAll("th button").forEach((b) => b.addEventListener("click", () => {
-      const k = b.dataset.k;
-      S.sort = { key: k, asc: S.sort.key === k ? !S.sort.asc : k === "name" };
-      table(ov);
-    }));
   }
 
   /* ---------- 總經（三種排序：推薦順序、好到壞（預設）、剛更新到舊） ---------- */
@@ -141,7 +110,6 @@
     Object.keys(ECO.trendIndex).forEach((k) => { if (ECO.trendIndex[k].src === "trends") delete ECO.trendIndex[k]; });
     d.trends.charts.forEach((c) => c.series.forEach((s) => { if (!ECO.trendIndex[s.id]) ECO.trendIndex[s.id] = { href: "#trends/" + c.cat, chart: c.id, src: "trends" }; }));
     renderCharts(d.trends);
-    table(d.overview);
     macro(d.macro);
     lights(d.lights);
     ECO.calendar.render(d.calendar);

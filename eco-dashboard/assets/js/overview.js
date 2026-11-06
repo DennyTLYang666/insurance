@@ -36,6 +36,7 @@
 
   /* 每組的排序：依績效（日漲跌，預設）或依預設順序 */
   const TREND = { us: "#trends/stocks", ai: "#trends/stocks", asia: "#trends/stocks", twd: "#trends/fx", twd_c: "#trends/fx", fx: "#trends/fx", rates: "#trends/rates", risk: "#trends/risk", cmd: "#trends/cmd" };
+  ECO.TREND = TREND;
   const gsort = {};
   try { Object.assign(gsort, JSON.parse(localStorage.getItem("eco.gsort") || "{}")); } catch (e) {}
   const gdefault = { rates: "def" };  // 各組預設排序（資料站 symbols.json 的 sort；美債殖利率預設依期限短→長）
@@ -67,7 +68,7 @@
     const gs = ov.groups.filter((g) => !want || want.includes(g.id));
     return gs.map((g) => {
       const link = TREND[g.id] || (g.id.indexOf("f_") === 0 ? "#funds/common" : "");
-      const sb = '<div class="gsort" role="group" aria-label="排序"><span class="mut">排序</span><button type="button" data-gsort="' + g.id + '|perf"' + (sortOf(g.id) === "perf" ? ' class="on"' : "") + '>依績效</button><button type="button" data-gsort="' + g.id + '|def"' + (sortOf(g.id) === "def" ? ' class="on"' : "") + ">依名稱</button></div>";
+      const sb = '<div class="gsort" role="group" aria-label="排序"><span class="mut">排序</span><button type="button" data-gsort="' + g.id + '|perf"' + (sortOf(g.id) === "perf" ? ' class="on"' : "") + '>依績效</button><button type="button" data-gsort="' + g.id + '|def"' + (sortOf(g.id) === "def" ? ' class="on"' : "") + ">依預設</button></div>";
       return '<section class="group"><div class="gh"><h2>' + esc(g.name) + "</h2>" + (link ? '<a class="ext" href="' + link + '">看趨勢圖 ›</a>' : "") + sb + '</div>' +
         '<div class="tiles">' + sorted(g).map(tile).join("") + "</div></section>";
     }).join("") || '<p class="mut">這個分類目前沒有資料。</p>';
@@ -113,6 +114,7 @@
     ECO.tiles = {};
     ov.groups.forEach((g) => g.tiles.forEach((t) => (ECO.tiles[t.id] = t)));
     paint();
+    ECO.table.render(ov);  // 「表格」頁籤
   };
   ECO.overviewSub = function (sub) { S.sub = SUBS[sub] !== undefined ? sub : "all"; paint(); };
 })();
