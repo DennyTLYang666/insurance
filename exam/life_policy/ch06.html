@@ -11,7 +11,7 @@ header p{margin:6px 0 0;font-size:14px;opacity:.95}
 .wrap{max-width:900px;margin:0 auto;padding:0 12px 60px}
 .banner{background:var(--warnbg);color:var(--warn);border:1px solid #f0d9a8;border-radius:8px;padding:10px 12px;margin:12px 0;font-size:14px}
 .banner b{margin-right:4px}
-nav{position:sticky;top:0;background:var(--bg);z-index:5;display:flex;gap:6px;padding:10px 0;overflow-x:auto;border-bottom:1px solid var(--line)}
+nav{display:flex;gap:6px;padding:10px 0;overflow-x:auto}
 nav button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:15px;cursor:pointer;color:var(--ink)}
 nav button[aria-selected="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
 section{display:none;padding-top:14px}section.on{display:block}
@@ -52,15 +52,27 @@ h2{font-size:18px;margin:24px 0 8px}
 
 .pw{margin:6px 0}.pw p{margin:4px 0}.pl{margin:6px 0 6px 0;padding-left:20px}.pl li{margin:5px 0;line-height:1.7}.pl ul{margin:4px 0;padding-left:18px;list-style:disc}.pl ul li{margin:2px 0}.pl>li>b{color:#283593}
 table.ft{font-size:14px;table-layout:fixed}table.ft td:first-child,table.ft th:first-child{font-weight:600;width:34%;word-break:break-all}table.ft td,table.ft th{word-break:break-word;padding:6px 7px}table.ft th{width:auto}
+#top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+#au-btn[aria-pressed="true"]{background:var(--brand2);color:var(--brand);border-color:var(--brand);font-weight:600}
+#cap{position:relative;padding:4px 36px 8px 2px;font-size:clamp(15px,4.2vw,19px);line-height:1.55;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+#cap[hidden]{display:none}
+.cap-l{height:1.55em;white-space:nowrap;overflow:hidden}
+#cap-a{color:var(--sub)}
+#cap-b{font-weight:600;color:var(--ink)}
+#cap-x{position:absolute;right:0;top:2px;width:34px;height:34px;border:0;background:none;color:var(--sub);font-size:16px;cursor:pointer}
+.sp{display:inline-block;font-size:12px;font-weight:400;line-height:1.5;border-radius:4px;padding:0 5px;margin-right:6px;color:#fff;vertical-align:1px}
+.sp.F{background:#c2185b}.sp.M{background:#1f5f8b}
 </style></head>
 <body>
-<header><div class="wrap" style="padding:0"><a href="index.html">← 首頁（搜尋、總複習）</a><h1 id="h1"></h1><p id="intro"></p></div></header>
+<header><div class="wrap" style="padding:0"><a href="../index.html">⌂ 所有考試</a>　<a href="index.html">← 本科首頁（搜尋、總複習）</a><h1 id="h1"></h1><p id="intro"></p></div></header>
 <div class="wrap">
-<nav role="tablist" id="nav"></nav>
+<div id="top"><nav role="tablist" id="nav"></nav><div id="cap" hidden><div class="cap-l" id="cap-a"></div><div class="cap-l" id="cap-b"></div><button type="button" id="cap-x" aria-label="關閉語音字幕">✕</button></div></div>
 <section id="s-read"></section><section id="s-table"></section><section id="s-cards"></section><section id="s-quiz"></section>
 <div class="pager"><a id="prev" href="#"></a><a id="next" href="#"></a></div>
 <footer id="foot"></footer>
 </div>
+<audio id="au" preload="none"></audio>
+<script src="mp3/timing/ch06.js"></script>
 <script id="data" type="application/json">{"chapter": "第六章", "title": "金融消費者保護法", "laws": [{"pcode": "G0380226", "name": "金融消費者保護法", "amended": "民國112年12月6日", "url": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0380226", "source": "法務部全國法規資料庫", "retrieved": "2026-11-03", "mirrorDate": "20231206"}], "alerts": [{"t": "業務員最該記得的三件事", "d": "第9條『適合度』（先了解客戶）、第10條『說明與揭露風險』（充分說明重要內容）、第11條『賠償責任與舉證責任倒置』（保險公司要自己證明沒有違反）。三條是一組。"}, {"t": "風險（罰錢）", "d": "違反廣告招攬規定、適合度、說明揭露義務、酬金制度，處新臺幣30萬元以上1,000萬元以下罰鍰（第30-1條）。故意違規造成損害，法院可酌定損害額3倍以下的懲罰性賠償（第11-3條）。"}, {"t": "版本", "d": "本法最近一次修正為民國112年12月6日（第3、11-1、19條），民國113年2月1日施行。"}], "clauses": [{"no": "3", "title": "金融服務業的範圍", "plain": "金融服務業包括銀行業、證券業、期貨業、保險業、電子支付業，以及主管機關公告的其他金融服務業。", "mnemonic": "銀、證、期、保、電支。", "official": ["本法所定金融服務業，包括銀行業、證券業、期貨業、保險業、電子支付業及其他經主管機關公告之金融服務業。", "前項銀行業、證券業、期貨業及保險業之範圍，依金融監督管理委員會組織法第二條第三項規定。但不包括證券交易所、證券櫃檯買賣中心、證券集中保管事業、期貨交易所及其他經主管機關公告之事業。", "第一項所稱電子支付業，指電子支付機構管理條例第三條第一款之電子支付機構。"], "has_official": true}, {"no": "4", "title": "誰是金融消費者；『專業投資人』除外", "plain": "金融消費者是接受金融服務業提供金融商品或服務的人，但不包括專業投資機構，以及符合一定財力或專業能力的自然人或法人。金融服務業如果協助未達條件的人創造符合形式上的外觀，那個人仍是金融消費者。", "mnemonic": "原則上都是金融消費者；專業投資機構與符合財力專業條件者除外；包裝外觀不算數。", "tip": "『協助創造外觀』的處罰很重：第30-1條第2項，處1,000萬元以上5,000萬元以下罰鍰。", "official": ["本法所稱金融消費者，指接受金融服務業提供金融商品或服務者。但不包括下列對象：", "一、專業投資機構。", "二、符合一定財力或專業能力之自然人或法人。", "前項專業投資機構之範圍及一定財力或專業能力之條件，由主管機關定之。", "金融服務業對自然人或法人未符合前項所定之條件，而協助其創造符合形式上之外觀條件者，該自然人或法人仍為本法所稱金融消費者。"], "has_official": true}, {"no": "5", "title": "金融消費爭議", "plain": "金融消費爭議是金融消費者與金融服務業之間，因金融商品或服務所生的民事爭議。", "official": ["本法所稱金融消費爭議，指金融消費者與金融服務業間因商品或服務所生之民事爭議。"], "has_official": true}, {"no": "7", "title": "公平合理、誠信，契約疑義作有利於消費者的解釋", "plain": "金融服務業與消費者訂契約，要本於公平合理、平等互惠及誠信原則。契約條款顯失公平的，該部分無效；有疑義時，要作有利於金融消費者的解釋。金融服務業提供商品或服務，要盡善良管理人的注意義務；具有信託、委託性質的，還要負忠實義務。", "mnemonic": "公平誠信；顯失公平該部分無效；疑義有利消費者；善良管理人注意＋忠實義務。", "tip": "對照保險法第54條、第54-1條，兩部法律的概念相同：疑義有利被保險人（消費者）、顯失公平該部分無效。", "official": ["金融服務業與金融消費者訂立提供金融商品或服務之契約，應本公平合理、平等互惠及誠信原則。", "金融服務業與金融消費者訂立之契約條款顯失公平者，該部分條款無效；契約條款如有疑義時，應為有利於金融消費者之解釋。", "金融服務業提供金融商品或服務，應盡善良管理人之注意義務；其提供之金融商品或服務具有信託、委託等性質者，並應依所適用之法規規定或契約約定，負忠實義務。"], "has_official": true}, {"no": "8", "title": "廣告與招攬不得有虛偽、詐欺、隱匿", "plain": "金融服務業刊登廣告、進行業務招攬或營業促銷時，不得有虛偽、詐欺、隱匿或其他足以讓人誤信的情事，要確保廣告內容真實；對消費者所負的義務，不能低於廣告內容與招攬時所提示的資料或說明。另外，金融服務業不得藉金融教育宣導，引薦個別金融商品或服務。", "mnemonic": "廣告要真；承諾不低於廣告；教育宣導不能推銷個別商品。", "official": ["金融服務業刊登、播放廣告及進行業務招攬或營業促銷活動時，不得有虛偽、詐欺、隱匿或其他足致他人誤信之情事，並應確保其廣告內容之真實，其對金融消費者所負擔之義務不得低於前述廣告之內容及進行業務招攬或營業促銷活動時對金融消費者所提示之資料或說明。", "前項廣告、業務招攬及營業促銷活動之方式、內容及其他應遵行事項之辦法，由主管機關定之。", "金融服務業不得藉金融教育宣導，引薦個別金融商品或服務。"], "has_official": true}, {"no": "9", "title": "適合度：訂約前要充分了解消費者", "plain": "金融服務業在與消費者訂立提供金融商品或服務的契約前，應充分了解消費者的相關資料，確保商品或服務對消費者的適合度。要了解哪些資料、適合度應考量什麼，由主管機關訂定辦法。", "mnemonic": "訂約前先了解客戶，確保適合度。", "tip": "這是『了解客戶（KYC）』在金融消費者保護法的依據。", "official": ["金融服務業與金融消費者訂立提供金融商品或服務之契約前，應充分瞭解金融消費者之相關資料，以確保該商品或服務對金融消費者之適合度。", "前項應充分瞭解之金融消費者相關資料、適合度應考量之事項及其他應遵行事項之辦法，由主管機關定之。"], "has_official": true}, {"no": "10", "title": "說明義務與風險揭露；複雜性高風險商品要錄音或錄影", "plain": "訂約前，要向消費者充分說明金融商品、服務及契約的重要內容，並充分揭露風險。涉及個人資料的蒐集、處理與利用時，要說明個人資料保護的相關權利，以及拒絕同意可能的不利益。說明及揭露要用消費者能充分了解的文字或方式，內容至少包括交易成本、可能的收益及風險。複雜性高風險商品的說明與揭露，除了以非臨櫃的自動化通路交易，或消費者不同意外，要錄音或錄影。", "mnemonic": "充分說明重要內容＋充分揭露風險；成本、收益、風險都要講；複雜高風險商品錄音錄影。", "tip": "哪些屬於『複雜性高風險商品』，由主管機關依第11-2條第2項規定訂定類型。", "official": ["金融服務業與金融消費者訂立提供金融商品或服務之契約前，應向金融消費者充分說明該金融商品、服務及契約之重要內容，並充分揭露其風險。", "前項涉及個人資料之蒐集、處理及利用者，應向金融消費者充分說明個人資料保護之相關權利，以及拒絕同意可能之不利益；金融服務業辦理授信業務，應同時審酌借款戶、資金用途、還款來源、債權保障及授信展望等授信原則，不得僅因金融消費者拒絕授權向經營金融機構間信用資料之服務事業查詢信用資料，作為不同意授信之唯一理由。", "第一項金融服務業對金融消費者進行之說明及揭露，應以金融消費者能充分瞭解之文字或其他方式為之，其內容應包括但不限交易成本、可能之收益及風險等有關金融消費者權益之重要內容；其相關應遵循事項之辦法，由主管機關定之。", "金融服務業提供之金融商品屬第十一條之二第二項所定之複雜性高風險商品者，前項之說明及揭露，除以非臨櫃之自動化通路交易或金融消費者不予同意之情形外，應錄音或錄影。"], "has_official": true}, {"no": "11", "title": "違反適合度或說明義務的損害賠償與舉證", "plain": "金融服務業違反第9條、第10條，使消費者受損害，要負損害賠償責任。但金融服務業如果能證明：損害不是因為未充分了解消費者的商品或服務適合度，也不是因為未說明、說明不實、錯誤或未充分揭露風險而發生，就不用負責。", "mnemonic": "違反適合度或說明義務要賠；證明責任在金融服務業。", "tip": "『由金融服務業自己證明沒有違反』就是常說的舉證責任倒置。所以平常的紀錄、錄音、簽名文件很重要。", "official": ["金融服務業違反前二條規定，致金融消費者受有損害者，應負損害賠償責任。但金融服務業能證明損害之發生非因其未充分瞭解金融消費者之商品或服務適合度或非因其未說明、說明不實、錯誤或未充分揭露風險之事項所致者，不在此限。"], "has_official": true}, {"no": "11-1", "title": "業務人員酬金制度要衡平考量客戶權益", "plain": "金融服務業要訂定業務人員的酬金制度，提報董（理）事會通過。酬金制度要衡平考量客戶權益、商品或服務對金融服務業及客戶可能產生的各種風險，不能只考量業績目標的達成。制度應遵行的原則，由所屬同業公會擬訂或經主管機關指定的公會團體擬訂，報主管機關核定。", "mnemonic": "酬金制度：董事會通過；不能只看業績。", "official": ["金融服務業應訂定業務人員之酬金制度，並提報董（理）事會通過。", "前項酬金制度應衡平考量客戶權益、金融商品或服務對金融服務業及客戶可能產生之各項風險，不得僅考量金融商品或服務之業績目標達成情形。", "前項金融服務業業務人員酬金制度應遵行之原則，由所屬同業公會擬訂或經主管機關指定之公會團體擬訂，報請主管機關核定。"], "has_official": true}, {"no": "11-2", "title": "初次銷售複雜性高風險商品要經董事會通過", "plain": "金融服務業初次銷售的複雜性高風險商品，要報經董（理）事會或常務董（理）事會通過。複雜性高風險商品的類型由主管機關訂定。複雜性高風險商品及前條酬金制度，在外國金融服務業在臺分支機構，要經其在臺負責人同意。", "mnemonic": "第一次賣複雜高風險商品：董事會通過。", "official": ["金融服務業初次銷售之複雜性高風險商品應報經董（理）事會或常務董（理）事會通過。", "前項所定複雜性高風險商品類型，由主管機關定之。", "第一項複雜性高風險商品及前條第一項之酬金制度，於外國金融服務業在臺分支機構，應經其在臺負責人同意。"], "has_official": true}, {"no": "11-3", "title": "懲罰性賠償", "plain": "金融服務業因違反本法規定應負損害賠償責任，對於故意所致的損害，法院可因消費者的請求，依侵害情節，酌定損害額3倍以下的懲罰性賠償；對於過失所致的損害，可酌定損害額1倍以下的懲罰性賠償。這個請求權，自請求權人知有得受賠償的原因時起2年不行使而消滅；自賠償原因發生之日起逾5年者，亦同。", "facts": {"head": ["情形", "懲罰性賠償上限"], "rows": [["故意所致的損害", "損害額3倍以下"], ["過失所致的損害", "損害額1倍以下"], ["請求權時效", "知有得受賠償原因時起2年；賠償原因發生日起逾5年亦消滅"]]}, "mnemonic": "故意三倍、過失一倍；時效2年、5年。", "official": ["金融服務業因違反本法規定應負損害賠償責任者，對於故意所致之損害，法院得因金融消費者之請求，依侵害情節，酌定損害額三倍以下之懲罰性賠償；對於過失所致之損害，得酌定損害額一倍以下之懲罰性賠償。", "前項懲罰性賠償請求權，自請求權人知有得受賠償之原因時起二年間不行使而消滅；自賠償原因發生之日起逾五年者，亦同。"], "has_official": true}, {"no": "13", "title": "爭議處理流程：先申訴，再申請評議", "plain": "消費者就金融消費爭議事件，要先向金融服務業提出申訴。金融服務業要在收到申訴之日起30日內為適當的處理，並把結果回覆。消費者不接受處理結果，或金融服務業逾30日不處理的，消費者可以在收受處理結果或期限屆滿之日起60日內，向爭議處理機構申請評議。", "facts": {"head": ["步驟", "誰、多久"], "rows": [["一、申訴", "消費者先向金融服務業申訴"], ["二、處理", "金融服務業收受申訴之日起30日內處理並回覆"], ["三、申請評議", "不接受處理結果或逾期不處理，收受結果或期限屆滿之日起60日內，向爭議處理機構申請"]]}, "mnemonic": "先申訴；公司三十日回覆；不滿意六十日內申請評議。", "official": ["為公平合理、迅速有效處理金融消費爭議，以保護金融消費者權益，應依本法設立爭議處理機構。", "金融消費者就金融消費爭議事件應先向金融服務業提出申訴，金融服務業應於收受申訴之日起三十日內為適當之處理，並將處理結果回覆提出申訴之金融消費者；金融消費者不接受處理結果者或金融服務業逾上述期限不為處理者，金融消費者得於收受處理結果或期限屆滿之日起六十日內，向爭議處理機構申請評議；金融消費者向爭議處理機構提出申訴者，爭議處理機構之金融消費者服務部門應將該申訴移交金融服務業處理。", "爭議處理機構除處理金融消費爭議外，並應辦理對金融服務業及金融消費者之教育宣導，使金融服務業與金融消費者均能充分瞭解正確之金融消費觀念及金融消費關係之權利與義務，以有效預防金融消費爭議發生。", "爭議處理機構辦理金融消費爭議處理及前項業務，得向金融服務業收取年費及爭議處理服務費。", "前項年費及服務費之收取標準及有關規定由主管機關定之。"], "has_official": true}, {"no": "29", "title": "評議成立與金融服務業的接受義務", "plain": "當事人要在評議書所載期限內，用書面通知爭議處理機構接受或拒絕評議決定，評議經雙方都接受才成立。金融服務業如果事前書面同意，或在商品、服務契約等文件中表明願意適用本法的爭議處理程序，對於評議決定中每一筆金額在一定額度以下的給付，一定要接受。一定額度由爭議處理機構擬訂，報主管機關核定公告。", "mnemonic": "雙方接受才成立；金融服務業對一定額度以下的評議決定要接受。", "official": ["當事人應於評議書所載期限內，以書面通知爭議處理機構，表明接受或拒絕評議決定之意思。評議經當事人雙方接受而成立。", "金融服務業於事前以書面同意或於其商品、服務契約或其他文件中表明願意適用本法之爭議處理程序者，對於評議委員會所作其應向金融消費者給付每一筆金額或財產價值在一定額度以下之評議決定，應予接受；評議決定超過一定額度，而金融消費者表明願意縮減該金額或財產價值至一定額度者，亦同。", "前項一定額度，由爭議處理機構擬訂，報請主管機關核定後公告之。"], "has_official": true}, {"no": "30", "title": "評議書經法院核可，與確定判決同效力", "plain": "消費者可以在評議成立之日起90日的不變期間內，申請爭議處理機構把評議書送法院核可。評議書經法院核可後，與民事確定判決有同一效力，當事人不能再就該事件起訴，也不能再依本法申訴或申請評議。", "mnemonic": "評議成立後90日內送法院核可；核可後等同確定判決。", "official": ["金融消費者得於評議成立之日起九十日之不變期間內，申請爭議處理機構將評議書送請法院核可。爭議處理機構應於受理前述申請之日起五日內，將評議書及卷證送請爭議處理機構事務所所在地之管轄地方法院核可。但爭議處理機構送請法院核可前，金融服務業已依評議成立之內容完全履行者，免送請核可。", "除有第三項情形外，法院對於前項之評議書應予核可。法院核可後，應將經核可之評議書併同評議事件卷證發還爭議處理機構，並將經核可之評議書以正本送達當事人及其代理人。", "法院因評議書內容牴觸法令、違背公共秩序或善良風俗或有其他不能強制執行之原因而未予核可者，法院應將其理由通知爭議處理機構及當事人。", "評議書依第二項規定經法院核可者，與民事確定判決有同一之效力，當事人就該事件不得再行起訴或依本法申訴、申請評議。", "評議書經法院核可後，依法有無效或得撤銷之原因者，當事人得向管轄地方法院提起宣告評議無效或撤銷評議之訴。", "前項情形，準用民事訴訟法第五百條至第五百零二條及第五百零六條、強制執行法第十八條第二項規定。"], "has_official": true}, {"no": "30-1", "title": "違反招攬、適合度、說明義務、酬金制度的罰鍰", "plain": "金融服務業有下列情形之一，處新臺幣30萬元以上1,000萬元以下罰鍰：違反廣告、業務招攬、營業促銷的方式或內容規定；違反第9條未充分了解消費者資料及確保適合度；違反第10條未充分說明或揭露風險；違反第11-1條酬金制度規定。協助不符資格的人創造專業投資人外觀的，處1,000萬元以上5,000萬元以下罰鍰。情節重大的，主管機關可以在所得利益範圍內酌量加重。", "facts": {"head": ["情形", "罰鍰"], "rows": [["違反廣告招攬規定、未確保適合度、未充分說明揭露風險、酬金制度未依規定", "新臺幣30萬元以上1,000萬元以下"], ["協助不符資格者創造專業投資人的形式外觀", "新臺幣1,000萬元以上5,000萬元以下"], ["情節重大", "主管機關可在所得利益範圍內酌量加重，不受最高額限制"]]}, "mnemonic": "三十萬到一千萬；包裝專業投資人，一千萬到五千萬。", "official": ["金融服務業有下列情形之一者，處新臺幣三十萬元以上一千萬元以下罰鍰：", "一、違反第八條第二項所定辦法中有關廣告、業務招攬、營業促銷活動方式或內容之規定。", "二、違反第九條第一項規定未充分瞭解金融消費者相關資料及確保金融消費者之適合度，或同條第二項所定辦法中有關適合度應考量事項之規定。", "三、違反第十條第一項規定，未向金融消費者充分說明金融商品、服務、契約之重要內容或充分揭露風險，或違反同條第三項所定辦法中有關說明、揭露應以金融消費者能充分瞭解之方式或內容之規定。", "四、違反第十一條之一規定，未訂定或未依主管機關核定應遵行之原則訂定酬金制度或未確實執行。", "金融服務業對自然人或法人未符合第四條第二項所定之條件，而協助其創造符合形式上之外觀條件者，處新臺幣一千萬元以上五千萬元以下罰鍰。", "金融服務業有前二項情形之一，且情節重大者，主管機關得於其所得利益之範圍內酌量加重，不受前二項罰鍰最高額之限制。"], "has_official": true}], "tables": [{"title": "第9條、第10條、第11條：三條一組", "head": ["條", "義務", "重點"], "rows": [["9", "適合度", "訂約前充分了解消費者相關資料，確保商品或服務對其適合"], ["10", "說明與揭露", "充分說明重要內容、充分揭露風險；成本、收益、風險都要講；複雜高風險商品錄音錄影"], ["11", "賠償與舉證", "違反9、10條致損害要賠；除非自己證明損害與未了解適合度、未說明或未揭露風險無關"]]}, {"title": "數字速記：金融消費者保護法", "head": ["條", "數字", "什麼事"], "rows": [["13", "30日", "金融服務業處理申訴並回覆的期限"], ["13", "60日", "不滿意處理結果或逾期，申請評議的期限"], ["30", "90日", "評議成立後，申請送法院核可的不變期間"], ["11-3", "3倍／1倍", "故意損害：3倍以下；過失損害：1倍以下"], ["11-3", "2年／5年", "懲罰性賠償請求權時效"], ["30-1", "30萬～1,000萬", "一般違規罰鍰"], ["30-1", "1,000萬～5,000萬", "協助創造專業投資人外觀"]]}], "cards": [{"id": 1, "ref": "3", "front": "金融服務業包括哪些行業？", "back": "銀行業、證券業、期貨業、保險業、電子支付業及主管機關公告的其他金融服務業。"}, {"id": 2, "ref": "4", "front": "哪兩類人不算金融消費者？", "back": "專業投資機構，以及符合一定財力或專業能力的自然人或法人。"}, {"id": 3, "ref": "7", "front": "金融服務業與消費者的契約條款有疑義時，怎麼解釋？", "back": "作有利於金融消費者的解釋。"}, {"id": 4, "ref": "8", "front": "金融服務業可以藉金融教育宣導引薦個別金融商品嗎？", "back": "不可以。第8條第3項。"}, {"id": 5, "ref": "9", "front": "第9條『適合度』要求金融服務業在訂約前做什麼？", "back": "充分了解消費者的相關資料，確保商品或服務對消費者的適合度。"}, {"id": 6, "ref": "10", "front": "第10條的說明內容至少要包括什麼？", "back": "交易成本、可能的收益及風險等有關消費者權益的重要內容。"}, {"id": 7, "ref": "10", "front": "複雜性高風險商品的說明揭露，原則上要怎麼留存？", "back": "錄音或錄影（非臨櫃的自動化通路交易、消費者不同意者除外）。"}, {"id": 8, "ref": "11", "front": "違反第9、10條致消費者受損害，誰要證明什麼？", "back": "金融服務業要證明損害的發生非因其未了解適合度，或未說明、說明不實、未充分揭露風險。"}, {"id": 9, "ref": "11-1", "front": "業務人員酬金制度不能只考量什麼？", "back": "業績目標達成情形；要衡平考量客戶權益與各項風險。"}, {"id": 10, "ref": "11-3", "front": "懲罰性賠償：故意與過失的上限？", "back": "故意：損害額3倍以下；過失：1倍以下。"}, {"id": 11, "ref": "13", "front": "金融服務業收到申訴後，幾日內要處理並回覆？", "back": "30日內。"}, {"id": 12, "ref": "13", "front": "不接受處理結果，申請評議的期限？", "back": "收受處理結果或期限屆滿之日起60日內，向爭議處理機構申請。"}, {"id": 13, "ref": "30", "front": "評議成立後多久內可申請送法院核可？", "back": "90日的不變期間。"}, {"id": 14, "ref": "30-1", "front": "一般違反廣告、適合度、說明義務的罰鍰範圍？", "back": "新臺幣30萬元以上1,000萬元以下。"}], "scenarios": [{"ref": "9", "q": "保險公司在客戶投保前，沒有了解客戶的財務狀況與需求，就推薦高風險商品。主要違反金融消費者保護法哪一條？", "opts": ["第9條（適合度）", "第13條（申訴）", "第29條（評議成立）", "第30條（法院核可）"], "ans": 0, "why": "第9條：訂約前要充分了解消費者相關資料，確保商品對消費者的適合度。"}, {"ref": "11", "q": "客戶主張保險公司未充分說明風險而受損失。依第11條，誰要證明損害與未說明無關？", "opts": ["客戶", "金融服務業", "法院", "主管機關"], "ans": 1, "why": "第11條但書：金融服務業能證明損害的發生非因其未說明、說明不實、錯誤或未充分揭露風險者，才免責。舉證責任在金融服務業。"}, {"ref": "13", "q": "客戶向保險公司申訴，公司逾30日都不處理。客戶下一步？", "opts": ["只能等待", "自期限屆滿之日起60日內向爭議處理機構申請評議", "直接申請法院核可", "向業務員索賠"], "ans": 1, "why": "第13條第2項：金融服務業逾期不處理者，消費者可於期限屆滿之日起60日內向爭議處理機構申請評議。"}, {"ref": "11-3", "q": "金融服務業因故意違反本法造成損害，法院可酌定懲罰性賠償最高為損害額的？", "opts": ["1倍", "2倍", "3倍", "5倍"], "ans": 2, "why": "第11-3條：故意：損害額3倍以下；過失：1倍以下。"}, {"ref": "30", "q": "評議成立後，消費者要申請爭議處理機構把評議書送法院核可，期限是？", "opts": ["30日", "60日", "90日", "1年"], "ans": 2, "why": "第30條第1項：評議成立之日起90日的不變期間。"}, {"ref": "10", "q": "依第10條，下列哪一項不是說明內容必須包括的？", "opts": ["交易成本", "可能的收益", "風險", "業務員的酬金金額"], "ans": 3, "why": "第10條第3項：說明及揭露內容包括交易成本、可能收益及風險等有關消費者權益的重要內容。酬金制度是第11-1條，由金融服務業內部制定，不是向消費者說明的必備項目。"}, {"ref": "4", "q": "金融服務業協助未符合資格的客戶，創造符合專業投資人的形式外觀。該客戶仍是？", "opts": ["專業投資人", "金融消費者", "無需保護", "由業務員決定"], "ans": 1, "why": "第4條第3項：仍為本法所稱金融消費者。金融服務業還會被處1,000萬元以上5,000萬元以下罰鍰（第30-1條第2項）。"}, {"ref": "30-1", "q": "金融服務業違反第10條，未充分說明並揭露風險。罰鍰範圍？", "opts": ["新臺幣1萬至10萬", "新臺幣30萬至1,000萬", "新臺幣1,000萬至5,000萬", "不處罰鍰"], "ans": 1, "why": "第30-1條第1項第3款：違反第10條第1項，處30萬元以上1,000萬元以下罰鍰。"}], "chNo": "06", "summary": "金融消費者保護法中和業務員最相關的：適合度、說明與揭露風險、舉證責任倒置、懲罰性賠償、申訴與評議流程，以及罰鍰。", "scope": "收錄金融消費者保護法第3、4、5、7、8、9、10、11、11-1、11-2、11-3、13、29、30、30-1條。", "nav": {"prev": {"file": "ch05.html", "label": "第5章 保險業務員：登錄、招攬行為與懲處（保險業務員管理規則）"}, "next": {"file": "ch07.html", "label": "第7章 個人資料保護法（保險業務最常用的條文）"}}}</script>
 <script>const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -151,10 +163,92 @@ function step(d){const i=TABS.findIndex(t=>t[0]===curTab)+d;
   if(i>=TABS.length){if(N.next)location.href=N.next.file+'#read';return}
   show(TABS[i][0])}
 let sx=0,sy=0,skip=false;
-document.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;const el=e.target&&e.target.nodeType===1?e.target:(e.target&&e.target.parentElement);skip=!!(el&&el.closest('.tw,nav,input,.off'))},{passive:true});
+document.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;const el=e.target&&e.target.nodeType===1?e.target:(e.target&&e.target.parentElement);skip=!!(el&&el.closest('.tw,nav,input,.off,#cap'))},{passive:true});
 document.addEventListener('touchend',e=>{if(skip)return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>70&&Math.abs(dy)<45){step(dx<0?1:-1)}},{passive:true});
-document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1)});
+document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select'))return;if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1)});
 // 深層連結
 function route(){const h=(location.hash||'#read').slice(1).split('/');show(TABS.some(t=>t[0]===h[0])?h[0]:'read',h[1]?decodeURIComponent(h[1]):null)}
 window.addEventListener('hashchange',route);route();
+</script>
+<script>// 語音：導覽列多一顆「🎧 語音」鈕，按下就從頭播放；畫面上方只留最後兩行字幕（固定高度，不會推動下面的頁面）。
+// 再按一次＝暫停／繼續；點字幕也一樣；字幕右側的 ✕ 關閉。播完一段自動接下一段。
+// 資料來自 mp3/timing/chNN.js（window.AUDIO_TIMING），由 make_timing.py 產生；沒有這個檔就不會出現「語音」鈕。
+(function(){
+const T=window.AUDIO_TIMING;
+if(!T||!T.segments||!T.segments.length)return;
+const BASE='mp3',segs=T.segments,au=document.getElementById('au');
+const cap=document.getElementById('cap'),rowA=document.getElementById('cap-a'),rowB=document.getElementById('cap-b'),top=document.getElementById('top');
+const SP={F:'主持人',M:'專家'},PUNC='，、：；。！？';
+let si=-1,lines=[],li=-2,started=false,raf=0,endTimer=0;
+
+// ---- 按鈕 ----
+const btn=document.createElement('button');
+btn.id='au-btn';btn.type='button';btn.textContent='🎧 語音';btn.setAttribute('aria-pressed','false');btn.title='按下開始聽這一章的語音重點';
+nav.appendChild(btn);
+function label(){btn.textContent=!started?'🎧 語音':(au.paused?'▶ 語音':'⏸ 語音');btn.setAttribute('aria-pressed',started?'true':'false')}
+
+// ---- 字幕斷行：依目前寬度，把每句切成一行一行 ----
+const fontPx=()=>parseFloat(getComputedStyle(rowB).fontSize)||17;
+const cw=(s,f)=>{let w=0;for(const c of s)w+=c.charCodeAt(0)<128?f*0.56:f;return w};
+function wrap(text,lim0,lim,f){
+  const parts=text.match(new RegExp('[^'+PUNC+']+['+PUNC+']*|['+PUNC+']+','g'))||[text];
+  const out=[];let cur='',w=0,lim_=lim0;
+  const push=()=>{if(cur){out.push(cur);cur='';w=0;lim_=lim}};
+  for(const p of parts){
+    const pw=cw(p,f);
+    if(w+pw<=lim_){cur+=p;w+=pw;continue}
+    push();
+    if(pw<=lim_){cur=p;w=pw;continue}
+    for(const c of p){const x=cw(c,f);if(w+x>lim_)push();cur+=c;w+=x}
+  }
+  push();return out;
+}
+function buildLines(){
+  lines=[];if(si<0)return;
+  const s=segs[si],f=fontPx(),avail=Math.max(120,(rowB.clientWidth||cap.clientWidth||300)-2);let prevSpk=null;
+  s.cues.forEach((c,k)=>{
+    const t0=c.t,t1=k+1<s.cues.length?s.cues[k+1].t:s.dur;
+    const span=Math.max(0.4,t1-t0-0.7);                       // 句尾約有 0.7 秒停頓，不分給字
+    const badge=c.spk!==prevSpk;prevSpk=c.spk;
+    const bw=badge?SP[c.spk].length*12+18:0;                   // 說話者小標籤的寬度（12px 字＋留白）
+    const ls=wrap(c.text,avail-bw,avail,f),ws=ls.map(x=>Math.max(1,cw(x,f))),tot=ws.reduce((a,b)=>a+b,0);
+    let acc=0;ls.forEach((x,j)=>{lines.push({t:t0+span*acc/tot,spk:c.spk,badge:badge&&j===0,text:x});acc+=ws[j]});
+  });
+}
+const esc2=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const rowHTML=l=>l?(l.badge?'<span class="sp '+l.spk+'">'+SP[l.spk]+'</span>':'')+esc2(l.text):'';
+function paint(){
+  const t=au.currentTime;let j=-1;
+  for(let k=0;k<lines.length;k++){if(lines[k].t<=t+0.05)j=k;else break}
+  if(j===li)return;li=j;
+  rowA.innerHTML=rowHTML(lines[j-1]);rowB.innerHTML=rowHTML(lines[j]);
+}
+function tick(){paint();raf=au.paused?0:requestAnimationFrame(tick)}
+
+// ---- 播放 ----
+const nice=t=>String(t).replace(/_/g,' ');
+function meta(){if('mediaSession' in navigator&&window.MediaMetadata&&si>=0)navigator.mediaSession.metadata=new MediaMetadata({title:nice(segs[si].title),artist:D.chapter+' '+D.title,album:'考試複習語音'})}
+function pad(){document.documentElement.style.scrollPaddingTop=cap.hidden?'':(top.offsetHeight+8)+'px'}
+function setSrc(i){if(si===i)return;si=i;li=-2;rowA.innerHTML=rowB.innerHTML='';au.src=encodeURI(BASE+'/'+segs[i].file);au.load();au.playbackRate=1;buildLines();meta()}
+function playSeg(i){
+  setSrc(i);
+  const go=()=>{buildLines();au.play().catch(()=>{})};
+  if(au.readyState>=1)go();else au.addEventListener('loadedmetadata',go,{once:true});
+}
+function start(){clearTimeout(endTimer);started=true;cap.hidden=false;pad();si=-1;playSeg(0)}
+function stop(){clearTimeout(endTimer);au.pause();started=false;si=-1;lines=[];li=-2;cap.hidden=true;rowA.innerHTML=rowB.innerHTML='';pad();label()}
+function toggle(){if(!started)start();else if(au.paused)au.play().catch(()=>{});else au.pause()}
+btn.onclick=toggle;
+cap.addEventListener('click',e=>{if(e.target.closest('#cap-x'))stop();else toggle()});
+au.addEventListener('play',()=>{label();cancelAnimationFrame(raf);raf=requestAnimationFrame(tick)});
+au.addEventListener('pause',label);
+au.addEventListener('seeked',paint);
+au.addEventListener('ended',()=>{
+  if(si<segs.length-1)playSeg(si+1);
+  else{started=false;label();endTimer=setTimeout(()=>{if(!started)stop()},2500)}   // 全部播完，字幕停 2.5 秒後自動收起
+});
+au.addEventListener('error',()=>{rowA.textContent='';rowB.textContent='找不到音檔（'+BASE+'/'+(segs[si]?segs[si].file:'')+'）'});
+let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(si>=0){buildLines();li=-2;paint();pad()}},150)});
+if('mediaSession' in navigator){[['play',()=>au.play()],['pause',()=>au.pause()],['previoustrack',()=>started&&playSeg(Math.max(0,si-1))],['nexttrack',()=>started&&si<segs.length-1&&playSeg(si+1)]].forEach(([a,f])=>{try{navigator.mediaSession.setActionHandler(a,f)}catch(e){}})}
+})();
 </script></body></html>

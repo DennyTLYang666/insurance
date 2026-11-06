@@ -11,7 +11,7 @@ header p{margin:6px 0 0;font-size:14px;opacity:.95}
 .wrap{max-width:900px;margin:0 auto;padding:0 12px 60px}
 .banner{background:var(--warnbg);color:var(--warn);border:1px solid #f0d9a8;border-radius:8px;padding:10px 12px;margin:12px 0;font-size:14px}
 .banner b{margin-right:4px}
-nav{position:sticky;top:0;background:var(--bg);z-index:5;display:flex;gap:6px;padding:10px 0;overflow-x:auto;border-bottom:1px solid var(--line)}
+nav{display:flex;gap:6px;padding:10px 0;overflow-x:auto}
 nav button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:15px;cursor:pointer;color:var(--ink)}
 nav button[aria-selected="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
 section{display:none;padding-top:14px}section.on{display:block}
@@ -52,9 +52,19 @@ h2{font-size:18px;margin:24px 0 8px}
 
 .pw{margin:6px 0}.pw p{margin:4px 0}.pl{margin:6px 0 6px 0;padding-left:20px}.pl li{margin:5px 0;line-height:1.7}.pl ul{margin:4px 0;padding-left:18px;list-style:disc}.pl ul li{margin:2px 0}.pl>li>b{color:#283593}
 table.ft{font-size:14px;table-layout:fixed}table.ft td:first-child,table.ft th:first-child{font-weight:600;width:34%;word-break:break-all}table.ft td,table.ft th{word-break:break-word;padding:6px 7px}table.ft th{width:auto}
+#top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+#au-btn[aria-pressed="true"]{background:var(--brand2);color:var(--brand);border-color:var(--brand);font-weight:600}
+#cap{position:relative;padding:4px 36px 8px 2px;font-size:clamp(15px,4.2vw,19px);line-height:1.55;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+#cap[hidden]{display:none}
+.cap-l{height:1.55em;white-space:nowrap;overflow:hidden}
+#cap-a{color:var(--sub)}
+#cap-b{font-weight:600;color:var(--ink)}
+#cap-x{position:absolute;right:0;top:2px;width:34px;height:34px;border:0;background:none;color:var(--sub);font-size:16px;cursor:pointer}
+.sp{display:inline-block;font-size:12px;font-weight:400;line-height:1.5;border-radius:4px;padding:0 5px;margin-right:6px;color:#fff;vertical-align:1px}
+.sp.F{background:#c2185b}.sp.M{background:#1f5f8b}
 </style></head>
 <body>
-<header><div class="wrap" style="padding:0"><h1>金融市場常識與職業道德：法規條文速查與備考</h1><p>「金融市場常識與職業道德」共同科目中以法條為依據的部分：金融消費者保護法與公平待客、保險招攬、個資與保密、洗錢防制、證券期貨從業規範、利益衝突與忠實義務、賄賂貪污與檢舉。備考、實務上查規定、向客戶說明時都能用。</p></div></header>
+<header><div class="wrap" style="padding:0"><a href="../index.html">← 所有考試</a><h1>金融市場常識與職業道德：法規條文速查與備考</h1><p>「金融市場常識與職業道德」共同科目中以法條為依據的部分：金融消費者保護法與公平待客、保險招攬、個資與保密、洗錢防制、證券期貨從業規範、利益衝突與忠實義務、賄賂貪污與檢舉。備考、實務上查規定、向客戶說明時都能用。</p></div></header>
 <div class="wrap">
 <div class="search"><input id="q" type="search" placeholder="搜尋全部章節，例如：適合度　內線交易　30日　洗錢　忠實義務　賄賂" autocomplete="off"></div>
 <div id="res"></div>

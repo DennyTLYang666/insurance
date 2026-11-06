@@ -11,7 +11,7 @@ header p{margin:6px 0 0;font-size:14px;opacity:.95}
 .wrap{max-width:900px;margin:0 auto;padding:0 12px 60px}
 .banner{background:var(--warnbg);color:var(--warn);border:1px solid #f0d9a8;border-radius:8px;padding:10px 12px;margin:12px 0;font-size:14px}
 .banner b{margin-right:4px}
-nav{position:sticky;top:0;background:var(--bg);z-index:5;display:flex;gap:6px;padding:10px 0;overflow-x:auto;border-bottom:1px solid var(--line)}
+nav{display:flex;gap:6px;padding:10px 0;overflow-x:auto}
 nav button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:15px;cursor:pointer;color:var(--ink)}
 nav button[aria-selected="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
 section{display:none;padding-top:14px}section.on{display:block}
@@ -52,15 +52,27 @@ h2{font-size:18px;margin:24px 0 8px}
 
 .pw{margin:6px 0}.pw p{margin:4px 0}.pl{margin:6px 0 6px 0;padding-left:20px}.pl li{margin:5px 0;line-height:1.7}.pl ul{margin:4px 0;padding-left:18px;list-style:disc}.pl ul li{margin:2px 0}.pl>li>b{color:#283593}
 table.ft{font-size:14px;table-layout:fixed}table.ft td:first-child,table.ft th:first-child{font-weight:600;width:34%;word-break:break-all}table.ft td,table.ft th{word-break:break-word;padding:6px 7px}table.ft th{width:auto}
+#top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+#au-btn[aria-pressed="true"]{background:var(--brand2);color:var(--brand);border-color:var(--brand);font-weight:600}
+#cap{position:relative;padding:4px 36px 8px 2px;font-size:clamp(15px,4.2vw,19px);line-height:1.55;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+#cap[hidden]{display:none}
+.cap-l{height:1.55em;white-space:nowrap;overflow:hidden}
+#cap-a{color:var(--sub)}
+#cap-b{font-weight:600;color:var(--ink)}
+#cap-x{position:absolute;right:0;top:2px;width:34px;height:34px;border:0;background:none;color:var(--sub);font-size:16px;cursor:pointer}
+.sp{display:inline-block;font-size:12px;font-weight:400;line-height:1.5;border-radius:4px;padding:0 5px;margin-right:6px;color:#fff;vertical-align:1px}
+.sp.F{background:#c2185b}.sp.M{background:#1f5f8b}
 </style></head>
 <body>
-<header><div class="wrap" style="padding:0"><a href="index.html">← 首頁（搜尋、總複習）</a><h1 id="h1"></h1><p id="intro"></p></div></header>
+<header><div class="wrap" style="padding:0"><a href="../index.html">⌂ 所有考試</a>　<a href="index.html">← 本科首頁（搜尋、總複習）</a><h1 id="h1"></h1><p id="intro"></p></div></header>
 <div class="wrap">
-<nav role="tablist" id="nav"></nav>
+<div id="top"><nav role="tablist" id="nav"></nav><div id="cap" hidden><div class="cap-l" id="cap-a"></div><div class="cap-l" id="cap-b"></div><button type="button" id="cap-x" aria-label="關閉語音字幕">✕</button></div></div>
 <section id="s-read"></section><section id="s-table"></section><section id="s-cards"></section><section id="s-quiz"></section>
 <div class="pager"><a id="prev" href="#"></a><a id="next" href="#"></a></div>
 <footer id="foot"></footer>
 </div>
+<audio id="au" preload="none"></audio>
+<script src="mp3/timing/ch08.js"></script>
 <script id="data" type="application/json">{"chapter": "第八章", "title": "賄賂、貪污與檢舉：送禮、挪用客戶款項與保護檢舉人", "laws": [{"pcode": "C0000001", "name": "中華民國刑法", "amended": "民國115年7月22日", "url": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=C0000001", "source": "法務部全國法規資料庫（經 kong0107/mojLawSplitJSON 公開鏡像取得，鏡像更新日 20261016）", "retrieved": "2026-11-03", "mirrorDate": "20260722"}, {"pcode": "C0000007", "name": "貪污治罪條例", "amended": "民國105年6月22日", "url": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=C0000007", "source": "法務部全國法規資料庫（經 kong0107/mojLawSplitJSON 公開鏡像取得，鏡像更新日 20261016）", "retrieved": "2026-11-03", "mirrorDate": "20160622"}, {"pcode": "I0070003", "name": "獎勵保護檢舉貪污瀆職辦法", "amended": "民國108年2月1日", "url": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=I0070003", "source": "法務部全國法規資料庫（經 kong0107/mojLawSplitJSON 公開鏡像取得，鏡像更新日 20261016）", "retrieved": "2026-11-03", "mirrorDate": "20190201"}], "alerts": [{"t": "『送禮』和『行賄』的界線在對價關係", "d": "依貪污治罪條例第11條，對公務員，無論是『違背職務』或『不違背職務』的行為，行求、期約或交付賄賂或其他不正利益，都有刑責（違背職務：1年以上7年以下；不違背職務：3年以下）。判斷是不是賄賂，實務上看是否與職務行為有『對價關係』（這是實務見解，不是條文原文；你的筆記也是這個重點）。"}, {"t": "後果的提醒（風險）", "d": "金融從業人員挪用、侵占客戶款項，依刑法第336條業務侵占，6個月以上5年以下有期徒刑；為他人處理事務卻圖私利而違背任務，依刑法第342條背信，5年以下有期徒刑。行賄公務員，最重7年以下有期徒刑（但自首者免除其刑，偵查或審判中自白可減輕或免除）。"}, {"t": "沒有收錄的部分", "d": "公司內部吹哨者管道、上市櫃公司誠信經營守則屬於公司治理與自律規範，不是這幾部法律的條文，本章沒有收錄；檢舉獎金的給獎標準在辦法的附表（PDF附件），我無法從資料庫鏡像取得內容，所以只收錄條文，沒有附表金額。"}], "clauses": [{"title": "公務員收受職務上行為的賄賂", "plain": "公務員或仲裁人，對於職務上的行為，要求、期約或收受賄賂或其他不正利益的，處7年以下有期徒刑，得併科70萬元以下罰金。", "mnemonic": "公務員收職務上行為的賄賂：7年以下。", "tip": "貪污治罪條例第5條對公務員『職務上行為』收賄的規定較重（7年以上），一般公務員會適用貪污治罪條例。", "official": ["公務員或仲裁人對於職務上之行為，要求、期約或收受賄賂或其他不正利益者，處七年以下有期徒刑，得併科七十萬元以下罰金。"], "has_official": true, "no": "刑121"}, {"title": "收賄與行賄：違背職務行為", "plain": "公務員或仲裁人，對於違背職務的行為，要求、期約或收受賄賂或其他不正利益的，處3年以上10年以下有期徒刑，得併科200萬元以下罰金；因而為違背職務行為的，處無期徒刑或5年以上有期徒刑。對公務員或仲裁人的違背職務行為，行求、期約或交付賄賂或其他不正利益的，處3年以下有期徒刑，得併科30萬元以下罰金；自首者減輕或免除其刑，偵查或審判中自白者，得減輕其刑。", "mnemonic": "收賄違背職務：3到10年；行賄違背職務：3年以下，自首減免、自白可減。", "tip": "行賄的人（包含公司業務員）也有刑責，不是只有收錢的公務員。", "official": ["公務員或仲裁人對於違背職務之行為，要求、期約或收受賄賂或其他不正利益者，處三年以上十年以下有期徒刑，得併科二百萬元以下罰金。", "因而為違背職務之行為者，處無期徒刑或五年以上有期徒刑，得併科四百萬元以下罰金。", "對於公務員或仲裁人關於違背職務之行為，行求、期約或交付賄賂或其他不正利益者，處三年以下有期徒刑，得併科三十萬元以下罰金。但自首者減輕或免除其刑。在偵查或審判中自白者，得減輕其刑。"], "has_official": true, "no": "刑122"}, {"title": "公務員對職務上行為要求、期約或收受賄賂", "plain": "公務員有下列行為之一，處7年以上有期徒刑，得併科6,000萬元以下罰金：意圖得利，擅提或截留公款、違背法令收募稅捐或公債；利用職務上機會，以詐術使人交付財物；對於職務上之行為，要求、期約或收受賄賂或其他不正利益。", "mnemonic": "職務上行為收賄：7年以上。", "official": ["有下列行為之一者，處七年以上有期徒刑，得併科新臺幣六千萬元以下罰金：", "一、意圖得利，擅提或截留公款或違背法令收募稅捐或公債者。", "二、利用職務上之機會，以詐術使人將本人之物或第三人之物交付者。", "三、對於職務上之行為，要求、期約或收受賄賂或其他不正利益者。", "前項第一款及第二款之未遂犯罰之。"], "has_official": true, "no": "貪5"}, {"title": "對公務員行賄：違背職務與不違背職務", "plain": "對公務員，關於違背職務的行為，行求、期約或交付賄賂或其他不正利益的，處1年以上7年以下有期徒刑，得併科300萬元以下罰金。關於不違背職務的行為，行求、期約或交付賄賂或其他不正利益的，處3年以下有期徒刑、拘役或科或併科50萬元以下罰金。不具公務員身分的人也適用。犯行賄罪而自首的，免除其刑；偵查或審判中自白的，減輕或免除其刑。", "mnemonic": "行賄公務員：違背職務1到7年；不違背職務3年以下；自首免刑、自白減輕。", "tip": "你的筆記有一題：公司自己符合規定，只是想縮短辦理時間，就送承辦公務員高價禮品。條文上，無論違背職務與否，行求、期約或交付賄賂或不正利益都有刑責（只是刑度不同），所以不能送。", "facts": {"head": ["行為", "刑責"], "rows": [["對公務員違背職務的行為行賄", "1年以上7年以下有期徒刑，得併科300萬元以下罰金"], ["對公務員不違背職務的行為行賄", "3年以下有期徒刑、拘役或科或併科50萬元以下罰金"], ["自首", "免除其刑"], ["偵查或審判中自白", "減輕或免除其刑"]]}, "official": ["對於第二條人員，關於違背職務之行為，行求、期約或交付賄賂或其他不正利益者，處一年以上七年以下有期徒刑，得併科新臺幣三百萬元以下罰金。", "對於第二條人員，關於不違背職務之行為，行求、期約或交付賄賂或其他不正利益者，處三年以下有期徒刑、拘役或科或併科新臺幣五十萬元以下罰金。", "對於外國、大陸地區、香港或澳門之公務員，就跨區貿易、投資或其他商業活動有關事項，為前二項行為者，依前二項規定處斷。", "不具第二條人員之身分而犯前三項之罪者，亦同。", "犯前四項之罪而自首者，免除其刑；在偵查或審判中自白者，減輕或免除其刑。", "在中華民國領域外犯第一項至第三項之罪者，不問犯罪地之法律有無處罰規定，均依本條例處罰。"], "has_official": true, "no": "貪11"}, {"title": "洩漏或交付國防以外應秘密的消息", "plain": "公務員洩漏或交付關於國防以外應秘密的文書、圖畫、消息或物品的，處3年以下有期徒刑；因過失犯的，處1年以下有期徒刑、拘役或9千元以下罰金。非公務員因職務或業務知悉或持有這些消息而洩漏或交付的，處1年以下有期徒刑、拘役或9千元以下罰金。", "mnemonic": "洩漏國防以外的秘密：公務員3年以下，非公務員1年以下。", "tip": "檢舉人資料被洩漏，就是適用這類洩密罪（見獎勵保護檢舉貪污瀆職辦法第10條）。", "official": ["公務員洩漏或交付關於中華民國國防以外應秘密之文書、圖畫、消息或物品者，處三年以下有期徒刑。", "因過失犯前項之罪者，處一年以下有期徒刑、拘役或九千元以下罰金。", "非公務員因職務或業務知悉或持有第一項之文書、圖畫、消息或物品，而洩漏或交付之者，處一年以下有期徒刑、拘役或九千元以下罰金。"], "has_official": true, "no": "刑132"}, {"title": "業務侵占", "plain": "對於業務上所持有的物，犯侵占罪的，處6個月以上5年以下有期徒刑，得併科9萬元以下罰金；未遂也罰。對於公務上或因公益所持有的物，處1年以上7年以下有期徒刑，得併科15萬元以下罰金。", "mnemonic": "業務上持有的錢、物，侵占：6月到5年。", "tip": "業務員代收保費卻挪用，除了違反業務員管理規則第19條第9款，也可能構成業務侵占。", "official": ["對於公務上或因公益所持有之物，犯前條第一項之罪者，處一年以上七年以下有期徒刑，得併科十五萬元以下罰金。", "對於業務上所持有之物，犯前條第一項之罪者，處六月以上五年以下有期徒刑，得併科九萬元以下罰金。", "前二項之未遂犯罰之。"], "has_official": true, "no": "刑336"}, {"title": "背信：為他人處理事務卻圖私利", "plain": "為他人處理事務，意圖為自己或第三人不法利益，或損害本人利益，而為違背其任務的行為，致生損害於本人的財產或其他利益的，處5年以下有期徒刑、拘役，或科或併科50萬元以下罰金；未遂也罰。", "mnemonic": "替人處理事務，圖私利違背任務，造成損害：5年以下。", "tip": "受託管理財產、代客操作的人，違背任務圖私利，容易落在這條。", "official": ["為他人處理事務，意圖為自己或第三人不法之利益，或損害本人之利益，而為違背其任務之行為，致生損害於本人之財產或其他利益者，處五年以下有期徒刑、拘役或科或併科五十萬元以下罰金。", "前項之未遂犯罰之。"], "has_official": true, "no": "刑342"}, {"title": "要在『未被發覺前』向有權機關檢舉", "plain": "檢舉人要在貪污瀆職事實『未被發覺前』，向檢察機關、司法警察機關或政風機構檢舉，才依本辦法核給檢舉獎金。", "mnemonic": "未發覺前檢舉，才有獎金。", "official": ["檢舉人於前條所列案件之貪污瀆職事實未被發覺前，向檢察機關、司法警察機關或政風機構檢舉者，依本辦法規定核給檢舉獎金（以下簡稱獎金）。"], "has_official": true, "no": "獎3"}, {"title": "不給獎金的六種情形", "plain": "不給獎金：一、檢舉事實與判決書事實不符；二、公務員執行職務知有嫌疑而檢舉（法令另有規定者除外）；三、共同實行或教唆、幫助犯貪污瀆職；四、對公務員期約或交付賄賂後再行檢舉；五、匿名或不以真實姓名檢舉、未提出具體事證或拒絕作筆錄；六、委託他人檢舉、以他人名義檢舉或受委託檢舉。", "mnemonic": "事實不符、公務員職務、共犯、先行賄再檢舉、匿名沒證據、代檢舉。", "tip": "匿名檢舉不能領獎金；要用真實姓名並製作筆錄。", "official": ["有下列情事之一者，不給與獎金：", "一、檢舉事實與判決書所載之事實不符。", "二、公務員執行職務知有貪污瀆職嫌疑而檢舉。", "三、共同實行或教唆、幫助他人犯貪污瀆職案件。", "四、對於公務員期約或交付賄賂或不正利益後再行檢舉。", "五、匿名或不以真實姓名檢舉、檢舉而未提出具體事證或拒絕製作筆錄。", "六、委託他人檢舉、以他人名義檢舉或受委託而檢舉。", "前項第二款情形，法令另有規定者，從其規定。"], "has_official": true, "no": "獎4"}, {"title": "檢舉同一案犯罪人數逾5人，增給1/2，最高1,000萬", "plain": "因檢舉同一貪污瀆職案件的犯罪人數，經法院判決有罪確定逾5人的，增給二分之一獎金，最高以新臺幣1,000萬元為限。同一案件包括一人犯數罪或數人共犯一罪、數罪或裁判上一罪的情形。", "mnemonic": "逾5人增給一半，上限1,000萬。", "tip": "筆記裡提到的『同一貪污瀆職案件最高獎金1,000萬元』，條文原文是在這條出現的（逾5人增給二分之一獎金，最高以1,000萬元為限）。給獎標準金額在辦法附表，這裡沒有收錄。", "official": ["因檢舉同一貪污瀆職案件之犯罪人數，經法院判決有罪確定逾五人者，增給二分之一獎金。最高以新臺幣一千萬元為限。", "前項所定同一貪污瀆職案件，包括一人犯數罪或數人共犯一罪、數罪或裁判上一罪之情形。"], "has_official": true, "no": "獎5"}, {"title": "獎金分兩階段發放", "plain": "檢舉貪污瀆職案件，經法院判決有罪的，依附表標準給與獎金三分之一；經法院判決有罪確定後，給與其餘獎金。獎金扣除應繳稅額後給與。除誣告情形外，給與的獎金不予追回。", "mnemonic": "判決有罪先發1/3；確定再發其餘。", "facts": {"head": ["階段", "發多少"], "rows": [["法院判決有罪", "依附表標準給與獎金三分之一"], ["判決有罪確定", "給與其餘獎金"], ["獎金", "扣除應繳稅額後給與；除誣告外不追回"]]}, "official": ["檢舉貪污瀆職案件，經法院判決有罪者，依附表之標準給與獎金三分之一，經法院判決有罪確定後，給與其餘獎金。", "檢舉人檢舉之事實有第四條第一項第一款不給與獎金之情事，經第八條第二項規定之審查會審核同意，認該檢舉內容對查獲貪污瀆職案件有直接重要幫助，且經法院判決有罪確定者，得依附表之標準給與十分之一獎金。", "檢舉獎金於扣除應繳稅額後給與之。", "檢舉人死亡者，由其繼承人依民法相關規定具領。", "給與之獎金，除有第十一條規定情形外，不予追回。"], "has_official": true, "no": "獎7"}, {"title": "檢舉資料要保密；洩漏者依法處罰", "plain": "受理檢舉的機關，對檢舉書、筆錄等資料，應予保密，另行保存，不附於偵查案卷內。檢察官或法官為釐清案情，或相關機關為審核獎金發放事宜有必要時，得調閱。無故洩漏這些資料的，依刑法或其他法令處罰。", "mnemonic": "檢舉人資料：保密、另行保存、洩漏要罰。", "official": ["受理檢舉機關，對於前條之檢舉書、筆錄等資料，應予保密，另行保存，不附於偵查案卷內。但檢察官或法官為釐清案情，或相關機關為審核檢舉獎金發放事宜，有必要時，得調閱之。", "無故洩漏前項資料者，應依刑法或其他法令處罰之。"], "has_official": true, "no": "獎10"}, {"title": "誣告他人，要追回獎金", "plain": "檢舉人誣告他人貪污瀆職，經法院判決有罪確定的，由受理檢舉機關追回已核發的獎金；檢舉人死亡的，向其繼承人追回。", "mnemonic": "誣告有罪確定，獎金追回。", "official": ["檢舉人誣告他人貪污瀆職，經法院判決有罪確定者，由受理檢舉機關追回已核發之獎金。", "前項情形，檢舉人死亡者，向其繼承人追回已核發之獎金。"], "has_official": true, "no": "獎11"}, {"title": "檢舉人安全要保護", "plain": "檢舉人的安全，應予保護；對檢舉人威脅、恐嚇或其他不法行為的，應依法嚴懲。", "mnemonic": "保護檢舉人安全；威脅恐嚇要嚴懲。", "official": ["檢舉人之安全，應予保護，對檢舉人威脅、恐嚇或其他不法行為者，應依法嚴懲。"], "has_official": true, "no": "獎12"}], "tables": [{"title": "對公務員送禮／行賄：怎麼判斷刑度", "head": ["情形", "刑責", "依據"], "rows": [["對違背職務的行為行賄", "1年以上7年以下有期徒刑，得併科300萬元以下罰金", "貪污治罪條例第11條第1項"], ["對不違背職務的行為行賄", "3年以下有期徒刑、拘役或科或併科50萬元以下罰金", "貪污治罪條例第11條第2項"], ["行賄後自首", "免除其刑", "貪污治罪條例第11條第5項"], ["行賄後偵查或審判中自白", "減輕或免除其刑", "貪污治罪條例第11條第5項"]]}, {"title": "挪用、侵占與背信：金融從業人員常見刑責", "head": ["行為", "刑責", "依據"], "rows": [["業務侵占（挪用客戶款項、保費）", "6個月以上5年以下有期徒刑，得併科9萬元以下罰金", "刑法第336條第2項"], ["背信（為他人處理事務圖私利）", "5年以下有期徒刑、拘役，或科或併科50萬元以下罰金", "刑法第342條"], ["洩漏業務秘密", "1年以下（工商秘密）", "刑法第317條（見第四章）"]]}, {"title": "檢舉貪污獎金：要點速記", "head": ["項目", "重點"], "rows": [["檢舉時點", "貪污瀆職事實未被發覺前"], ["檢舉對象機關", "檢察機關、司法警察機關或政風機構"], ["不給獎金", "事實不符、公務員職務、共犯、先行賄後檢舉、匿名或無具體事證、代檢舉"], ["獎金發放", "判決有罪給1/3，確定後給其餘"], ["逾5人", "增給1/2，最高1,000萬元"], ["檢舉資料", "保密，另行保存；洩漏依刑法或其他法令處罰"], ["誣告", "有罪確定，追回已核發獎金"]]}], "cards": [{"ref": "貪11", "front": "對公務員違背職務的行為行賄，刑責？", "back": "1年以上7年以下有期徒刑，得併科300萬元以下罰金（貪污治罪條例第11條）。", "id": 1}, {"ref": "貪11", "front": "對公務員不違背職務的行為行賄，有沒有刑責？", "back": "有，3年以下有期徒刑、拘役或科或併科50萬元以下罰金。", "id": 2}, {"ref": "貪11", "front": "行賄後自首，會怎麼樣？", "back": "免除其刑；偵查或審判中自白者，減輕或免除其刑。", "id": 3}, {"ref": "刑122", "front": "公務員對違背職務行為收賄，刑責？", "back": "3年以上10年以下有期徒刑，得併科200萬元以下罰金（因而違背職務者更重）。", "id": 4}, {"ref": "刑336", "front": "代收客戶款項卻挪用，可能構成什麼罪？", "back": "業務侵占（刑法第336條第2項）：6個月以上5年以下有期徒刑。", "id": 5}, {"ref": "刑342", "front": "受託管理財產，違背任務圖私利致委託人受損，可能構成什麼罪？", "back": "背信罪（刑法第342條）：5年以下有期徒刑、拘役，或科或併科50萬元以下罰金。", "id": 6}, {"ref": "獎3", "front": "檢舉貪污瀆職要在什麼時點檢舉，才有獎金？", "back": "貪污瀆職事實『未被發覺前』。", "id": 7}, {"ref": "獎4", "front": "匿名檢舉貪污，能不能領獎金？", "back": "不能；匿名或不以真實姓名檢舉、未提出具體事證或拒絕作筆錄，不給獎金。", "id": 8}, {"ref": "獎4", "front": "行賄公務員後再去檢舉，能不能領獎金？", "back": "不能。", "id": 9}, {"ref": "獎5", "front": "同一貪污瀆職案件，犯罪人數逾5人時，獎金如何增加？上限？", "back": "增給二分之一獎金，最高以新臺幣1,000萬元為限。", "id": 10}, {"ref": "獎7", "front": "檢舉貪污獎金怎麼分階段發放？", "back": "判決有罪先給三分之一；判決有罪確定後給其餘獎金。", "id": 11}, {"ref": "獎10", "front": "檢舉書、筆錄等資料要怎麼處理？", "back": "保密，另行保存，不附於偵查案卷；無故洩漏要依刑法或其他法令處罰。", "id": 12}, {"ref": "獎11", "front": "檢舉人誣告他人，獎金會怎樣？", "back": "經法院判決有罪確定，由受理機關追回已核發獎金。", "id": 13}, {"ref": "刑132", "front": "洩漏國防以外應秘密消息，公務員與非公務員刑責分別是？", "back": "公務員3年以下有期徒刑；非公務員因職務或業務知悉而洩漏，1年以下有期徒刑、拘役或9千元以下罰金。", "id": 14}], "scenarios": [{"ref": "貪11", "q": "某公司業務員為了縮短申請流程，送一份高價禮品給承辦的公務員，希望能優先處理（該公司案件本身符合規定）。依貪污治罪條例第11條，下列何者最正確？", "opts": ["只是人情往來，不會有刑責", "對公務員行求、期約或交付不正利益，即使是不違背職務的行為，也有刑責", "只有違背職務才有刑責", "只要公務員沒收下就沒有責任"], "ans": 1, "why": "貪污治罪條例第11條第2項：對公務員關於不違背職務的行為，行求、期約或交付賄賂或其他不正利益的，處3年以下有期徒刑、拘役或科或併科50萬元以下罰金。『行求』只要提出就成立，不用等對方收下。"}, {"ref": "貪11", "q": "行賄公務員後，行為人主動向檢察機關自首。依貪污治罪條例第11條第5項，法律效果是？", "opts": ["加重其刑", "免除其刑", "沒有影響", "只能減輕一半"], "ans": 1, "why": "第11條第5項：犯行賄罪而自首者，免除其刑；在偵查或審判中自白者，減輕或免除其刑。"}, {"ref": "刑336", "q": "保險業務員收了客戶現金保費，沒有交給公司，而是自己花掉。除了違反保險業務員管理規則，還可能涉及？", "opts": ["沒有刑事責任", "刑法業務侵占罪（6個月以上5年以下有期徒刑）", "刑法誹謗罪", "刑法妨害名譽罪"], "ans": 1, "why": "刑法第336條第2項：對於業務上所持有之物犯侵占罪，處6個月以上5年以下有期徒刑，得併科9萬元以下罰金。"}, {"ref": "刑342", "q": "受託代客操作的人員，為了自己或第三人的不法利益，違背任務操作，致客戶財產受損。可能構成？", "opts": ["背信罪", "誹謗罪", "偽造文書罪", "沒有任何罪"], "ans": 0, "why": "刑法第342條：為他人處理事務，意圖為自己或第三人不法利益，違背其任務致生損害於本人財產的，處5年以下有期徒刑、拘役或科或併科50萬元以下罰金。"}, {"ref": "獎3", "q": "某人發現公司內部有貪污，想要領檢舉獎金，下列時點何者才符合？", "opts": ["案件已被媒體報導之後", "貪污瀆職事實『未被發覺前』", "檢察官已起訴之後", "判決確定之後"], "ans": 1, "why": "獎勵保護檢舉貪污瀆職辦法第3條：檢舉人在貪污瀆職事實未被發覺前，向檢察機關、司法警察機關或政風機構檢舉。"}, {"ref": "獎4", "q": "下列哪一種情形，依獎勵保護檢舉貪污瀆職辦法，『不給與』獎金？", "opts": ["以真實姓名向檢察機關檢舉", "匿名檢舉且未提出具體事證", "提出具體事證並接受筆錄", "事實與判決書所載相符"], "ans": 1, "why": "第4條第5款：匿名或不以真實姓名檢舉、檢舉而未提出具體事證或拒絕製作筆錄，不給與獎金。"}, {"ref": "獎5", "q": "同一貪污瀆職案件，檢舉後犯罪人經法院判決有罪確定逾5人，獎金如何處理？", "opts": ["獎金減半", "增給二分之一，最高以新臺幣1,000萬元為限", "不再給獎金", "增給一倍，無上限"], "ans": 1, "why": "第5條：因檢舉同一案件的犯罪人數，經法院判決有罪確定逾5人者，增給二分之一獎金；最高以新臺幣1,000萬元為限。"}, {"ref": "獎10", "q": "受理檢舉機關的承辦人，無故把檢舉人的資料洩漏給被檢舉人。依辦法第10條，下列何者正確？", "opts": ["不需負責", "應依刑法或其他法令處罰", "只需內部警告", "只有罰款，不會有刑責"], "ans": 1, "why": "第10條第2項：無故洩漏檢舉書、筆錄等資料者，應依刑法或其他法令處罰（例如刑法第132條洩密罪）。"}, {"ref": "獎11", "q": "檢舉人檢舉他人貪污，經查是誣告，法院判決有罪確定。獎金如何處理？", "opts": ["獎金照給", "由受理機關追回已核發的獎金", "減半給予", "不影響"], "ans": 1, "why": "第11條：檢舉人誣告他人貪污瀆職，經法院判決有罪確定，由受理檢舉機關追回已核發的獎金。"}, {"ref": "獎7", "q": "檢舉貪污獎金，在法院『判決有罪』（尚未確定）時，依辦法第7條應該怎麼發？", "opts": ["全額發給", "依附表標準先給三分之一，確定後再給其餘", "完全不發", "減半發給"], "ans": 1, "why": "第7條第1項：經法院判決有罪者，依附表標準給與獎金三分之一；經法院判決有罪確定後，給與其餘獎金。"}], "chNo": "08", "summary": "金融從業人員最容易碰到的刑責：對公務員送禮或行賄、收受客戶的好處、挪用或侵占客戶款項、為他人處理事務卻圖私利（背信），以及檢舉貪污瀆職時，檢舉人的資料要保密、獎金怎麼算。職業道德科的賄賂貪污、檢舉人制度題從這裡出。", "scope": "收錄中華民國刑法第121、122、132、336、342條；貪污治罪條例第5、11條；獎勵保護檢舉貪污瀆職辦法第3、4、5、7、10、11、12條。", "nav": {"prev": {"file": "ch07.html", "label": "第7章 利益衝突與忠實義務：信託、銀行與不得保證獲利"}, "next": null}}</script>
 <script>const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -152,10 +164,92 @@ function step(d){const i=TABS.findIndex(t=>t[0]===curTab)+d;
   if(i>=TABS.length){if(N.next)location.href=N.next.file+'#read';return}
   show(TABS[i][0])}
 let sx=0,sy=0,skip=false;
-document.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;const el=e.target&&e.target.nodeType===1?e.target:(e.target&&e.target.parentElement);skip=!!(el&&el.closest('.tw,nav,input,.off'))},{passive:true});
+document.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;const el=e.target&&e.target.nodeType===1?e.target:(e.target&&e.target.parentElement);skip=!!(el&&el.closest('.tw,nav,input,.off,#cap'))},{passive:true});
 document.addEventListener('touchend',e=>{if(skip)return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>70&&Math.abs(dy)<45){step(dx<0?1:-1)}},{passive:true});
-document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1)});
+document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select'))return;if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1)});
 // 深層連結
 function route(){const h=(location.hash||'#read').slice(1).split('/');show(TABS.some(t=>t[0]===h[0])?h[0]:'read',h[1]?decodeURIComponent(h[1]):null)}
 window.addEventListener('hashchange',route);route();
+</script>
+<script>// 語音：導覽列多一顆「🎧 語音」鈕，按下就從頭播放；畫面上方只留最後兩行字幕（固定高度，不會推動下面的頁面）。
+// 再按一次＝暫停／繼續；點字幕也一樣；字幕右側的 ✕ 關閉。播完一段自動接下一段。
+// 資料來自 mp3/timing/chNN.js（window.AUDIO_TIMING），由 make_timing.py 產生；沒有這個檔就不會出現「語音」鈕。
+(function(){
+const T=window.AUDIO_TIMING;
+if(!T||!T.segments||!T.segments.length)return;
+const BASE='mp3',segs=T.segments,au=document.getElementById('au');
+const cap=document.getElementById('cap'),rowA=document.getElementById('cap-a'),rowB=document.getElementById('cap-b'),top=document.getElementById('top');
+const SP={F:'主持人',M:'專家'},PUNC='，、：；。！？';
+let si=-1,lines=[],li=-2,started=false,raf=0,endTimer=0;
+
+// ---- 按鈕 ----
+const btn=document.createElement('button');
+btn.id='au-btn';btn.type='button';btn.textContent='🎧 語音';btn.setAttribute('aria-pressed','false');btn.title='按下開始聽這一章的語音重點';
+nav.appendChild(btn);
+function label(){btn.textContent=!started?'🎧 語音':(au.paused?'▶ 語音':'⏸ 語音');btn.setAttribute('aria-pressed',started?'true':'false')}
+
+// ---- 字幕斷行：依目前寬度，把每句切成一行一行 ----
+const fontPx=()=>parseFloat(getComputedStyle(rowB).fontSize)||17;
+const cw=(s,f)=>{let w=0;for(const c of s)w+=c.charCodeAt(0)<128?f*0.56:f;return w};
+function wrap(text,lim0,lim,f){
+  const parts=text.match(new RegExp('[^'+PUNC+']+['+PUNC+']*|['+PUNC+']+','g'))||[text];
+  const out=[];let cur='',w=0,lim_=lim0;
+  const push=()=>{if(cur){out.push(cur);cur='';w=0;lim_=lim}};
+  for(const p of parts){
+    const pw=cw(p,f);
+    if(w+pw<=lim_){cur+=p;w+=pw;continue}
+    push();
+    if(pw<=lim_){cur=p;w=pw;continue}
+    for(const c of p){const x=cw(c,f);if(w+x>lim_)push();cur+=c;w+=x}
+  }
+  push();return out;
+}
+function buildLines(){
+  lines=[];if(si<0)return;
+  const s=segs[si],f=fontPx(),avail=Math.max(120,(rowB.clientWidth||cap.clientWidth||300)-2);let prevSpk=null;
+  s.cues.forEach((c,k)=>{
+    const t0=c.t,t1=k+1<s.cues.length?s.cues[k+1].t:s.dur;
+    const span=Math.max(0.4,t1-t0-0.7);                       // 句尾約有 0.7 秒停頓，不分給字
+    const badge=c.spk!==prevSpk;prevSpk=c.spk;
+    const bw=badge?SP[c.spk].length*12+18:0;                   // 說話者小標籤的寬度（12px 字＋留白）
+    const ls=wrap(c.text,avail-bw,avail,f),ws=ls.map(x=>Math.max(1,cw(x,f))),tot=ws.reduce((a,b)=>a+b,0);
+    let acc=0;ls.forEach((x,j)=>{lines.push({t:t0+span*acc/tot,spk:c.spk,badge:badge&&j===0,text:x});acc+=ws[j]});
+  });
+}
+const esc2=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const rowHTML=l=>l?(l.badge?'<span class="sp '+l.spk+'">'+SP[l.spk]+'</span>':'')+esc2(l.text):'';
+function paint(){
+  const t=au.currentTime;let j=-1;
+  for(let k=0;k<lines.length;k++){if(lines[k].t<=t+0.05)j=k;else break}
+  if(j===li)return;li=j;
+  rowA.innerHTML=rowHTML(lines[j-1]);rowB.innerHTML=rowHTML(lines[j]);
+}
+function tick(){paint();raf=au.paused?0:requestAnimationFrame(tick)}
+
+// ---- 播放 ----
+const nice=t=>String(t).replace(/_/g,' ');
+function meta(){if('mediaSession' in navigator&&window.MediaMetadata&&si>=0)navigator.mediaSession.metadata=new MediaMetadata({title:nice(segs[si].title),artist:D.chapter+' '+D.title,album:'考試複習語音'})}
+function pad(){document.documentElement.style.scrollPaddingTop=cap.hidden?'':(top.offsetHeight+8)+'px'}
+function setSrc(i){if(si===i)return;si=i;li=-2;rowA.innerHTML=rowB.innerHTML='';au.src=encodeURI(BASE+'/'+segs[i].file);au.load();au.playbackRate=1;buildLines();meta()}
+function playSeg(i){
+  setSrc(i);
+  const go=()=>{buildLines();au.play().catch(()=>{})};
+  if(au.readyState>=1)go();else au.addEventListener('loadedmetadata',go,{once:true});
+}
+function start(){clearTimeout(endTimer);started=true;cap.hidden=false;pad();si=-1;playSeg(0)}
+function stop(){clearTimeout(endTimer);au.pause();started=false;si=-1;lines=[];li=-2;cap.hidden=true;rowA.innerHTML=rowB.innerHTML='';pad();label()}
+function toggle(){if(!started)start();else if(au.paused)au.play().catch(()=>{});else au.pause()}
+btn.onclick=toggle;
+cap.addEventListener('click',e=>{if(e.target.closest('#cap-x'))stop();else toggle()});
+au.addEventListener('play',()=>{label();cancelAnimationFrame(raf);raf=requestAnimationFrame(tick)});
+au.addEventListener('pause',label);
+au.addEventListener('seeked',paint);
+au.addEventListener('ended',()=>{
+  if(si<segs.length-1)playSeg(si+1);
+  else{started=false;label();endTimer=setTimeout(()=>{if(!started)stop()},2500)}   // 全部播完，字幕停 2.5 秒後自動收起
+});
+au.addEventListener('error',()=>{rowA.textContent='';rowB.textContent='找不到音檔（'+BASE+'/'+(segs[si]?segs[si].file:'')+'）'});
+let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(si>=0){buildLines();li=-2;paint();pad()}},150)});
+if('mediaSession' in navigator){[['play',()=>au.play()],['pause',()=>au.pause()],['previoustrack',()=>started&&playSeg(Math.max(0,si-1))],['nexttrack',()=>started&&si<segs.length-1&&playSeg(si+1)]].forEach(([a,f])=>{try{navigator.mediaSession.setActionHandler(a,f)}catch(e){}})}
+})();
 </script></body></html>

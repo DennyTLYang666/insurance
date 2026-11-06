@@ -11,7 +11,7 @@ header p{margin:6px 0 0;font-size:14px;opacity:.95}
 .wrap{max-width:900px;margin:0 auto;padding:0 12px 60px}
 .banner{background:var(--warnbg);color:var(--warn);border:1px solid #f0d9a8;border-radius:8px;padding:10px 12px;margin:12px 0;font-size:14px}
 .banner b{margin-right:4px}
-nav{position:sticky;top:0;background:var(--bg);z-index:5;display:flex;gap:6px;padding:10px 0;overflow-x:auto;border-bottom:1px solid var(--line)}
+nav{display:flex;gap:6px;padding:10px 0;overflow-x:auto}
 nav button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:15px;cursor:pointer;color:var(--ink)}
 nav button[aria-selected="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
 section{display:none;padding-top:14px}section.on{display:block}
@@ -52,15 +52,27 @@ h2{font-size:18px;margin:24px 0 8px}
 
 .pw{margin:6px 0}.pw p{margin:4px 0}.pl{margin:6px 0 6px 0;padding-left:20px}.pl li{margin:5px 0;line-height:1.7}.pl ul{margin:4px 0;padding-left:18px;list-style:disc}.pl ul li{margin:2px 0}.pl>li>b{color:#283593}
 table.ft{font-size:14px;table-layout:fixed}table.ft td:first-child,table.ft th:first-child{font-weight:600;width:34%;word-break:break-all}table.ft td,table.ft th{word-break:break-word;padding:6px 7px}table.ft th{width:auto}
+#top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+#au-btn[aria-pressed="true"]{background:var(--brand2);color:var(--brand);border-color:var(--brand);font-weight:600}
+#cap{position:relative;padding:4px 36px 8px 2px;font-size:clamp(15px,4.2vw,19px);line-height:1.55;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+#cap[hidden]{display:none}
+.cap-l{height:1.55em;white-space:nowrap;overflow:hidden}
+#cap-a{color:var(--sub)}
+#cap-b{font-weight:600;color:var(--ink)}
+#cap-x{position:absolute;right:0;top:2px;width:34px;height:34px;border:0;background:none;color:var(--sub);font-size:16px;cursor:pointer}
+.sp{display:inline-block;font-size:12px;font-weight:400;line-height:1.5;border-radius:4px;padding:0 5px;margin-right:6px;color:#fff;vertical-align:1px}
+.sp.F{background:#c2185b}.sp.M{background:#1f5f8b}
 </style></head>
 <body>
-<header><div class="wrap" style="padding:0"><a href="index.html">← 首頁（搜尋、總複習）</a><h1 id="h1"></h1><p id="intro"></p></div></header>
+<header><div class="wrap" style="padding:0"><a href="../index.html">⌂ 所有考試</a>　<a href="index.html">← 本科首頁（搜尋、總複習）</a><h1 id="h1"></h1><p id="intro"></p></div></header>
 <div class="wrap">
-<nav role="tablist" id="nav"></nav>
+<div id="top"><nav role="tablist" id="nav"></nav><div id="cap" hidden><div class="cap-l" id="cap-a"></div><div class="cap-l" id="cap-b"></div><button type="button" id="cap-x" aria-label="關閉語音字幕">✕</button></div></div>
 <section id="s-read"></section><section id="s-table"></section><section id="s-cards"></section><section id="s-quiz"></section>
 <div class="pager"><a id="prev" href="#"></a><a id="next" href="#"></a></div>
 <footer id="foot"></footer>
 </div>
+<audio id="au" preload="none"></audio>
+<script src="mp3/timing/ch08.js"></script>
 <script id="data" type="application/json">{"chapter": "第八章", "title": "洗錢防制法（保險業務要記得的條文）", "laws": [{"pcode": "G0380131", "name": "洗錢防制法", "amended": "民國113年7月31日", "url": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0380131", "source": "法務部全國法規資料庫", "retrieved": "2026-11-03", "mirrorDate": "20240731"}], "alerts": [{"t": "本法是母法，細節在辦法", "d": "確認客戶身分、大額通貨交易申報、疑似洗錢申報的『金額、範圍、方式、程序』都授權由中央目的事業主管機關訂辦法（保險業是金融監督管理委員會）。大額通貨交易的申報金額在辦法裡，不在本法條文；本頁沒有收錄辦法，申報金額請查最新辦法。"}, {"t": "版本（事實，取自官網沿革）", "d": "洗錢防制法在民國113年7月31日修正公布全文31條，除第6、11條外自公布日施行（第6、11條由行政院定自113年11月30日施行）。條號和舊版不同，舊教材的條號可能對不上，以本頁為準。"}, {"t": "風險（罰錢與刑責）", "d": "金融機構違反確認客戶身分、紀錄保存、大額與疑似洗錢申報等義務，處新臺幣50萬元以上1,000萬元以下罰鍰，並得按次處罰。洗錢罪最重可處10年有期徒刑，併科新臺幣1億元以下罰金。"}], "clauses": [{"no": "2", "title": "什麼叫洗錢", "plain": "洗錢有四種行為：隱匿特定犯罪所得或掩飾其來源；妨礙或危害國家對特定犯罪所得的調查、發現、保全、沒收或追徵；收受、持有或使用他人的特定犯罪所得；使用自己的特定犯罪所得與他人進行交易。", "facts": {"head": ["款", "行為"], "rows": [["一", "隱匿特定犯罪所得或掩飾其來源"], ["二", "妨礙或危害國家對特定犯罪所得的調查、發現、保全、沒收或追徵"], ["三", "收受、持有或使用他人的特定犯罪所得"], ["四", "使用自己的特定犯罪所得與他人進行交易"]]}, "mnemonic": "隱匿掩飾、妨礙追查、收受持用他人所得、用自己所得去交易。", "official": ["本法所稱洗錢，指下列行為：", "一、隱匿特定犯罪所得或掩飾其來源。", "二、妨礙或危害國家對於特定犯罪所得之調查、發現、保全、沒收或追徵。", "三、收受、持有或使用他人之特定犯罪所得。", "四、使用自己之特定犯罪所得與他人進行交易。"], "has_official": true}, {"no": "5", "title": "金融機構的範圍：保險公司在內", "plain": "本法所稱金融機構包括銀行、信託投資公司、信用合作社、農漁會信用部、全國農業金庫、辦理簡易人壽保險的郵政機構、票券金融公司、信用卡公司、保險公司、證券商等，以及其他經目的事業主管機關指定的金融機構。辦理融資性租賃、提供虛擬資產服務的事業或人員，也適用金融機構的規定。另有『指定之非金融事業或人員』，例如銀樓業、地政士及不動產經紀業、律師、公證人、會計師等。", "mnemonic": "第10款：保險公司是金融機構。", "tip": "不動產經紀業屬『指定之非金融事業或人員』（第5條第3項第2款）。", "official": ["本法所稱金融機構，包括下列機構：", "一、銀行。", "二、信託投資公司。", "三、信用合作社。", "四、農會信用部。", "五、漁會信用部。", "六、全國農業金庫。", "七、辦理儲金匯兌、簡易人壽保險業務之郵政機構。", "八、票券金融公司。", "九、信用卡公司。", "十、保險公司。", "十一、證券商。", "十二、證券投資信託事業。", "十三、證券金融事業。", "十四、證券投資顧問事業。", "十五、證券集中保管事業。", "十六、期貨商。", "十七、信託業。", "十八、其他經目的事業主管機關指定之金融機構。", "辦理融資性租賃、提供虛擬資產服務之事業或人員，適用本法關於金融機構之規定。", "本法所稱指定之非金融事業或人員，指從事下列交易之事業或人員：", "一、銀樓業。", "二、地政士及不動產經紀業從事與不動產買賣交易有關之行為。", "三、律師、公證人、會計師為客戶準備或進行下列交易時：", "（一）買賣不動產。", "（二）管理客戶金錢、證券或其他資產。", "（三）管理銀行、儲蓄或證券帳戶。", "（四）有關提供公司設立、營運或管理之資金籌劃。", "（五）法人或法律協議之設立、營運或管理以及買賣事業體。", "四、信託及公司服務提供業為客戶準備或進行下列交易時：", "（一）關於法人之籌備或設立事項。", "（二）擔任或安排他人擔任公司董事或秘書、合夥之合夥人或在其他法人組織之類似職位。", "（三）提供公司、合夥、信託、其他法人或協議註冊之辦公室、營業地址、居住所、通訊或管理地址。", "（四）擔任或安排他人擔任信託或其他類似契約性質之受託人或其他相同角色。", "（五）擔任或安排他人擔任實質持股股東。", "五、提供第三方支付服務之事業或人員。", "六、其他業務特性或交易型態易為洗錢犯罪利用之事業或從業人員。", "第二項辦理融資性租賃、提供虛擬資產服務之事業或人員之範圍、第三項第六款指定之非金融事業或人員，其適用之交易型態，及得不適用第十二條第一項申報規定之前項各款事業或人員，由法務部會同中央目的事業主管機關報請行政院指定。", "第一項至第三項之金融機構、事業或人員所從事之交易，必要時，得由法務部會同中央目的事業主管機關指定其達一定金額者，應使用現金以外之支付工具。", "第一項至第三項之金融機構、事業或人員違反前項規定者，由中央目的事業主管機關處交易金額二倍以下罰鍰。", "前六項之中央目的事業主管機關認定有疑義者，由行政院指定之。", "第四項、第五項及前項之指定，其事務涉司法院者，由行政院會同司法院指定之。"], "has_official": true}, {"no": "7", "title": "洗錢防制內部控制與稽核制度", "plain": "金融機構及指定之非金融事業或人員，要依洗錢與資恐風險及業務規模，建立洗錢防制內部控制與稽核制度，包括：防制洗錢及打擊資恐的作業及控制程序；定期舉辦或參加防制洗錢的在職訓練；指派專責人員負責協調監督；備置並定期更新防制洗錢及打擊資恐風險評估報告；稽核程序；其他經主管機關指定的事項。未建立制度，由主管機關限期改善，屆期未改善的，金融機構處新臺幣50萬元以上1,000萬元以下罰鍰，並得按次處罰。", "mnemonic": "作業程序、在職訓練、專責人員、風險評估報告、稽核程序。", "official": ["金融機構及指定之非金融事業或人員應依洗錢與資恐風險及業務規模，建立洗錢防制內部控制與稽核制度；其內容應包括下列事項：", "一、防制洗錢及打擊資恐之作業及控制程序。", "二、定期舉辦或參加防制洗錢之在職訓練。", "三、指派專責人員負責協調監督第一款事項之執行。", "四、備置並定期更新防制洗錢及打擊資恐風險評估報告。", "五、稽核程序。", "六、其他經中央目的事業主管機關指定之事項。", "前項制度之執行，中央目的事業主管機關應定期查核，並得委託其他機關（構）、法人或團體辦理。", "第一項制度之實施內容、作業程序、執行措施，前項查核之方式、受委託之資格條件及其他應遵行事項之辦法，由中央目的事業主管機關會商法務部及相關機關定之；於訂定前應徵詢相關公會之意見。", "違反第一項規定未建立制度，或前項辦法中有關制度之實施內容、作業程序、執行措施之規定者，由中央目的事業主管機關限期令其改善，屆期未改善者，處金融機構新臺幣五十萬元以上一千萬元以下罰鍰、處指定之非金融事業或人員新臺幣五萬元以上五百萬元以下罰鍰，並得按次處罰。", "金融機構及指定之非金融事業或人員規避、拒絕或妨礙現地或非現地查核者，由中央目的事業主管機關處金融機構新臺幣五十萬元以上五百萬元以下罰鍰、處指定之非金融事業或人員新臺幣五萬元以上二百五十萬元以下罰鍰，並得按次處罰。"], "has_official": true}, {"no": "8", "title": "確認客戶身分與紀錄保存5年", "plain": "金融機構要進行確認客戶身分的程序，並留存所得資料；這個程序要以風險為基礎，並包括實質受益人的審查。確認客戶身分所得資料，要自業務關係終止時起至少保存5年；臨時性交易自臨時性交易終止時起至少保存5年；法律另有較長保存期間者從其規定。對現任或曾任國內外政府或國際組織重要政治性職務的客戶或受益人，與其家庭成員及有密切關係的人，要以風險為基礎，執行加強客戶審查。違反規定，金融機構處新臺幣50萬元以上1,000萬元以下罰鍰，並得按次處罰。", "mnemonic": "風險為基礎＋實質受益人；資料至少保存5年；政治性職務人士要加強審查。", "official": ["金融機構及指定之非金融事業或人員應進行確認客戶身分程序，並留存其確認客戶身分程序所得資料；其確認客戶身分程序應以風險為基礎，並應包括實質受益人之審查。", "前項確認客戶身分程序所得資料，應自業務關係終止時起至少保存五年；臨時性交易者，應自臨時性交易終止時起至少保存五年。但法律另有較長保存期間規定者，從其規定。", "金融機構及指定之非金融事業或人員對現任或曾任國內外政府或國際組織重要政治性職務之客戶或受益人與其家庭成員及有密切關係之人，應以風險為基礎，執行加強客戶審查程序。", "第一項確認客戶身分範圍、留存確認資料之範圍、程序、方式及前項加強客戶審查之範圍、程序、方式之辦法，由中央目的事業主管機關會商法務部及相關機關定之；於訂定前應徵詢相關公會之意見。前項重要政治性職務之人與其家庭成員及有密切關係之人之範圍，由法務部定之。", "違反第一項至第三項規定或前項所定辦法中有關確認客戶身分、留存確認資料、加強客戶審查之範圍、程序、方式之規定者，由中央目的事業主管機關處金融機構新臺幣五十萬元以上一千萬元以下罰鍰、處指定之非金融事業或人員新臺幣五萬元以上五百萬元以下罰鍰，並得按次處罰。"], "has_official": true}, {"no": "10", "title": "交易紀錄保存5年", "plain": "金融機構因執行業務而辦理國內外交易，要留存必要的交易紀錄，自交易完成時起至少保存5年；法律另有較長保存期間者從其規定。違反規定，金融機構處新臺幣50萬元以上1,000萬元以下罰鍰，並得按次處罰。", "mnemonic": "交易紀錄：交易完成後至少保存5年。", "tip": "第8條的保存起算點是『業務關係終止時』（身分資料）；第10條的起算點是『交易完成時』（交易紀錄）。", "official": ["金融機構及指定之非金融事業或人員因執行業務而辦理國內外交易，應留存必要交易紀錄。", "前項必要交易紀錄之保存，自交易完成時起，應至少保存五年。但法律另有較長保存期間規定者，從其規定。", "第一項留存必要交易紀錄之適用交易範圍、程序、方式之辦法，由中央目的事業主管機關會商法務部及相關機關定之；於訂定前應徵詢相關公會之意見。", "違反第一項、第二項規定或前項所定辦法中有關留存必要交易紀錄之範圍、程序、方式之規定者，由中央目的事業主管機關處金融機構新臺幣五十萬元以上一千萬元以下罰鍰、處指定之非金融事業或人員新臺幣五萬元以上五百萬元以下罰鍰，並得按次處罰。"], "has_official": true}, {"no": "12", "title": "達一定金額的通貨交易要申報", "plain": "金融機構對於達一定金額的通貨交易，除本法另有規定外，要向法務部調查局申報。依規定申報的，免除其業務上應保守秘密的義務；負責人、董事、經理人及職員，亦同。一定金額與申報細節由主管機關會商法務部訂辦法。違反規定，金融機構處新臺幣50萬元以上1,000萬元以下罰鍰，並得按次處罰。", "mnemonic": "大額通貨交易→向調查局申報；申報免保密義務。", "tip": "一定金額在辦法，不在本法。考試或實務上要用數字時，請以現行辦法為準（本頁未收錄）。", "official": ["金融機構及指定之非金融事業或人員對於達一定金額之通貨交易，除本法另有規定外，應向法務部調查局申報。", "金融機構及指定之非金融事業或人員依前項規定為申報者，免除其業務上應保守秘密之義務。該機構或事業之負責人、董事、經理人及職員，亦同。", "第一項一定金額、通貨交易之範圍、種類、申報之範圍、方式、程序及其他應遵行事項之辦法，由中央目的事業主管機關會商法務部及相關機關定之；於訂定前應徵詢相關公會之意見。", "違反第一項規定或前項所定辦法中有關申報之範圍、方式、程序之規定者，由中央目的事業主管機關處金融機構新臺幣五十萬元以上一千萬元以下罰鍰、處指定之非金融事業或人員新臺幣五萬元以上五百萬元以下罰鍰，並得按次處罰。"], "has_official": true}, {"no": "13", "title": "疑似洗錢交易要申報", "plain": "金融機構對疑似犯第19條、第20條之罪的交易，要向法務部調查局申報；交易未完成的，也要申報。依規定申報的，免除業務上應保守秘密的義務；負責人、董事、經理人及職員，亦同。違反規定，金融機構處新臺幣50萬元以上1,000萬元以下罰鍰，並得按次處罰。", "mnemonic": "疑似洗錢（含未完成交易）→申報調查局；申報免保密義務。", "tip": "『達一定金額的通貨交易』（第12條）看金額；『疑似洗錢交易』（第13條）看有無疑似犯罪，交易沒完成也要報。", "official": ["金融機構及指定之非金融事業或人員對疑似犯第十九條、第二十條之罪之交易，應向法務部調查局申報；其交易未完成者，亦同。", "金融機構及指定之非金融事業或人員依前項規定為申報者，免除其業務上應保守秘密之義務。該機構或事業之負責人、董事、經理人及職員，亦同。", "第一項之申報範圍、方式、程序及其他應遵行事項之辦法，由中央目的事業主管機關會商法務部及相關機關定之；於訂定前應徵詢相關公會之意見。", "前項、第七條第三項、第八條第四項、第十條第三項及前條第三項之辦法，其事務涉司法院者，由司法院會商行政院定之。", "違反第一項規定或第三項所定辦法中有關申報之範圍、方式、程序之規定者，由中央目的事業主管機關處金融機構新臺幣五十萬元以上一千萬元以下罰鍰、處指定之非金融事業或人員新臺幣五萬元以上五百萬元以下罰鍰，並得按次處罰。"], "has_official": true}, {"no": "19", "title": "洗錢罪的刑責", "plain": "有第2條各款的洗錢行為，處3年以上10年以下有期徒刑，併科新臺幣1億元以下罰金。洗錢的財物或財產上利益未達新臺幣1億元的，處6月以上5年以下有期徒刑，併科新臺幣5,000萬元以下罰金。未遂犯也處罰。", "facts": {"head": ["洗錢財物或利益", "刑度"], "rows": [["新臺幣1億元以上", "3年以上10年以下有期徒刑，併科1億元以下罰金"], ["未達新臺幣1億元", "6月以上5年以下有期徒刑，併科5,000萬元以下罰金"], ["未遂", "也處罰"]]}, "mnemonic": "一億以上：三到十年；未達一億：六月到五年；未遂罰。", "official": ["有第二條各款所列洗錢行為者，處三年以上十年以下有期徒刑，併科新臺幣一億元以下罰金。其洗錢之財物或財產上利益未達新臺幣一億元者，處六月以上五年以下有期徒刑，併科新臺幣五千萬元以下罰金。", "前項之未遂犯罰之。"], "has_official": true}, {"no": "22", "title": "不得把自己或他人的帳戶交付給別人使用", "plain": "任何人不得把自己或他人向金融機構申請開立的帳戶，交付、提供給他人使用；但符合一般商業、金融交易習慣，或基於親友間信賴關係或其他正當理由的，不在此限。違反的，由警察機關裁處告誡；期約或收受對價、交付的帳戶合計3個以上、或經裁處後5年內再犯的，處3年以下有期徒刑、拘役或科或併科新臺幣100萬元以下罰金。違反時，金融機構要對其已開立或欲開立的帳戶，在一定期間內暫停或限制功能，或逕予關閉。", "mnemonic": "不得交付帳戶；收對價、3個帳戶以上、5年內再犯：刑責。", "tip": "收取客戶帳戶、請客戶借帳戶收款，都要小心觸及這條的精神。", "official": ["任何人不得將自己或他人向金融機構申請開立之帳戶、向提供虛擬資產服務或第三方支付服務之事業或人員申請之帳號交付、提供予他人使用。但符合一般商業、金融交易習慣，或基於親友間信賴關係或其他正當理由者，不在此限。", "違反前項規定者，由直轄市、縣（市）政府警察機關裁處告誡。經裁處告誡後逾五年再違反前項規定者，亦同。", "違反第一項規定而有下列情形之一者，處三年以下有期徒刑、拘役或科或併科新臺幣一百萬元以下罰金：", "一、期約或收受對價而犯之。", "二、交付、提供之帳戶或帳號合計三個以上。", "三、經直轄市、縣（市）政府警察機關依前項或第四項規定裁處後，五年以內再犯。", "前項第一款或第二款情形，應依第二項規定，由該管機關併予裁處之。", "違反第一項規定者，金融機構、提供虛擬資產服務及第三方支付服務之事業或人員，應對其已開立之帳戶、帳號，或欲開立之新帳戶、帳號，於一定期間內，暫停或限制該帳戶、帳號之全部或部分功能，或逕予關閉。", "前項帳戶、帳號之認定基準，暫停、限制功能或逕予關閉之期間、範圍、程序、方式、作業程序之辦法，由法務部會同中央目的事業主管機關定之。", "警政主管機關應會同社會福利主管機關，建立個案通報機制，於依第二項規定為告誡處分時，倘知悉有社會救助需要之個人或家庭，應通報直轄市、縣（市）社會福利主管機關，協助其獲得社會救助法所定社會救助。"], "has_official": true}], "tables": [{"title": "第8條與第10條：保存5年的起算點", "head": ["條", "保存什麼", "至少保存5年，自何時起算"], "rows": [["8", "確認客戶身分所得資料（業務關係）", "業務關係終止時"], ["8", "確認客戶身分所得資料（臨時性交易）", "臨時性交易終止時"], ["10", "必要交易紀錄", "交易完成時"]]}, {"title": "第12條與第13條：兩種申報", "head": ["項目", "第12條", "第13條"], "rows": [["申報什麼", "達一定金額的通貨交易", "疑似犯第19、20條之罪的交易（交易未完成亦同）"], ["向誰申報", "法務部調查局", "法務部調查局"], ["金額或細節", "由辦法訂定（本頁未收錄）", "由辦法訂定（本頁未收錄）"], ["保密義務", "依規定申報者免除", "依規定申報者免除"]]}, {"title": "數字速記：洗錢防制法", "head": ["條", "數字", "什麼事"], "rows": [["8、10", "至少5年", "身分資料自業務關係（或臨時交易）終止時；交易紀錄自交易完成時"], ["7、8、10、12、13", "50萬～1,000萬", "金融機構違反義務的罰鍰，並得按次處罰"], ["19", "1億元", "洗錢財物或利益達1億元以上與未達1億元的刑度分界"], ["19", "3～10年／6月～5年", "兩種刑度"], ["22", "3個帳戶", "交付、提供帳戶合計3個以上，進入刑責"]]}], "cards": [{"id": 1, "ref": "2", "front": "洗錢的四種行為？", "back": "隱匿或掩飾來源；妨礙追查與沒收；收受、持有或使用他人特定犯罪所得；使用自己的特定犯罪所得與他人交易。"}, {"id": 2, "ref": "5", "front": "保險公司是不是洗錢防制法的金融機構？", "back": "是。第5條第1項第10款。"}, {"id": 3, "ref": "7", "front": "洗錢防制內部控制制度要包括哪些？", "back": "作業及控制程序、在職訓練、專責人員、風險評估報告、稽核程序、其他主管機關指定事項。"}, {"id": 4, "ref": "8", "front": "確認客戶身分資料至少保存幾年？從何時起算？", "back": "至少5年；自業務關係終止時（臨時性交易為終止時）起算。"}, {"id": 5, "ref": "8", "front": "確認客戶身分要包含什麼審查？", "back": "實質受益人的審查，並以風險為基礎。"}, {"id": 6, "ref": "8", "front": "對現任或曾任重要政治性職務的人，要做什麼？", "back": "以風險為基礎，執行加強客戶審查程序。"}, {"id": 7, "ref": "10", "front": "交易紀錄至少保存幾年？從何時起算？", "back": "至少5年；自交易完成時起算。"}, {"id": 8, "ref": "12", "front": "達一定金額的通貨交易要向誰申報？", "back": "法務部調查局。一定金額由辦法訂定。"}, {"id": 9, "ref": "13", "front": "疑似洗錢交易，交易未完成時要不要申報？", "back": "要。第13條第1項後段。"}, {"id": 10, "ref": "19", "front": "洗錢財物達新臺幣1億元以上的刑度？", "back": "3年以上10年以下有期徒刑，併科1億元以下罰金。"}, {"id": 11, "ref": "19", "front": "洗錢財物未達新臺幣1億元的刑度？", "back": "6月以上5年以下有期徒刑，併科5,000萬元以下罰金。"}, {"id": 12, "ref": "22", "front": "交付帳戶給他人使用，達什麼情況會進入刑責？", "back": "期約或收受對價；帳戶合計3個以上；或經警察機關裁處後5年內再犯。"}, {"id": 13, "ref": "7", "front": "金融機構違反第7、8、10、12、13條義務，罰鍰範圍？", "back": "新臺幣50萬元以上1,000萬元以下，並得按次處罰。"}], "scenarios": [{"ref": "8", "q": "保險公司與客戶的業務關係於2026年1月終止。依洗錢防制法第8條，確認客戶身分所得資料至少要保存到？", "opts": ["2026年1月就可銷毀", "2027年1月", "2031年1月", "2036年1月"], "ans": 2, "why": "第8條第2項：自業務關係終止時起至少保存5年。2026年1月起算5年到2031年1月。法律另有較長保存期間的，從其規定。"}, {"ref": "10", "q": "洗錢防制法第10條，交易紀錄至少保存多久，從何時起算？", "opts": ["3年，自交易完成時", "5年，自交易完成時", "5年，自業務關係終止時", "10年，自交易完成時"], "ans": 1, "why": "第10條第2項：自交易完成時起，至少保存5年。自業務關係終止時起算的是第8條的確認客戶身分資料。"}, {"ref": "13", "q": "金融機構發現某筆交易疑似洗錢，但客戶最後沒完成交易。是否仍要申報？", "opts": ["不需申報", "要申報，交易未完成者亦同", "只要通知客戶", "只要內部記錄"], "ans": 1, "why": "第13條第1項：對疑似犯第19、20條之罪的交易，應向法務部調查局申報；交易未完成者，亦同。"}, {"ref": "19", "q": "洗錢的財物達新臺幣1億元以上，依第19條的刑度？", "opts": ["6月以上5年以下，併科5,000萬元以下罰金", "3年以上10年以下，併科1億元以下罰金", "1年以下", "僅處罰金"], "ans": 1, "why": "第19條第1項前段：3年以上10年以下有期徒刑，併科新臺幣1億元以下罰金。選項A是未達1億元的刑度。"}, {"ref": "5", "q": "依洗錢防制法第5條，下列何者屬於金融機構？", "opts": ["保險公司", "餐廳", "便利商店", "旅行社"], "ans": 0, "why": "第5條第1項第10款：保險公司是金融機構。"}, {"ref": "22", "q": "甲把自己的銀行帳戶交給陌生人使用並收取報酬。依第22條？", "opts": ["不處罰", "可能涉及刑責（期約或收受對價）", "只要口頭警告", "只罰款不涉刑責"], "ans": 1, "why": "第22條第3項第1款：期約或收受對價而違反者，處3年以下有期徒刑、拘役或科或併科新臺幣100萬元以下罰金。"}, {"ref": "12", "q": "洗錢防制法第12條的『一定金額』規定在哪裡？", "opts": ["洗錢防制法第12條條文內", "主管機關依授權訂定的辦法", "刑法", "保險法"], "ans": 1, "why": "第12條第3項：一定金額、通貨交易的範圍、申報方式等由中央目的事業主管機關會商法務部等訂辦法。數字要查現行辦法。"}], "chNo": "08", "summary": "洗錢防制法（民國113年全文修正）中保險業務要記得的：什麼是洗錢、保險公司是金融機構、確認客戶身分與紀錄保存5年、大額與疑似洗錢申報，以及刑責與罰鍰。", "scope": "收錄洗錢防制法第2、5、7、8、10、12、13、19、22條。大額通貨交易的申報金額在辦法，未收錄。", "nav": {"prev": {"file": "ch07.html", "label": "第7章 個人資料保護法（保險業務最常用的條文）"}, "next": null}}</script>
 <script>const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -151,10 +163,92 @@ function step(d){const i=TABS.findIndex(t=>t[0]===curTab)+d;
   if(i>=TABS.length){if(N.next)location.href=N.next.file+'#read';return}
   show(TABS[i][0])}
 let sx=0,sy=0,skip=false;
-document.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;const el=e.target&&e.target.nodeType===1?e.target:(e.target&&e.target.parentElement);skip=!!(el&&el.closest('.tw,nav,input,.off'))},{passive:true});
+document.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;const el=e.target&&e.target.nodeType===1?e.target:(e.target&&e.target.parentElement);skip=!!(el&&el.closest('.tw,nav,input,.off,#cap'))},{passive:true});
 document.addEventListener('touchend',e=>{if(skip)return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>70&&Math.abs(dy)<45){step(dx<0?1:-1)}},{passive:true});
-document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1)});
+document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select'))return;if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1)});
 // 深層連結
 function route(){const h=(location.hash||'#read').slice(1).split('/');show(TABS.some(t=>t[0]===h[0])?h[0]:'read',h[1]?decodeURIComponent(h[1]):null)}
 window.addEventListener('hashchange',route);route();
+</script>
+<script>// 語音：導覽列多一顆「🎧 語音」鈕，按下就從頭播放；畫面上方只留最後兩行字幕（固定高度，不會推動下面的頁面）。
+// 再按一次＝暫停／繼續；點字幕也一樣；字幕右側的 ✕ 關閉。播完一段自動接下一段。
+// 資料來自 mp3/timing/chNN.js（window.AUDIO_TIMING），由 make_timing.py 產生；沒有這個檔就不會出現「語音」鈕。
+(function(){
+const T=window.AUDIO_TIMING;
+if(!T||!T.segments||!T.segments.length)return;
+const BASE='mp3',segs=T.segments,au=document.getElementById('au');
+const cap=document.getElementById('cap'),rowA=document.getElementById('cap-a'),rowB=document.getElementById('cap-b'),top=document.getElementById('top');
+const SP={F:'主持人',M:'專家'},PUNC='，、：；。！？';
+let si=-1,lines=[],li=-2,started=false,raf=0,endTimer=0;
+
+// ---- 按鈕 ----
+const btn=document.createElement('button');
+btn.id='au-btn';btn.type='button';btn.textContent='🎧 語音';btn.setAttribute('aria-pressed','false');btn.title='按下開始聽這一章的語音重點';
+nav.appendChild(btn);
+function label(){btn.textContent=!started?'🎧 語音':(au.paused?'▶ 語音':'⏸ 語音');btn.setAttribute('aria-pressed',started?'true':'false')}
+
+// ---- 字幕斷行：依目前寬度，把每句切成一行一行 ----
+const fontPx=()=>parseFloat(getComputedStyle(rowB).fontSize)||17;
+const cw=(s,f)=>{let w=0;for(const c of s)w+=c.charCodeAt(0)<128?f*0.56:f;return w};
+function wrap(text,lim0,lim,f){
+  const parts=text.match(new RegExp('[^'+PUNC+']+['+PUNC+']*|['+PUNC+']+','g'))||[text];
+  const out=[];let cur='',w=0,lim_=lim0;
+  const push=()=>{if(cur){out.push(cur);cur='';w=0;lim_=lim}};
+  for(const p of parts){
+    const pw=cw(p,f);
+    if(w+pw<=lim_){cur+=p;w+=pw;continue}
+    push();
+    if(pw<=lim_){cur=p;w=pw;continue}
+    for(const c of p){const x=cw(c,f);if(w+x>lim_)push();cur+=c;w+=x}
+  }
+  push();return out;
+}
+function buildLines(){
+  lines=[];if(si<0)return;
+  const s=segs[si],f=fontPx(),avail=Math.max(120,(rowB.clientWidth||cap.clientWidth||300)-2);let prevSpk=null;
+  s.cues.forEach((c,k)=>{
+    const t0=c.t,t1=k+1<s.cues.length?s.cues[k+1].t:s.dur;
+    const span=Math.max(0.4,t1-t0-0.7);                       // 句尾約有 0.7 秒停頓，不分給字
+    const badge=c.spk!==prevSpk;prevSpk=c.spk;
+    const bw=badge?SP[c.spk].length*12+18:0;                   // 說話者小標籤的寬度（12px 字＋留白）
+    const ls=wrap(c.text,avail-bw,avail,f),ws=ls.map(x=>Math.max(1,cw(x,f))),tot=ws.reduce((a,b)=>a+b,0);
+    let acc=0;ls.forEach((x,j)=>{lines.push({t:t0+span*acc/tot,spk:c.spk,badge:badge&&j===0,text:x});acc+=ws[j]});
+  });
+}
+const esc2=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const rowHTML=l=>l?(l.badge?'<span class="sp '+l.spk+'">'+SP[l.spk]+'</span>':'')+esc2(l.text):'';
+function paint(){
+  const t=au.currentTime;let j=-1;
+  for(let k=0;k<lines.length;k++){if(lines[k].t<=t+0.05)j=k;else break}
+  if(j===li)return;li=j;
+  rowA.innerHTML=rowHTML(lines[j-1]);rowB.innerHTML=rowHTML(lines[j]);
+}
+function tick(){paint();raf=au.paused?0:requestAnimationFrame(tick)}
+
+// ---- 播放 ----
+const nice=t=>String(t).replace(/_/g,' ');
+function meta(){if('mediaSession' in navigator&&window.MediaMetadata&&si>=0)navigator.mediaSession.metadata=new MediaMetadata({title:nice(segs[si].title),artist:D.chapter+' '+D.title,album:'考試複習語音'})}
+function pad(){document.documentElement.style.scrollPaddingTop=cap.hidden?'':(top.offsetHeight+8)+'px'}
+function setSrc(i){if(si===i)return;si=i;li=-2;rowA.innerHTML=rowB.innerHTML='';au.src=encodeURI(BASE+'/'+segs[i].file);au.load();au.playbackRate=1;buildLines();meta()}
+function playSeg(i){
+  setSrc(i);
+  const go=()=>{buildLines();au.play().catch(()=>{})};
+  if(au.readyState>=1)go();else au.addEventListener('loadedmetadata',go,{once:true});
+}
+function start(){clearTimeout(endTimer);started=true;cap.hidden=false;pad();si=-1;playSeg(0)}
+function stop(){clearTimeout(endTimer);au.pause();started=false;si=-1;lines=[];li=-2;cap.hidden=true;rowA.innerHTML=rowB.innerHTML='';pad();label()}
+function toggle(){if(!started)start();else if(au.paused)au.play().catch(()=>{});else au.pause()}
+btn.onclick=toggle;
+cap.addEventListener('click',e=>{if(e.target.closest('#cap-x'))stop();else toggle()});
+au.addEventListener('play',()=>{label();cancelAnimationFrame(raf);raf=requestAnimationFrame(tick)});
+au.addEventListener('pause',label);
+au.addEventListener('seeked',paint);
+au.addEventListener('ended',()=>{
+  if(si<segs.length-1)playSeg(si+1);
+  else{started=false;label();endTimer=setTimeout(()=>{if(!started)stop()},2500)}   // 全部播完，字幕停 2.5 秒後自動收起
+});
+au.addEventListener('error',()=>{rowA.textContent='';rowB.textContent='找不到音檔（'+BASE+'/'+(segs[si]?segs[si].file:'')+'）'});
+let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(si>=0){buildLines();li=-2;paint();pad()}},150)});
+if('mediaSession' in navigator){[['play',()=>au.play()],['pause',()=>au.pause()],['previoustrack',()=>started&&playSeg(Math.max(0,si-1))],['nexttrack',()=>started&&si<segs.length-1&&playSeg(si+1)]].forEach(([a,f])=>{try{navigator.mediaSession.setActionHandler(a,f)}catch(e){}})}
+})();
 </script></body></html>

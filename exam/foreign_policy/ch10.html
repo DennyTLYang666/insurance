@@ -11,7 +11,7 @@ header p{margin:6px 0 0;font-size:14px;opacity:.95}
 .wrap{max-width:900px;margin:0 auto;padding:0 12px 60px}
 .banner{background:var(--warnbg);color:var(--warn);border:1px solid #f0d9a8;border-radius:8px;padding:10px 12px;margin:12px 0;font-size:14px}
 .banner b{margin-right:4px}
-nav{position:sticky;top:0;background:var(--bg);z-index:5;display:flex;gap:6px;padding:10px 0;overflow-x:auto;border-bottom:1px solid var(--line)}
+nav{display:flex;gap:6px;padding:10px 0;overflow-x:auto}
 nav button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:15px;cursor:pointer;color:var(--ink)}
 nav button[aria-selected="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
 section{display:none;padding-top:14px}section.on{display:block}
@@ -52,15 +52,28 @@ h2{font-size:18px;margin:24px 0 8px}
 
 .pw{margin:6px 0}.pw p{margin:4px 0}.pl{margin:6px 0 6px 0;padding-left:20px}.pl li{margin:5px 0;line-height:1.7}.pl ul{margin:4px 0;padding-left:18px;list-style:disc}.pl ul li{margin:2px 0}.pl>li>b{color:#283593}
 table.ft{font-size:14px;table-layout:fixed}table.ft td:first-child,table.ft th:first-child{font-weight:600;width:34%;word-break:break-all}table.ft td,table.ft th{word-break:break-word;padding:6px 7px}table.ft th{width:auto}
+
+#top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+#au-btn[aria-pressed="true"]{background:var(--brand2);color:var(--brand);border-color:var(--brand);font-weight:600}
+#cap{position:relative;padding:4px 36px 8px 2px;font-size:clamp(15px,4.2vw,19px);line-height:1.55;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+#cap[hidden]{display:none}
+.cap-l{height:1.55em;white-space:nowrap;overflow:hidden}
+#cap-a{color:var(--sub)}
+#cap-b{font-weight:600;color:var(--ink)}
+#cap-x{position:absolute;right:0;top:2px;width:34px;height:34px;border:0;background:none;color:var(--sub);font-size:16px;cursor:pointer}
+.sp{display:inline-block;font-size:12px;font-weight:400;line-height:1.5;border-radius:4px;padding:0 5px;margin-right:6px;color:#fff;vertical-align:1px}
+.sp.F{background:#c2185b}.sp.M{background:#1f5f8b}
 </style></head>
 <body>
-<header><div class="wrap" style="padding:0"><a href="index.html">← 首頁（搜尋、總複習）</a><h1 id="h1"></h1><p id="intro"></p></div></header>
+<header><div class="wrap" style="padding:0"><a href="../index.html">⌂ 所有考試</a>　<a href="index.html">← 本科首頁（搜尋、總複習）</a><h1 id="h1"></h1><p id="intro"></p></div></header>
 <div class="wrap">
-<nav role="tablist" id="nav"></nav>
+<div id="top"><nav role="tablist" id="nav"></nav><div id="cap" hidden><div class="cap-l" id="cap-a"></div><div class="cap-l" id="cap-b"></div><button type="button" id="cap-x" aria-label="關閉語音字幕">✕</button></div></div>
 <section id="s-read"></section><section id="s-table"></section><section id="s-cards"></section><section id="s-quiz"></section>
 <div class="pager"><a id="prev" href="#"></a><a id="next" href="#"></a></div>
 <footer id="foot"></footer>
 </div>
+<audio id="au" preload="none"></audio>
+<script src="mp3/timing/ch10.js"></script>
 <script id="data" type="application/json">{"chapter": "第十章", "title": "新型態人身保險商品認定標準", "laws": [{"name": "新型態人身保險商品認定標準", "amended": "民國113年6月28日", "url": "https://law.lia-roc.org.tw/Law/Content?lsid=FL043620", "source": "中華民國人壽保險商業同業公會 保險相關法規查詢系統", "retrieved": "2026-10-30"}], "alerts": [{"t": "版本要小心（必看）", "d": "本頁採用壽險公會法規系統的現行版本（民國113年6月28日修正）：核准逾「一年」、同類型已核准達「三張」、其他特殊事項共「七款」。金管會網站上同名文件是民國103年的舊版（「六個月」「兩張」「十一款」）。查到的資料若和本頁不同，先確認是哪個版本。"}, {"t": "與題庫不同的地方", "d": "題庫只收六款特殊事項，且第六款是「其他經認定」；現行版本第六款是分紅保險商品的新規定，「其他經主管機關認定」變成第七款。第五項「不屬新型態」的第（三）至（五）款也是新增。"}], "clauses": [{"no": "一", "title": "訂定依據", "official": ["本認定標準由中華民國人壽保險商業同業公會（以下簡稱壽險公會）依保險商品銷售前程序作業準則第十七條第二項規定訂定之。"], "plain": "這份認定標準是壽險公會依保險商品銷售前程序作業準則第17條第2項訂定的。", "mnemonic": "訂定者「壽險公會」。", "tip": ""}, {"no": "二", "title": "什麼是新型態保險商品", "official": ["新型態人身保險商品（以下簡稱新型態保險商品），指國內保險市場尚未有同類型，或有其他特殊事項之保險商品。", "前項所稱同類型保險商品，指經主管機關核准、核備或備查並於保險市場銷售中之保險商品，且符合下列條件之一者：", "（一）維持原保險範圍、保險給付項目。", "（二）減少原保險範圍、保險給付項目。", "（三）組合已核准、核備或備查並銷售中之保險範圍、保險給付項目或投資標的而成。", "前項所指備查之保險商品，不包含依「保險商品銷售前程序作業準則」第二十一條第一項、第二十一條之一第一項或第三項規定，以備查方式辦理之保險商品。", "第一項所稱其他特殊事項，指保險商品符合下列條件之一者：", "（一）各公司第一張以外幣收付之人身保險商品。", "（二）失能程度與保險金給付表未依示範內容規範辦理。", "（三）各公司第一張由保險人全權決定運用標的之投資型保險商品。", "（四）各公司第一張連結國內結構型商品之投資型保險商品或連結國內結構型商品屬新種財務工程。（如結構型商品連結投資標的之計算公式或連結標的之資產為市場上未曾採行者）", "（五）實物給付項目非屬殯葬服務且保險期間與保險給付期間合計超過十年之實物給付型保險商品。", "（六）給付項目包括提供不參加紅利分配之非屬人壽保險保險給付項目之分紅保險商品。但各公司該同類型新型態保險商品曾經主管機關核准並於保險市場銷售中者，不在此限。", "（七）其他經主管機關認定有特殊事項情形者。", "符合下列條件之一者，不屬新型態保險商品：", "（一）新型態保險商品經主管機關核准時間逾一年。", "（二）同類型新型態保險商品經主管機關核准時間雖未逾一年，惟已核准達三張。", "（三）同類型保險商品另提供鼓勵機制以鼓勵被保險人落實或提升自身健康管理觀念及行為，且其鼓勵機制之辦理方式符合「人身保險商品審查應注意事項」第二百二十點之三第二項第一款及第二款規範。", "（四）同類型保險商品僅縮短或取消法定傳染病之等待期間。", "（五）同類型疫苗接種不良反應保險商品，其保險範圍、保險給付項目及保險金額均未逾已核准保險商品之範圍。", "要保書之告知事項及聲明事項應依「人身保險要保書示範內容及注意事項」規定辦理。如因配合保險商品特性欲加列問項、聲明事項或增加問項、聲明事項之內容時，應依前開注意事項第 8  點及第 12 點規定報經主管機關核准後始得列入；如欲加列之問項、聲明事項或增加問項、聲明事項之內容經主管機關認定涉及通案性質者，應交由壽險公會研議報准後，方得增列。"], "plain": "新型態保險商品有兩種情況：國內市場尚未有同類型，或有其他特殊事項。「同類型」指已核准、核備或備查並銷售中的商品，且維持、減少原保險範圍與給付項目，或是組合已銷售的範圍、給付項目或投資標的。「其他特殊事項」共七款，其中和外幣保險最相關的是第一款：各公司第一張以外幣收付的人身保險商品。另有五款情形不算新型態：核准時間逾一年；同類型核准時間雖未逾一年但已核准達三張；以及（三）至（五）三種特定情形。", "mnemonic": "特殊事項七款「外、失、全、結、實、分、其他」＝外幣首張、失能表、全權決定、結構型、實物給付、分紅、其他認定。不算新型態「一年、三張」。", "tip": "「各公司第一張以外幣收付之人身保險商品」不分傳統型或投資型，條文只寫「人身保險商品」。「一年」與「三張」是這個版本的數字，舊版寫過六個月與兩張，見上方提醒。"}, {"no": "三", "title": "認定有疑義怎麼辦", "official": ["保險公司對新型態人身保險商品認定有疑義時，應檢附相關保險單條款、計算說明書及投資標的說明書等文件，並就認定疑義部分予以說明，函請壽險公會認定之。"], "plain": "保險公司對認定有疑義時，檢附保單條款、計算說明書、投資標的說明書等文件並說明疑義處，函請壽險公會認定。", "mnemonic": "疑義找「壽險公會」。", "tip": ""}, {"no": "四", "title": "範例", "official": ["本認定標準之範例如附件。"], "plain": "本認定標準另有附件範例。", "mnemonic": "", "tip": "附件範例本頁沒有收錄。"}], "tables": [{"title": "其他特殊事項（第二點第四項，七款）", "head": ["款", "情形"], "rows": [["一", "各公司第一張以外幣收付之人身保險商品"], ["二", "失能程度與保險金給付表未依示範內容規範辦理"], ["三", "各公司第一張由保險人全權決定運用標的之投資型保險商品"], ["四", "各公司第一張連結國內結構型商品之投資型保險商品，或連結國內結構型商品屬新種財務工程"], ["五", "實物給付項目非屬殯葬服務，且保險期間與保險給付期間合計超過十年的實物給付型保險商品"], ["六", "給付項目包括提供不參加紅利分配之非屬人壽保險給付項目的分紅保險商品（有同類型已核准銷售中的但書）"], ["七", "其他經主管機關認定有特殊事項情形者"]]}, {"title": "不屬新型態保險商品（第二點第五項）", "head": ["款", "情形"], "rows": [["一", "新型態保險商品經主管機關核准時間逾一年"], ["二", "同類型新型態保險商品核准時間雖未逾一年，惟已核准達三張"], ["三", "同類型保險商品另提供鼓勵被保險人健康管理的機制，且符合審查應注意事項規定"], ["四", "同類型保險商品僅縮短或取消法定傳染病之等待期間"], ["五", "同類型疫苗接種不良反應保險商品，範圍、給付項目、保險金額均未逾已核准商品"]]}, {"title": "同類型保險商品（第二點第二項）", "head": ["條件", "意思"], "rows": [["前提", "經主管機關核准、核備或備查並於保險市場銷售中"], ["（一）", "維持原保險範圍、保險給付項目"], ["（二）", "減少原保險範圍、保險給付項目"], ["（三）", "組合已核准、核備或備查並銷售中之保險範圍、給付項目或投資標的"]]}], "scenarios": [{"ref": "二", "q": "某保險公司要推出公司的第一張以外幣收付的人身保險商品。依認定標準第二點，這張商品是？", "opts": ["不是新型態保險商品", "新型態保險商品（其他特殊事項第一款）", "只有投資型才是新型態", "由主管機關另行公告才知道"], "ans": 1, "why": "第二點第四項第一款：各公司第一張以外幣收付之人身保險商品屬其他特殊事項，即新型態保險商品。條文沒有限定傳統型或投資型。"}, {"ref": "二", "q": "某保險公司要推出第一張「約定以新臺幣為收付幣別的傳統型保險商品」。依認定標準第二點，它屬於新型態保險商品嗎？", "opts": ["屬於，因為是公司第一張", "目前條文列舉的其他特殊事項中沒有這一款，不屬於", "屬於，因為是傳統型", "要看壽險公會抽籤"], "ans": 1, "why": "現行第二點第四項七款特殊事項中，沒有「新臺幣傳統型首張」這一款（這是舊版內容）。"}, {"ref": "二", "q": "某新型態保險商品經主管機關核准後已逾一年。依認定標準第二點，結果是？", "opts": ["仍是新型態", "不屬新型態保險商品", "需重新送審", "改由壽險公會管理"], "ans": 1, "why": "第二點第五項第一款：新型態保險商品經主管機關核准時間逾一年，不屬新型態保險商品。"}, {"ref": "二", "q": "某類新型態保險商品核准時間尚未滿一年，但同類型已經核准了三張。依認定標準第二點，第四張是？", "opts": ["仍是新型態", "不屬新型態保險商品", "須延長核准", "只有投資型才不算"], "ans": 1, "why": "第二點第五項第二款：同類型新型態保險商品核准時間雖未逾一年，惟已核准達三張，不屬新型態保險商品。"}, {"ref": "二", "q": "下列哪一項「屬於」認定標準第二點第四項所列的其他特殊事項？", "opts": ["各公司第一張由保險人全權決定運用標的之投資型保險商品", "核准時間逾一年的商品", "同類型商品僅縮短法定傳染病等待期間", "同類型疫苗接種不良反應商品，範圍未逾已核准商品"], "ans": 0, "why": "第四項第三款：各公司第一張由保險人全權決定運用標的之投資型保險商品。其餘三項是第五項「不屬新型態」的情形。"}, {"ref": "三", "q": "保險公司對某商品是否屬於新型態有疑義，依認定標準第三點，應向誰函請認定？", "opts": ["金管會", "中央銀行", "壽險公會", "保發中心"], "ans": 2, "why": "第三點：函請壽險公會認定，並檢附保單條款、計算說明書及投資標的說明書等文件。"}], "cards": [{"id": 0, "ref": "一", "front": "誰訂定新型態人身保險商品認定標準？", "back": "壽險公會，依保險商品銷售前程序作業準則第17條第2項。"}, {"id": 1, "ref": "二", "front": "什麼是新型態人身保險商品？", "back": "國內保險市場尚未有同類型，或有其他特殊事項之保險商品。"}, {"id": 2, "ref": "二", "front": "「同類型保險商品」的前提與三種情形？", "back": "前提：經主管機關核准、核備或備查並於市場銷售中。情形：維持原保險範圍與給付項目；減少原保險範圍與給付項目；組合已銷售的範圍、給付項目或投資標的。"}, {"id": 3, "ref": "二", "front": "「其他特殊事項」共幾款？", "back": "七款。"}, {"id": 4, "ref": "二", "front": "各公司第一張以外幣收付的人身保險商品，是不是新型態？", "back": "是，屬「其他特殊事項」第一款（條文不分傳統型或投資型）。"}, {"id": 5, "ref": "二", "front": "第一張由保險人全權決定運用標的之投資型保險商品，是不是新型態？", "back": "是，第三款。"}, {"id": 6, "ref": "二", "front": "第一張連結國內結構型商品之投資型保險商品，何時屬新型態？", "back": "各公司第一張，或所連結的結構型商品屬新種財務工程（計算公式或連結標的資產為市場上未曾採行者），第四款。"}, {"id": 7, "ref": "二", "front": "實物給付型保險商品，什麼情形屬新型態？", "back": "實物給付項目非屬殯葬服務，且保險期間與保險給付期間合計超過十年，第五款。"}, {"id": 8, "ref": "二", "front": "新型態保險商品經主管機關核准後，多久就不再算新型態？", "back": "核准時間逾一年。"}, {"id": 9, "ref": "二", "front": "同類型新型態保險商品核准時間雖未逾一年，什麼情形也不再算新型態？", "back": "已核准達三張。"}, {"id": 10, "ref": "三", "front": "保險公司對新型態商品認定有疑義，向誰函請認定？", "back": "壽險公會，並檢附保單條款、計算說明書、投資標的說明書等文件說明疑義處。"}], "chNo": "10", "summary": "什麼商品算「新型態」：公司第一張外幣商品、全權決定運用標的的投資型商品等，以及什麼情形之後就不再算新型態。", "scope": "收錄全文。", "nav": {"prev": {"file": "ch09.html", "label": "第9章 銷售應注意事項（風險、費用、適合度）"}, "next": {"file": "ch11.html", "label": "第11章 保險業各類監控措施（僅收錄資產管理自律規範）"}}}</script>
 <script>const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -123,7 +136,7 @@ $('#h1').textContent=D.chapter+'｜'+D.title;
 $('#intro').textContent=D.summary||'';
 document.title=D.chapter+' '+D.title;
 $('#foot').innerHTML='官方來源：'+LAWS.map(L=>esc(L.name)+'（'+esc(L.amended)+(L.kind==='press'?'發布':'修正')+'）<a href="'+esc(L.url)+'" target="_blank" rel="noopener">'+esc(L.url)+'</a>').join('<br>')+(D.scope?'<br>'+esc(D.scope):'')+'<br>條文原文取自官方網頁；「白話」「口訣」「情境題」為編寫者整理，不是法條。法規可能再修正，請以官方最新公告為準；本內容不是法律或投資意見。';
-const TABS=[['read','條文速讀'],['table','對照表'],['cards','閃卡'],['quiz','情境題']];
+const TABS=[['read','條文'],['table','對照表'],['cards','閃卡'],['quiz','情境題']];
 const nav=$('#nav');
 TABS.forEach(([id,name])=>{const b=document.createElement('button');b.textContent=name;b.setAttribute('role','tab');b.dataset.id=id;b.onclick=()=>show(id);nav.appendChild(b)});
 let curTab='read';
@@ -151,10 +164,92 @@ function step(d){const i=TABS.findIndex(t=>t[0]===curTab)+d;
   if(i>=TABS.length){if(N.next)location.href=N.next.file+'#read';return}
   show(TABS[i][0])}
 let sx=0,sy=0,skip=false;
-document.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;const el=e.target&&e.target.nodeType===1?e.target:(e.target&&e.target.parentElement);skip=!!(el&&el.closest('.tw,nav,input,.off'))},{passive:true});
+document.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;const el=e.target&&e.target.nodeType===1?e.target:(e.target&&e.target.parentElement);skip=!!(el&&el.closest('.tw,nav,input,.off,#cap'))},{passive:true});
 document.addEventListener('touchend',e=>{if(skip)return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>70&&Math.abs(dy)<45){step(dx<0?1:-1)}},{passive:true});
-document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1)});
+document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select'))return;if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1)});
 // 深層連結
 function route(){const h=(location.hash||'#read').slice(1).split('/');show(TABS.some(t=>t[0]===h[0])?h[0]:'read',h[1]?decodeURIComponent(h[1]):null)}
 window.addEventListener('hashchange',route);route();
+</script>
+<script>// 語音：導覽列多一顆「🎧 語音」鈕，按下就從頭播放；畫面上方只留最後兩行字幕（固定高度，不會推動下面的頁面）。
+// 再按一次＝暫停／繼續；點字幕也一樣；字幕右側的 ✕ 關閉。播完一段自動接下一段。
+// 資料來自 mp3/timing/chNN.js（window.AUDIO_TIMING），由 make_timing.py 產生；沒有這個檔就不會出現「語音」鈕。
+(function(){
+const T=window.AUDIO_TIMING;
+if(!T||!T.segments||!T.segments.length)return;
+const BASE='mp3',segs=T.segments,au=document.getElementById('au');
+const cap=document.getElementById('cap'),rowA=document.getElementById('cap-a'),rowB=document.getElementById('cap-b'),top=document.getElementById('top');
+const SP={F:'主持人',M:'專家'},PUNC='，、：；。！？';
+let si=-1,lines=[],li=-2,started=false,raf=0,endTimer=0;
+
+// ---- 按鈕 ----
+const btn=document.createElement('button');
+btn.id='au-btn';btn.type='button';btn.textContent='🎧 語音';btn.setAttribute('aria-pressed','false');btn.title='按下開始聽這一章的語音重點';
+nav.appendChild(btn);
+function label(){btn.textContent=!started?'🎧 語音':(au.paused?'▶ 語音':'⏸ 語音');btn.setAttribute('aria-pressed',started?'true':'false')}
+
+// ---- 字幕斷行：依目前寬度，把每句切成一行一行 ----
+const fontPx=()=>parseFloat(getComputedStyle(rowB).fontSize)||17;
+const cw=(s,f)=>{let w=0;for(const c of s)w+=c.charCodeAt(0)<128?f*0.56:f;return w};
+function wrap(text,lim0,lim,f){
+  const parts=text.match(new RegExp('[^'+PUNC+']+['+PUNC+']*|['+PUNC+']+','g'))||[text];
+  const out=[];let cur='',w=0,lim_=lim0;
+  const push=()=>{if(cur){out.push(cur);cur='';w=0;lim_=lim}};
+  for(const p of parts){
+    const pw=cw(p,f);
+    if(w+pw<=lim_){cur+=p;w+=pw;continue}
+    push();
+    if(pw<=lim_){cur=p;w=pw;continue}
+    for(const c of p){const x=cw(c,f);if(w+x>lim_)push();cur+=c;w+=x}
+  }
+  push();return out;
+}
+function buildLines(){
+  lines=[];if(si<0)return;
+  const s=segs[si],f=fontPx(),avail=Math.max(120,(rowB.clientWidth||cap.clientWidth||300)-2);let prevSpk=null;
+  s.cues.forEach((c,k)=>{
+    const t0=c.t,t1=k+1<s.cues.length?s.cues[k+1].t:s.dur;
+    const span=Math.max(0.4,t1-t0-0.7);                       // 句尾約有 0.7 秒停頓，不分給字
+    const badge=c.spk!==prevSpk;prevSpk=c.spk;
+    const bw=badge?SP[c.spk].length*12+18:0;                   // 說話者小標籤的寬度（12px 字＋留白）
+    const ls=wrap(c.text,avail-bw,avail,f),ws=ls.map(x=>Math.max(1,cw(x,f))),tot=ws.reduce((a,b)=>a+b,0);
+    let acc=0;ls.forEach((x,j)=>{lines.push({t:t0+span*acc/tot,spk:c.spk,badge:badge&&j===0,text:x});acc+=ws[j]});
+  });
+}
+const esc2=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const rowHTML=l=>l?(l.badge?'<span class="sp '+l.spk+'">'+SP[l.spk]+'</span>':'')+esc2(l.text):'';
+function paint(){
+  const t=au.currentTime;let j=-1;
+  for(let k=0;k<lines.length;k++){if(lines[k].t<=t+0.05)j=k;else break}
+  if(j===li)return;li=j;
+  rowA.innerHTML=rowHTML(lines[j-1]);rowB.innerHTML=rowHTML(lines[j]);
+}
+function tick(){paint();raf=au.paused?0:requestAnimationFrame(tick)}
+
+// ---- 播放 ----
+const nice=t=>String(t).replace(/_/g,' ');
+function meta(){if('mediaSession' in navigator&&window.MediaMetadata&&si>=0)navigator.mediaSession.metadata=new MediaMetadata({title:nice(segs[si].title),artist:D.chapter+' '+D.title,album:'考試複習語音'})}
+function pad(){document.documentElement.style.scrollPaddingTop=cap.hidden?'':(top.offsetHeight+8)+'px'}
+function setSrc(i){if(si===i)return;si=i;li=-2;rowA.innerHTML=rowB.innerHTML='';au.src=encodeURI(BASE+'/'+segs[i].file);au.load();au.playbackRate=1;buildLines();meta()}
+function playSeg(i){
+  setSrc(i);
+  const go=()=>{buildLines();au.play().catch(()=>{})};
+  if(au.readyState>=1)go();else au.addEventListener('loadedmetadata',go,{once:true});
+}
+function start(){clearTimeout(endTimer);started=true;cap.hidden=false;pad();si=-1;playSeg(0)}
+function stop(){clearTimeout(endTimer);au.pause();started=false;si=-1;lines=[];li=-2;cap.hidden=true;rowA.innerHTML=rowB.innerHTML='';pad();label()}
+function toggle(){if(!started)start();else if(au.paused)au.play().catch(()=>{});else au.pause()}
+btn.onclick=toggle;
+cap.addEventListener('click',e=>{if(e.target.closest('#cap-x'))stop();else toggle()});
+au.addEventListener('play',()=>{label();cancelAnimationFrame(raf);raf=requestAnimationFrame(tick)});
+au.addEventListener('pause',label);
+au.addEventListener('seeked',paint);
+au.addEventListener('ended',()=>{
+  if(si<segs.length-1)playSeg(si+1);
+  else{started=false;label();endTimer=setTimeout(()=>{if(!started)stop()},2500)}   // 全部播完，字幕停 2.5 秒後自動收起
+});
+au.addEventListener('error',()=>{rowA.textContent='';rowB.textContent='找不到音檔（'+BASE+'/'+(segs[si]?segs[si].file:'')+'）'});
+let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(si>=0){buildLines();li=-2;paint();pad()}},150)});
+if('mediaSession' in navigator){[['play',()=>au.play()],['pause',()=>au.pause()],['previoustrack',()=>started&&playSeg(Math.max(0,si-1))],['nexttrack',()=>started&&si<segs.length-1&&playSeg(si+1)]].forEach(([a,f])=>{try{navigator.mediaSession.setActionHandler(a,f)}catch(e){}})}
+})();
 </script></body></html>

@@ -11,7 +11,7 @@ header p{margin:6px 0 0;font-size:14px;opacity:.95}
 .wrap{max-width:900px;margin:0 auto;padding:0 12px 60px}
 .banner{background:var(--warnbg);color:var(--warn);border:1px solid #f0d9a8;border-radius:8px;padding:10px 12px;margin:12px 0;font-size:14px}
 .banner b{margin-right:4px}
-nav{position:sticky;top:0;background:var(--bg);z-index:5;display:flex;gap:6px;padding:10px 0;overflow-x:auto;border-bottom:1px solid var(--line)}
+nav{display:flex;gap:6px;padding:10px 0;overflow-x:auto}
 nav button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:15px;cursor:pointer;color:var(--ink)}
 nav button[aria-selected="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
 section{display:none;padding-top:14px}section.on{display:block}
@@ -52,15 +52,27 @@ h2{font-size:18px;margin:24px 0 8px}
 
 .pw{margin:6px 0}.pw p{margin:4px 0}.pl{margin:6px 0 6px 0;padding-left:20px}.pl li{margin:5px 0;line-height:1.7}.pl ul{margin:4px 0;padding-left:18px;list-style:disc}.pl ul li{margin:2px 0}.pl>li>b{color:#283593}
 table.ft{font-size:14px;table-layout:fixed}table.ft td:first-child,table.ft th:first-child{font-weight:600;width:34%;word-break:break-all}table.ft td,table.ft th{word-break:break-word;padding:6px 7px}table.ft th{width:auto}
+#top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+#au-btn[aria-pressed="true"]{background:var(--brand2);color:var(--brand);border-color:var(--brand);font-weight:600}
+#cap{position:relative;padding:4px 36px 8px 2px;font-size:clamp(15px,4.2vw,19px);line-height:1.55;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+#cap[hidden]{display:none}
+.cap-l{height:1.55em;white-space:nowrap;overflow:hidden}
+#cap-a{color:var(--sub)}
+#cap-b{font-weight:600;color:var(--ink)}
+#cap-x{position:absolute;right:0;top:2px;width:34px;height:34px;border:0;background:none;color:var(--sub);font-size:16px;cursor:pointer}
+.sp{display:inline-block;font-size:12px;font-weight:400;line-height:1.5;border-radius:4px;padding:0 5px;margin-right:6px;color:#fff;vertical-align:1px}
+.sp.F{background:#c2185b}.sp.M{background:#1f5f8b}
 </style></head>
 <body>
-<header><div class="wrap" style="padding:0"><a href="index.html">← 首頁（搜尋、總複習）</a><h1 id="h1"></h1><p id="intro"></p></div></header>
+<header><div class="wrap" style="padding:0"><a href="../index.html">⌂ 所有考試</a>　<a href="index.html">← 本科首頁（搜尋、總複習）</a><h1 id="h1"></h1><p id="intro"></p></div></header>
 <div class="wrap">
-<nav role="tablist" id="nav"></nav>
+<div id="top"><nav role="tablist" id="nav"></nav><div id="cap" hidden><div class="cap-l" id="cap-a"></div><div class="cap-l" id="cap-b"></div><button type="button" id="cap-x" aria-label="關閉語音字幕">✕</button></div></div>
 <section id="s-read"></section><section id="s-table"></section><section id="s-cards"></section><section id="s-quiz"></section>
 <div class="pager"><a id="prev" href="#"></a><a id="next" href="#"></a></div>
 <footer id="foot"></footer>
 </div>
+<audio id="au" preload="none"></audio>
+<script src="mp3/timing/ch01.js"></script>
 <script id="data" type="application/json">{"chapter": "第一章", "title": "保險關係人與保險利益", "laws": [{"pcode": "G0390002", "name": "保險法", "amended": "民國114年6月18日", "url": "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0390002", "source": "法務部全國法規資料庫", "retrieved": "2026-11-03", "mirrorDate": "20250618"}], "alerts": [{"t": "本章讀法", "d": "先分清楚『繳錢的人（要保人）』『被保的人（被保險人）』『領錢的人（受益人）』三個角色，再看保險利益。情境題幾乎都在考：這個人對那個人有沒有保險利益、契約會不會失效。"}], "clauses": [{"no": "1", "title": "保險與保險契約的定義", "plain": "保險是一種約定：一方交保險費，另一方對於『不可預料或不可抗力的事故』造成的損害負擔賠償財物的責任。根據這個約定訂出的契約叫保險契約。", "mnemonic": "交保費換保障，事故要出於意外。", "tip": "這條的用語偏財產保險（賠償財物）。人身保險怎麼給付，看第101條以下（第三章）。", "official": ["本法所稱保險，謂當事人約定，一方交付保險費於他方，他方對於因不可預料，或不可抗力之事故所致之損害，負擔賠償財物之行為。", "根據前項所訂之契約，稱為保險契約。"], "has_official": true}, {"no": "2", "title": "保險人", "plain": "保險人是經營保險事業的組織。契約成立時，它有『請求保險費』的權利；承保的事故發生時，要依承保責任負賠償義務。", "mnemonic": "保險人＝收保費的權利、賠保險金的義務。", "tip": "考題常把保險人的權利義務和要保人的搞反：收保費是保險人的權利，繳保費才是要保人的義務。", "official": ["本法所稱保險人，指經營保險事業之各種組織，在保險契約成立時，有保險費之請求權；在承保危險事故發生時，依其承保之責任，負擔賠償之義務。"], "has_official": true}, {"no": "3", "title": "要保人", "plain": "要保人要同時符合三件事：對保險標的有保險利益；向保險人申請訂立保險契約；負有交付保險費的義務。", "mnemonic": "有利益、去申請、要繳錢。", "tip": "要保人的核心義務是繳保險費，但不是只有要保人能繳，人壽保險第115條規定利害關係人都可代繳（第三章）。", "official": ["本法所稱要保人，指對保險標的具有保險利益，向保險人申請訂立保險契約，並負有交付保險費義務之人。"], "has_official": true}, {"no": "4", "title": "被保險人", "plain": "被保險人是保險事故發生時遭受損害、享有賠償請求權的人。要保人也可以同時是被保險人。", "mnemonic": "出事的那個人。", "tip": "考題常拆成三個角色：繳費的人、被保的人、領錢的人。三個可以是同一人，也可以是三個不同的人。", "official": ["本法所稱被保險人，指於保險事故發生時，遭受損害，享有賠償請求權之人；要保人亦得為被保險人。"], "has_official": true}, {"no": "5", "title": "受益人", "plain": "受益人是被保險人或要保人約定享有賠償請求權的人。要保人或被保險人本人都可以當受益人。", "mnemonic": "約定領錢的人。", "tip": "受益人怎麼指定、能不能轉讓、什麼時候喪失，在人壽保險第110至114條、第121條（第三章）。", "official": ["本法所稱受益人，指被保險人或要保人約定享有賠償請求權之人，要保人或被保險人均得為受益人。"], "has_official": true}, {"no": "8", "title": "保險代理人、經紀人、業務員的分別", "plain": "代理人是依代理契約或授權書、向保險人收取費用並代理經營業務的人；經紀人是站在被保險人利益、洽訂契約而收取佣金或報酬的人；業務員是替保險業、經紀人公司、代理人公司或兼營的銀行從事保險招攬的人。", "mnemonic": "代理人站保險公司；經紀人站客戶；業務員負責招攬。", "facts": {"head": ["角色", "條文怎麼定義", "站在誰那邊"], "rows": [["保險代理人", "依代理契約或授權書，向保險人收取費用，並代理經營業務", "保險人"], ["保險經紀人", "基於被保險人之利益，洽訂保險契約或提供相關服務，收取佣金或報酬", "被保險人"], ["保險業務員", "為保險業、經紀人公司、代理人公司或兼營銀行，從事保險招攬之人", "所屬公司"]]}, "tip": "業務員的登錄、教育訓練、懲處規定在第五章（保險業務員管理規則）。", "official": ["本法所稱保險代理人，指根據代理契約或授權書，向保險人收取費用，並代理經營業務之人。", "本法所稱保險業務員，指為保險業、保險經紀人公司、保險代理人公司或兼營保險代理人或保險經紀人業務之銀行，從事保險招攬之人。", "本法所稱保險經紀人，指基於被保險人之利益，洽訂保險契約或提供相關服務，而收取佣金或報酬之人。"], "has_official": true}, {"no": "13", "title": "保險的分類", "plain": "保險分財產保險和人身保險兩大類。人身保險包括人壽保險、健康保險、傷害保險、年金保險四種；財產保險包括火災、海上、陸空、責任、保證保險和主管機關核准的其他保險。", "mnemonic": "人身四種：壽、健、傷、年。", "tip": "人身保險四種分別在保險法第101條（人壽）、第125條（健康）、第131條（傷害）、第135-1條（年金）開始。", "official": ["保險分為財產保險及人身保險。", "財產保險，包括火災保險、海上保險、陸空保險、責任保險、保證保險及經主管機關核准之其他保險。", "人身保險，包括人壽保險、健康保險、傷害保險及年金保險。"], "has_official": true}, {"no": "16", "title": "保險利益：要保人對哪些人的生命或身體有保險利益", "plain": "要保人對這四種人的生命或身體有保險利益：本人或其家屬；生活費或教育費所仰給之人；債務人；為本人管理財產或利益之人。", "mnemonic": "本人家屬、供我生活、欠我錢的、替我管事。", "facts": {"head": ["款", "要保人（我）對誰有保險利益", "例子"], "rows": [["一", "本人或其家屬", "替自己、配偶、子女投保"], ["二", "生活費或教育費所仰給之人", "我的生活費、學費靠誰供給，我對這個人有利益"], ["三", "債務人", "對方欠我錢，我對他有利益；反過來他對我（債權人）不在這四款內"], ["四", "為本人管理財產或利益之人", "我把公司交給對方經營，我對他有利益"]]}, "tip": "方向最容易反。以『我是要保人』為起點往外看：條文列的是我對誰有利益。借錢給我的人（債權人）不在第16條四款內。", "official": ["要保人對於左列各人之生命或身體，有保險利益。", "一、本人或其家屬。", "二、生活費或教育費所仰給之人。", "三、債務人。", "四、為本人管理財產或利益之人。"], "has_official": true}, {"no": "16-1", "title": "未成年人等為被保險人：保險金可約定匯入信託帳戶", "plain": "未成年人或依民法第14條第1項可受監護宣告者的父、母或監護人，依第138-2條第2項規定為被保險人時，要保人、被保險人、受益人可以在事故發生前共同約定：保險金出險後匯入指定信託帳戶；要保人也可放棄第111條的處分權。", "mnemonic": "保險金進信託，要保人放棄處分權。", "tip": "本頁沒有收錄第138-2條，這條要連同它一起讀才完整。", "official": ["未成年人或依民法第十四條第一項得受監護宣告者之父、母或監護人，依本法第一百三十八條之二第二項規定為被保險人時，保險契約之要保人、被保險人及受益人得於保險事故發生前，共同約定保險金於保險事故發生後應匯入指定信託帳戶，要保人並得放棄第一百十一條保險利益之處分權。"], "has_official": true}, {"no": "17", "title": "欠缺保險利益：契約失效", "plain": "要保人或被保險人對保險標的物沒有保險利益時，保險契約失去效力。", "mnemonic": "沒有保險利益，契約失效。", "tip": "用語要分清：第17條是『失其效力』（失效）；第105條第三人訂死亡保險未經被保險人書面同意是『其契約無效』。兩者是不同關卡，考題會看你有沒有看清楚用語。", "official": ["要保人或被保險人，對於保險標的物無保險利益者，保險契約失其效力。"], "has_official": true}, {"no": "18", "title": "被保險人死亡或標的物移轉", "plain": "被保險人死亡或保險標的物所有權移轉時，保險契約除了另有訂定外，仍為繼承人或受讓人的利益而存在。", "tip": "條文用語（標的物所有權移轉）偏財產保險。人身保險的受益人與遺產歸屬，看第112、113條（第三章）。", "official": ["被保險人死亡或保險標的物所有權移轉時，保險契約除另有訂定外，仍為繼承人或受讓人之利益而存在。"], "has_official": true}], "tables": [{"title": "四個核心角色：一句話對照", "head": ["角色", "條", "核心", "權利或義務"], "rows": [["保險人", "2", "經營保險事業的組織", "請求保險費（權利）；負賠償義務"], ["要保人", "3", "有保險利益、申請訂約的人", "負交付保險費義務"], ["被保險人", "4", "事故發生時遭受損害、享有賠償請求權的人", "要保人亦得為被保險人"], ["受益人", "5", "被保險人或要保人約定享有賠償請求權的人", "要保人、被保險人均得為受益人"]]}, {"title": "第16條保險利益：判斷練習（以『我是要保人』為起點）", "head": ["情況", "第16條有沒有列", "對應款"], "rows": [["我替自己投保", "有", "一、本人"], ["我替配偶、子女投保", "有", "一、家屬"], ["我的生活費靠姪子供給，我投保他的生命", "有", "二、生活費或教育費所仰給之人"], ["朋友欠我錢，我投保朋友的生命", "有", "三、債務人"], ["我欠朋友錢，我投保朋友的生命", "四款都沒列", "（債權人不在條文內）"], ["我把公司交給經理人經營，我投保經理人的生命", "有", "四、為本人管理財產或利益之人"]]}], "cards": [{"id": 1, "ref": "3", "front": "要保人要同時符合哪三件事？", "back": "對保險標的有保險利益；向保險人申請訂立保險契約；負有交付保險費的義務。"}, {"id": 2, "ref": "2", "front": "保險人在契約成立時有什麼權利、承保事故發生時有什麼義務？", "back": "權利：請求保險費；義務：依承保責任負賠償義務。"}, {"id": 3, "ref": "5", "front": "受益人可以是要保人或被保險人本人嗎？", "back": "可以。第5條：要保人或被保險人均得為受益人。"}, {"id": 4, "ref": "13", "front": "人身保險包括哪四種？", "back": "人壽保險、健康保險、傷害保險、年金保險。"}, {"id": 5, "ref": "16", "front": "第16條：要保人對哪四種人的生命或身體有保險利益？", "back": "本人或其家屬；生活費或教育費所仰給之人；債務人；為本人管理財產或利益之人。"}, {"id": 6, "ref": "16", "front": "我借錢給朋友，我是要保人，我對朋友的生命有保險利益嗎？", "back": "有。對方是我的債務人，屬第16條第3款。"}, {"id": 7, "ref": "17", "front": "要保人對保險標的物沒有保險利益，契約會怎樣？", "back": "失其效力（失效）。第17條。"}, {"id": 8, "ref": "8", "front": "保險經紀人是站在誰的利益洽訂保險契約？", "back": "被保險人的利益，並收取佣金或報酬。"}, {"id": 9, "ref": "16-1", "front": "父母或監護人為被保險人時，保險金可以怎麼約定以保障未成年人？", "back": "要保人、被保險人、受益人可事前共同約定，保險金出險後匯入指定信託帳戶，要保人並得放棄第111條的處分權。"}], "scenarios": [{"ref": "16", "q": "甲把自己的公司委託乙經營。依保險法第16條，下列何者正確？", "opts": ["甲對乙有保險利益", "乙對甲有保險利益", "兩人互有保險利益", "兩人互無保險利益"], "ans": 0, "why": "第16條第4款：要保人對『為本人管理財產或利益之人』有保險利益。甲是要保人，乙替甲管理公司，所以是甲對乙有。條文方向是要保人對被保人，不是雙向。"}, {"ref": "16", "q": "老陳每月提供生活費給阿明。若阿明是要保人，依第16條？", "opts": ["阿明對老陳有保險利益", "老陳對阿明有保險利益", "兩人互有保險利益", "兩人互無保險利益"], "ans": 0, "why": "第16條第2款：生活費所仰給之人。阿明的生活費靠老陳供給，阿明（要保人）對老陳有保險利益。反過來老陳是提供者，不在第2款內。"}, {"ref": "16", "q": "張三是要保人，下列何者的生命或身體，張三沒有被第16條列為有保險利益？", "opts": ["張三本人", "欠張三錢的王老五", "借錢給張三的李四", "張三的配偶"], "ans": 2, "why": "李四是借錢給張三的債權人，張三是李四的債務人，反過來。第16條第3款列的是要保人的『債務人』（欠要保人錢的人），不是要保人的債權人。"}, {"ref": "17", "q": "要保人對保險標的物沒有保險利益時，保險法第17條規定契約怎麼樣？", "opts": ["失其效力", "自始無效", "得撤銷", "效力不受影響"], "ans": 0, "why": "第17條用語是『失其效力』。『無效』是另外的條文用語（例如第105條）。"}, {"ref": "3", "q": "依第3條，下列哪一項不是要保人的要件？", "opts": ["對保險標的有保險利益", "向保險人申請訂立契約", "負有交付保險費義務", "於保險事故發生時遭受損害"], "ans": 3, "why": "『保險事故發生時遭受損害、享有賠償請求權』是被保險人的定義（第4條），不是要保人的要件。"}, {"ref": "8", "q": "依保險法，『基於被保險人之利益，洽訂保險契約並收取佣金或報酬』的人是？", "opts": ["保險代理人", "保險經紀人", "保險業務員", "保險公證人"], "ans": 1, "why": "第9條：保險經紀人基於被保險人之利益洽訂契約，收取佣金或報酬。代理人是向保險人收取費用並代理經營業務（第8條）。"}], "chNo": "01", "summary": "保險契約裡誰是誰：保險人、要保人、被保險人、受益人，以及人身保險最核心的「保險利益」。情境題最愛考：誰對誰有保險利益、契約會不會失效。", "scope": "收錄保險法第1、2、3、4、5、8、8-1、9、13、16、16-1、17、18條。", "nav": {"prev": null, "next": {"file": "ch02.html", "label": "第2章 保險契約：成立、告知義務與時效"}}}</script>
 <script>const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -151,10 +163,92 @@ function step(d){const i=TABS.findIndex(t=>t[0]===curTab)+d;
   if(i>=TABS.length){if(N.next)location.href=N.next.file+'#read';return}
   show(TABS[i][0])}
 let sx=0,sy=0,skip=false;
-document.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;const el=e.target&&e.target.nodeType===1?e.target:(e.target&&e.target.parentElement);skip=!!(el&&el.closest('.tw,nav,input,.off'))},{passive:true});
+document.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;const el=e.target&&e.target.nodeType===1?e.target:(e.target&&e.target.parentElement);skip=!!(el&&el.closest('.tw,nav,input,.off,#cap'))},{passive:true});
 document.addEventListener('touchend',e=>{if(skip)return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>70&&Math.abs(dy)<45){step(dx<0?1:-1)}},{passive:true});
-document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1)});
+document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select'))return;if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1)});
 // 深層連結
 function route(){const h=(location.hash||'#read').slice(1).split('/');show(TABS.some(t=>t[0]===h[0])?h[0]:'read',h[1]?decodeURIComponent(h[1]):null)}
 window.addEventListener('hashchange',route);route();
+</script>
+<script>// 語音：導覽列多一顆「🎧 語音」鈕，按下就從頭播放；畫面上方只留最後兩行字幕（固定高度，不會推動下面的頁面）。
+// 再按一次＝暫停／繼續；點字幕也一樣；字幕右側的 ✕ 關閉。播完一段自動接下一段。
+// 資料來自 mp3/timing/chNN.js（window.AUDIO_TIMING），由 make_timing.py 產生；沒有這個檔就不會出現「語音」鈕。
+(function(){
+const T=window.AUDIO_TIMING;
+if(!T||!T.segments||!T.segments.length)return;
+const BASE='mp3',segs=T.segments,au=document.getElementById('au');
+const cap=document.getElementById('cap'),rowA=document.getElementById('cap-a'),rowB=document.getElementById('cap-b'),top=document.getElementById('top');
+const SP={F:'主持人',M:'專家'},PUNC='，、：；。！？';
+let si=-1,lines=[],li=-2,started=false,raf=0,endTimer=0;
+
+// ---- 按鈕 ----
+const btn=document.createElement('button');
+btn.id='au-btn';btn.type='button';btn.textContent='🎧 語音';btn.setAttribute('aria-pressed','false');btn.title='按下開始聽這一章的語音重點';
+nav.appendChild(btn);
+function label(){btn.textContent=!started?'🎧 語音':(au.paused?'▶ 語音':'⏸ 語音');btn.setAttribute('aria-pressed',started?'true':'false')}
+
+// ---- 字幕斷行：依目前寬度，把每句切成一行一行 ----
+const fontPx=()=>parseFloat(getComputedStyle(rowB).fontSize)||17;
+const cw=(s,f)=>{let w=0;for(const c of s)w+=c.charCodeAt(0)<128?f*0.56:f;return w};
+function wrap(text,lim0,lim,f){
+  const parts=text.match(new RegExp('[^'+PUNC+']+['+PUNC+']*|['+PUNC+']+','g'))||[text];
+  const out=[];let cur='',w=0,lim_=lim0;
+  const push=()=>{if(cur){out.push(cur);cur='';w=0;lim_=lim}};
+  for(const p of parts){
+    const pw=cw(p,f);
+    if(w+pw<=lim_){cur+=p;w+=pw;continue}
+    push();
+    if(pw<=lim_){cur=p;w=pw;continue}
+    for(const c of p){const x=cw(c,f);if(w+x>lim_)push();cur+=c;w+=x}
+  }
+  push();return out;
+}
+function buildLines(){
+  lines=[];if(si<0)return;
+  const s=segs[si],f=fontPx(),avail=Math.max(120,(rowB.clientWidth||cap.clientWidth||300)-2);let prevSpk=null;
+  s.cues.forEach((c,k)=>{
+    const t0=c.t,t1=k+1<s.cues.length?s.cues[k+1].t:s.dur;
+    const span=Math.max(0.4,t1-t0-0.7);                       // 句尾約有 0.7 秒停頓，不分給字
+    const badge=c.spk!==prevSpk;prevSpk=c.spk;
+    const bw=badge?SP[c.spk].length*12+18:0;                   // 說話者小標籤的寬度（12px 字＋留白）
+    const ls=wrap(c.text,avail-bw,avail,f),ws=ls.map(x=>Math.max(1,cw(x,f))),tot=ws.reduce((a,b)=>a+b,0);
+    let acc=0;ls.forEach((x,j)=>{lines.push({t:t0+span*acc/tot,spk:c.spk,badge:badge&&j===0,text:x});acc+=ws[j]});
+  });
+}
+const esc2=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const rowHTML=l=>l?(l.badge?'<span class="sp '+l.spk+'">'+SP[l.spk]+'</span>':'')+esc2(l.text):'';
+function paint(){
+  const t=au.currentTime;let j=-1;
+  for(let k=0;k<lines.length;k++){if(lines[k].t<=t+0.05)j=k;else break}
+  if(j===li)return;li=j;
+  rowA.innerHTML=rowHTML(lines[j-1]);rowB.innerHTML=rowHTML(lines[j]);
+}
+function tick(){paint();raf=au.paused?0:requestAnimationFrame(tick)}
+
+// ---- 播放 ----
+const nice=t=>String(t).replace(/_/g,' ');
+function meta(){if('mediaSession' in navigator&&window.MediaMetadata&&si>=0)navigator.mediaSession.metadata=new MediaMetadata({title:nice(segs[si].title),artist:D.chapter+' '+D.title,album:'考試複習語音'})}
+function pad(){document.documentElement.style.scrollPaddingTop=cap.hidden?'':(top.offsetHeight+8)+'px'}
+function setSrc(i){if(si===i)return;si=i;li=-2;rowA.innerHTML=rowB.innerHTML='';au.src=encodeURI(BASE+'/'+segs[i].file);au.load();au.playbackRate=1;buildLines();meta()}
+function playSeg(i){
+  setSrc(i);
+  const go=()=>{buildLines();au.play().catch(()=>{})};
+  if(au.readyState>=1)go();else au.addEventListener('loadedmetadata',go,{once:true});
+}
+function start(){clearTimeout(endTimer);started=true;cap.hidden=false;pad();si=-1;playSeg(0)}
+function stop(){clearTimeout(endTimer);au.pause();started=false;si=-1;lines=[];li=-2;cap.hidden=true;rowA.innerHTML=rowB.innerHTML='';pad();label()}
+function toggle(){if(!started)start();else if(au.paused)au.play().catch(()=>{});else au.pause()}
+btn.onclick=toggle;
+cap.addEventListener('click',e=>{if(e.target.closest('#cap-x'))stop();else toggle()});
+au.addEventListener('play',()=>{label();cancelAnimationFrame(raf);raf=requestAnimationFrame(tick)});
+au.addEventListener('pause',label);
+au.addEventListener('seeked',paint);
+au.addEventListener('ended',()=>{
+  if(si<segs.length-1)playSeg(si+1);
+  else{started=false;label();endTimer=setTimeout(()=>{if(!started)stop()},2500)}   // 全部播完，字幕停 2.5 秒後自動收起
+});
+au.addEventListener('error',()=>{rowA.textContent='';rowB.textContent='找不到音檔（'+BASE+'/'+(segs[si]?segs[si].file:'')+'）'});
+let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(si>=0){buildLines();li=-2;paint();pad()}},150)});
+if('mediaSession' in navigator){[['play',()=>au.play()],['pause',()=>au.pause()],['previoustrack',()=>started&&playSeg(Math.max(0,si-1))],['nexttrack',()=>started&&si<segs.length-1&&playSeg(si+1)]].forEach(([a,f])=>{try{navigator.mediaSession.setActionHandler(a,f)}catch(e){}})}
+})();
 </script></body></html>
