@@ -1,0 +1,66 @@
+# 每日自動更新「每週市場總覽」的數據（報價、價格、利率、econ 因子、總經、行事曆、新聞標題）。
+# 放在 repo 根目錄的 .github/workflows/update-market.yml。
+#
+# 只更新「機器抓得到的數據」。結論、央行態度、新聞影響、風險事件這些判斷文字
+# 仍來自 data/raw/manual.json，需要你或 Claude 另外更新；頁面會標示判斷文字的撰寫日期。
+
+name: 更新市場數據
+
+on:
+  schedule:
+    # cron 用 UTC；台灣 = UTC+8。避開整點以免排隊延遲。
+    - cron: "37 22 * * 1-5"   # 台灣週二～週六 06:37：美股收盤後（含前一晚美股、夜盤）
+    - cron: "7 8 * * 1-5"     # 台灣週一～週五 16:07：台股收盤後（法人買賣超、台幣收盤）
+  workflow_dispatch: {}       # Actions 頁面可以手動按「Run workflow」
+
+# 網站資料夾在 repo 裡的位置；網站在 repo 根目錄就填 "."
+env:
+  SITE_DIR: code/util/eco-dashboard
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-market
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 抓資料並重建 weekly.json
+        env:
+          PYTHONUTF8: "1"
+          # 到 repo 的 Settings → Secrets and variables → Actions 新增 FRED_API_KEY
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          cd "$SITE_DIR"
+          set +e
+          python scripts/update_data.py --fetch
+          rc=$?
+          # 0＝全部成功；2＝網站已更新但部分來源失敗（照樣提交，失敗訊息留在記錄裡）；其他＝失敗
+          if [ "$rc" != "0" ] && [ "$rc" != "2" ]; then exit "$rc"; fi
+
+      - name: 有新數據才提交
+        run: |
+          cd "$SITE_DIR"
+          if git diff --quiet -- data/raw && [ -z "$(git ls-files --others --exclude-standard data/raw)" ]; then
+            echo "原始數據沒有變化（例如休市日），不提交。"
+            git checkout -- data
+            git clean -fdq -- data
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A data
+          git commit -m "chore(data): 自動更新 $(TZ=Asia/Taipei date '+%Y-%m-%d %H:%M')"
+          # 與手動 push 撞到時先同步再推
+          git pull --rebase --autostash
+          git push
