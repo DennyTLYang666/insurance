@@ -36,5 +36,15 @@
     return `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}`;
   }
 
-  WM.fmt = { MINUS, esc, pct, num, signClass, cell, dateTime };
+  /** ISO 8601 → 2026-10-28（台北日期） */
+  function dateOnly(iso) { return dateTime(iso).slice(0, 10); }
+  const utc = (s) => { const [y, m, d] = String(s).slice(0, 10).split("-").map(Number); return Date.UTC(y, m - 1, d); };
+  /** 兩個 YYYY-MM-DD 相差幾天（b − a） */
+  const daysBetween = (a, b) => Math.round((utc(b) - utc(a)) / 86400000);
+  const addDays = (s, n) => new Date(utc(s) + n * 86400000).toISOString().slice(0, 10);
+  const WD = ["日", "一", "二", "三", "四", "五", "六"];
+  const weekday = (s) => WD[new Date(utc(s)).getUTCDay()];
+  const md = (s) => { const [, m, d] = String(s).split("-"); return Number(m) + "/" + Number(d); };
+
+  WM.fmt = { MINUS, esc, pct, num, signClass, cell, dateTime, dateOnly, daysBetween, addDays, weekday, md };
 })();

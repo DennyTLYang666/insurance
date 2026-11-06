@@ -1,0 +1,109 @@
+//@version=6
+indicator("YAML_EA 宏觀環境燈號", shorttitle="YEA-宏觀", overlay=false, max_bars_back=500)
+
+// ════════════════════════════════════════════════════════════════════
+//  宏觀環境燈號（TradingView 補充版；完整看板＝tools/econ/econ_dashboard.html）
+//  【未在 TradingView 編譯驗證】貼上後若有編譯錯誤，把錯誤訊息貼回來即可。
+//
+//  做什麼：對圖表上的產品（例：XAUUSD、GBPUSD），看 5 個宏觀數列（預設：美元指數、美債 10 年、2 年、VIX、英債 10 年）
+//   1. 20 根 K 趨勢：現值高於 20 均線且均線上揚＝上行；低於且下行＝下行；其他＝橫盤
+//   2. 近 60／250 根「變化」的滾動相關（用報酬／變動，不用價位）
+//   3. 偏多／偏空＝趨勢方向 × 近 250 根相關的正負；相關絕對值 < 門檻不計
+//   4. 宏觀分數＝有效數列平均（+1 全偏多 / −1 全偏空），下方柱狀圖；±0.34 為燈號門檻
+//   5. 60 根相關偏離自己近 250 根均值 1.5 個標準差 → 「⚠ 偏離」（老規律可能失效）
+//  請放在「日線」使用（週期不是日線時，表格會提醒）。規則式、非預測，也不是進出場訊號。
+//  不含：CPI／非農等公告事件的實際反應統計（TradingView 版做不了，請用本機看板）。
+// ════════════════════════════════════════════════════════════════════
+
+minCorr = input.float(0.15, "相關絕對值門檻（低於不計分）", minval = 0.0, maxval = 0.9, step = 0.05)
+lightTh = input.float(0.34, "燈號門檻（|分數| ≥ 此值）", minval = 0.1, maxval = 1.0, step = 0.05)
+
+g1 = "數列 1"
+n1 = input.string("美元指數", "名稱", group = g1)
+s1 = input.symbol("TVC:DXY", "代碼", group = g1)
+p1 = input.string("報酬%", "變化方式", options = ["報酬%", "差值"], group = g1)
+g2 = "數列 2"
+n2 = input.string("美債10年", "名稱", group = g2)
+s2 = input.symbol("TVC:US10Y", "代碼", group = g2)
+p2 = input.string("差值", "變化方式", options = ["報酬%", "差值"], group = g2)
+g3 = "數列 3"
+n3 = input.string("美債2年", "名稱", group = g3)
+s3 = input.symbol("TVC:US02Y", "代碼", group = g3)
+p3 = input.string("差值", "變化方式", options = ["報酬%", "差值"], group = g3)
+g4 = "數列 4"
+n4 = input.string("VIX", "名稱", group = g4)
+s4 = input.symbol("TVC:VIX", "代碼", group = g4)
+p4 = input.string("報酬%", "變化方式", options = ["報酬%", "差值"], group = g4)
+g5 = "數列 5"
+n5 = input.string("英債10年", "名稱", group = g5)
+s5 = input.symbol("TVC:GB10Y", "代碼", group = g5)
+p5 = input.string("差值", "變化方式", options = ["報酬%", "差值"], group = g5)
+
+// 每個數列：[現值, 趨勢方向, 60根相關, 250根相關, 是否偏離, 偏多偏空(+1/0/-1), 20根變化, 是否有效]
+f_slot(string sym, bool isPct) =>
+    float x = request.security(sym, timeframe.period, close, ignore_invalid_symbol = true)
+    float prevX = nz(x[1], x)
+    float rx = isPct ? (prevX != 0 ? (x - prevX) / prevX : na) : x - prevX
+    float ry = close[1] != 0 ? (close - close[1]) / close[1] : na
+    float c60 = ta.correlation(rx, ry, 60)
+    float c250 = ta.correlation(rx, ry, 250)
+    float sm = ta.sma(x, 20)
+    int dir = x > sm and sm > sm[5] ? 1 : x < sm and sm < sm[5] ? -1 : 0
+    float cAvg = ta.sma(c60, 250)
+    float cSd = ta.stdev(c60, 250)
+    bool drift = not na(cSd) and cSd > 0 and math.abs(c60 - cAvg) > 1.5 * cSd
+    bool valid = not na(c250) and math.abs(c250) >= minCorr
+    float bias = valid ? dir * math.sign(c250) : 0.0
+    float chg20 = isPct ? (x / x[20] - 1) * 100 : x - x[20]
+    [x, dir, c60, c250, drift, bias, chg20, valid ? 1 : 0]
+
+[x1, d1, a1, b1, f1, bi1, ch1, v1] = f_slot(s1, p1 == "報酬%")
+[x2, d2, a2, b2, f2, bi2, ch2, v2] = f_slot(s2, p2 == "報酬%")
+[x3, d3, a3, b3, f3, bi3, ch3, v3] = f_slot(s3, p3 == "報酬%")
+[x4, d4, a4, b4, f4, bi4, ch4, v4] = f_slot(s4, p4 == "報酬%")
+[x5, d5, a5, b5, f5, bi5, ch5, v5] = f_slot(s5, p5 == "報酬%")
+
+int validN = v1 + v2 + v3 + v4 + v5
+float score = validN > 0 ? (bi1 + bi2 + bi3 + bi4 + bi5) / validN : 0.0
+
+hline(0, "0", color = color.gray)
+hline(lightTh, "偏多門檻", color = color.new(color.teal, 60), linestyle = hline.style_dotted)
+hline(-lightTh, "偏空門檻", color = color.new(color.red, 60), linestyle = hline.style_dotted)
+plot(score, "宏觀分數", style = plot.style_columns, color = score >= lightTh ? color.teal : score <= -lightTh ? color.red : color.gray)
+
+// ── 表格 ──
+f_sg(float v) =>
+    na(v) ? "—" : (v >= 0 ? "+" : "") + str.tostring(v, "#.##")
+
+var table tb = table.new(position.top_right, 7, 8, border_width = 1)
+f_row(int r, string nm, float x, int dir, float c60, float c250, bool drift, float bias, float chg20) =>
+    color tc = color.new(color.gray, 0)
+    table.cell(tb, 0, r, nm, text_color = tc, text_halign = text.align_left)
+    table.cell(tb, 1, r, na(x) ? "無資料" : str.tostring(x, "#.###"), text_color = tc)
+    table.cell(tb, 2, r, dir > 0 ? "▲" : dir < 0 ? "▼" : "▬", text_color = dir > 0 ? color.teal : dir < 0 ? color.red : tc)
+    table.cell(tb, 3, r, f_sg(chg20), text_color = tc)
+    table.cell(tb, 4, r, f_sg(c60), text_color = drift ? color.orange : tc)
+    table.cell(tb, 5, r, f_sg(c250), text_color = tc)
+    table.cell(tb, 6, r, bias > 0 ? "偏多" : bias < 0 ? "偏空" : "中性", text_color = bias > 0 ? color.teal : bias < 0 ? color.red : tc)
+
+if barstate.islast
+    table.cell(tb, 0, 0, "數列", text_color = color.gray, text_halign = text.align_left)
+    table.cell(tb, 1, 0, "現值", text_color = color.gray)
+    table.cell(tb, 2, 0, "趨勢", text_color = color.gray)
+    table.cell(tb, 3, 0, "20根變化", text_color = color.gray)
+    table.cell(tb, 4, 0, "相關60", text_color = color.gray)
+    table.cell(tb, 5, 0, "相關250", text_color = color.gray)
+    table.cell(tb, 6, 0, "對" + syminfo.ticker, text_color = color.gray)
+    f_row(1, n1, x1, d1, a1, b1, f1, bi1, ch1)
+    f_row(2, n2, x2, d2, a2, b2, f2, bi2, ch2)
+    f_row(3, n3, x3, d3, a3, b3, f3, bi3, ch3)
+    f_row(4, n4, x4, d4, a4, b4, f4, bi4, ch4)
+    f_row(5, n5, x5, d5, a5, b5, f5, bi5, ch5)
+    string lab = score >= lightTh ? "偏多" : score <= -lightTh ? "偏空" : "中性"
+    color lc = score >= lightTh ? color.teal : score <= -lightTh ? color.red : color.gray
+    table.cell(tb, 0, 6, "宏觀分數", text_color = lc, text_halign = text.align_left)
+    table.cell(tb, 1, 6, f_sg(score) + " " + lab + "（" + str.tostring(validN) + " 個有效）", text_color = lc)
+    table.merge_cells(tb, 1, 6, 6, 6)
+    string warn = timeframe.period != "D" ? "⚠ 建議在日線使用（目前 " + timeframe.period + "）" : "橙色相關＝60根偏離250根均值 >1.5σ（老規律可能失效）"
+    table.cell(tb, 0, 7, warn, text_color = color.orange, text_halign = text.align_left)
+    table.merge_cells(tb, 0, 7, 6, 7)

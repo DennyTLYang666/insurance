@@ -18,6 +18,7 @@
     if (instances[key]) { instances[key].destroy(); delete instances[key]; }
     const canvas = document.getElementById(r.canvasId);
     if (!canvas) return;
+    if (!canvas.getClientRects().length) return;  // 所在區塊收合中：展開時再由 flush() 補畫
     if (!window.Chart) {  // CDN 載入失敗（離線等）：保留文字摘要
       const box = canvas.parentElement;
       box.style.height = "auto";
@@ -37,6 +38,7 @@
     draw(key);
   }
   const redraw = () => Object.keys(registry).forEach(draw);          // 切換深淺色時重畫
+  const flush = () => Object.keys(registry).forEach((k) => { if (!instances[k]) draw(k); });  // 區塊展開後補畫
   function destroyAll() {                                            // 換週次重畫整頁前清空
     Object.keys(instances).forEach((k) => instances[k].destroy());
     Object.keys(instances).forEach((k) => delete instances[k]);
@@ -147,5 +149,5 @@
     });
   }
 
-  WM.charts = { show, redraw, destroyAll, builders: { rank, trend, countries, quote } };
+  WM.charts = { show, redraw, flush, destroyAll, builders: { rank, trend, countries, quote } };
 })();

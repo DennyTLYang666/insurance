@@ -30,11 +30,15 @@
     if (index) { $("history-select").value = cutoff; $("history-latest").disabled = !old; }
   }
 
+  let current = "";
   async function show(cutoff) {
+    current = cutoff;
     $("load-error").hidden = true;
     try {
       const data = await WM.loader.json(pathFor(cutoff));
+      WM.state = { data };
       WM.sections.renderAll(data);
+      WM.charts.flush();
       updateHistoryUi(data, cutoff);
       syncUrl(cutoff);
       document.title = "每週市場總覽 " + data.meta.data_cutoff;
@@ -53,6 +57,7 @@
   }
 
   async function start() {
+    WM.modes.init();
     WM.initTabs();
     try { index = await WM.loader.json("data/history/index.json"); } catch (e) { index = null; }  // 歷史索引可有可無
     if (index && (!index.weeks || !index.weeks.length)) index = null;
@@ -65,5 +70,8 @@
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     (mq.addEventListener ? mq.addEventListener.bind(mq, "change") : mq.addListener.bind(mq))(() => WM.charts.redraw());
   }
+  WM.reload = () => show(current);
+  WM.isLatest = () => !index || current === index.latest;
   start();
+  WM.live.init();
 })();

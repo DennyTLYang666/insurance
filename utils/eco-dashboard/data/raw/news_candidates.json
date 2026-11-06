@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-03T00:44:10+08:00",
+  "fetched_at": "2026-11-03T15:37:22+08:00",
   "note": "僅標題與連結；摘要與影響方向由人工／Claude 撰寫後放入 manual.json 的 news",
   "items": [
     {
@@ -99,13 +99,6 @@
       "source_type": "官方",
       "title": "Frank Elderson: Taking action for nature – investing in economic resilience and prosperity",
       "url": "https://www.ecb.europa.eu//press/key/date/2026/html/ecb.sp261026~d903d7ad85.en.html"
-    },
-    {
-      "published_at": "2026-10-24T14:00:00+08:00",
-      "source": "歐洲央行",
-      "source_type": "官方",
-      "title": "Piero Cipollone: Interview with Milano Finanza",
-      "url": "https://www.ecb.europa.eu//press/inter/date/2026/html/ecb.in261024~ee2ba73cf3.en.html"
     }
   ]
 }
