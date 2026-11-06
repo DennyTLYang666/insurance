@@ -149,7 +149,7 @@ window.ECO = window.ECO || {};
     const snippet = JSON.stringify({ co: co, k: key });
     ECO.dialog.open(o.n, '<dl class="dgrid">' + rows.map((r) => "<div><dt>" + r[0] + "</dt><dd>" + r[1] + "</dd></div>").join("") + "</dl>" +
       '<p class="links">' + ECO.news.link(ECO.news.gUrl(o.n), "Google 新聞：基金名稱") + " " + ECO.news.link("https://www.google.com/search?q=" + encodeURIComponent(o.n + " 基金 配息 績效"), "Google 搜尋") + " " + ECO.news.link(SITE[co], CO[co] + "官網基金快搜") + "</p>" +
-      '<p class="mut">要長期追蹤這檔：把下面這段加進 <code>config/fund_watch.json</code> 的 <code>watch</code> 清單，之後每次更新都會累積淨值走勢。</p>' +
+      '<p class="mut">要長期追蹤這檔：把下面這段加進資料站 eco-data 的 <code>config/fund_watch.json</code>（<code>watch</code> 清單），之後每次更新都會累積淨值走勢。</p>' +
       '<div class="copy"><code>' + esc(snippet) + '</code><button type="button" data-copy="' + esc(snippet) + '">複製</button></div>' +
       '<p class="mut">資料為官網公布的數字整理，報酬不代表未來表現，不是投資建議。</p>');
   }
