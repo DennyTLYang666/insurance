@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """把序列資料算成網站要的 JSON（概覽、趨勢、總經、燈號、行事曆）。純函式，不做網路與檔案存取。"""
+import re
 from collections import Counter
 from datetime import date, timedelta
 
+from . import events as events_mod
 from . import lights
 
 CHART_DAYS = 260  # 趨勢圖保留的交易日數（約 1 年）
@@ -124,16 +126,17 @@ def build_highlights(T, events, macro=()):
     """每則：tag 標籤、text 文字、sub 屬於概覽哪個小分頁、link 趨勢頁連結。"""
     out = []
 
-    def add(tag, text, sub, link):
-        out.append({"tag": tag, "text": text, "sub": sub, "link": link})
+    def add(tag, text, sub, link, hot=False):
+        # hot＝值得第一眼就看到；其餘預設收起來（前端可展開）
+        out.append({"tag": tag, "text": text, "sub": sub, "link": link, "hot": bool(hot)})
 
     us = [T[i] for i in ("dji", "spx", "ixic", "sox") if i in T]
     if us:
-        add("美股", "%s 收：%s" % (md(us[0]["date"]), "、".join(_mv(t) for t in us)), "stocks", "#trends/stocks")
+        add("美股", "%s 收：%s" % (md(us[0]["date"]), "、".join(_mv(t) for t in us)), "stocks", "#trends/stocks", True)
     ai = sorted([T[i] for i in ("tsm", "nvda", "amd", "mu") if i in T and abs(T[i]["chg"]) >= 4], key=lambda t: t["chg"])
     if ai:
         ai = ai if ai[0]["chg"] < 0 else ai[::-1]
-        add("AI 供應鏈", "、".join(_mv(t) for t in ai[:4]) + "（單日幅度 4% 以上）", "stocks", "#trends/stocks")
+        add("AI 供應鏈", "、".join(_mv(t) for t in ai[:4]) + "（單日幅度 4% 以上）", "stocks", "#trends/stocks", True)
     tw = T.get("twii")
     if tw:
         s = "台股加權 %s（%s）" % (nv(tw["value"], 2), sp(tw["chg"]))
@@ -147,20 +150,21 @@ def build_highlights(T, events, macro=()):
         # 美股收盤在台股收盤之後：ADR 的日期不早於台股台積電，代表這段漲跌台股還沒反映
         if tsm and t2330 and tsm["date"] >= t2330["date"] and abs(tsm["chg"]) >= 3:
             s += "；台積電 ADR %s（美股 %s 收），台股台積電 %s 收 %s，尚未反映" % (sp(tsm["chg"]), md(tsm["date"]), md(t2330["date"]), nv(t2330["value"], 0))
-        add("台股", s, "stocks", "#trends/stocks")
+        add("台股", s, "stocks", "#trends/stocks", True)
     asia = [T[i] for i in ("n225", "ks11", "hsi", "sse", "sensex", "dax") if i in T]
     if len(asia) >= 3:
         hi, lo = _best_worst(asia, 1)
-        add("亞歐股市", "最強 %s；最弱 %s；其餘 %s" % (_mv(hi[0]), _mv(lo[0]), "、".join(_mv(t) for t in asia if t not in (hi[0], lo[0]))), "stocks", "#trends/stocks")
+        add("亞歐股市", "最強 %s；最弱 %s；其餘 %s" % (_mv(hi[0]), _mv(lo[0]), "、".join(_mv(t) for t in asia if t not in (hi[0], lo[0]))), "stocks", "#trends/stocks",
+            max(abs(hi[0]["chg"]), abs(lo[0]["chg"])) >= 3)
 
     if "usdtwd" in T:
         u = T["usdtwd"]
         s = "美元兌台幣 %s（%s，%s）" % (nv(u["value"], 3), sp(u["chg"]), "台幣貶值" if u["chg"] > 0.05 else "台幣升值" if u["chg"] < -0.05 else "大致持平")
-        cross = [T[i] for i in T if i.startswith("twd_")]
+        cross = [T[i] for i in T if T[i]["group"] == "twd" and i.startswith("twd_")]
         if cross:
             hi, lo = _best_worst(cross, 1)
             s += "；1 單位外幣換台幣：%s 最強、%s 最弱" % (_mv(hi[0]), _mv(lo[0]))
-        add("新台幣", s, "fx", "#trends/fx")
+        add("新台幣", s, "fx", "#trends/fx", abs(u["chg"]) >= 0.4)
     fx = [T[i] for i in T if T[i]["group"] == "fx"]
     if fx:
         dxy = T.get("dxy")
@@ -171,7 +175,11 @@ def build_highlights(T, events, macro=()):
         elif s:
             s += "；其他主要貨幣單日波動都在 0.6% 以內"
         if s:
-            add("國際匯率", s, "fx", "#trends/fx")
+            add("國際匯率", s, "fx", "#trends/fx", bool(big))
+    cry = [T[i] for i in ("twd_btc", "twd_eth", "twd_sol", "twd_usdt") if i in T]
+    if cry:
+        s = "；".join("%s %s（%s）" % (t["short"], nv(t["value"], t["dec"]), sp(t["chg"])) for t in cry) + "（美元報價×美元兌台幣）"
+        add("加密貨幣", s, "fx", "#trends/fx", any(abs(t["chg"]) >= 5 for t in cry if t["id"] != "twd_usdt"))
 
     if "us10y" in T:
         bits = ["美債 10 年 %s%%（%s）" % (nv(T["us10y"]["value"], 2), sp(T["us10y"]["chg"], 2, " pp"))]
@@ -181,25 +189,26 @@ def build_highlights(T, events, macro=()):
                 bits.append("%s利差 %s（%s）" % (name, sp(spr, 2, " pp"), "倒掛" if spr < 0 else "正斜率"))
         if "us30y" in T and "us3m" in T:
             bits.append("短端（3 個月）%s%%、長端（30 年）%s%%" % (nv(T["us3m"]["value"], 2), nv(T["us30y"]["value"], 2)))
-        add("美債利率", "；".join(bits), "rates", "#trends/rates")
+        add("美債利率", "；".join(bits), "rates", "#trends/rates", abs(T["us10y"]["chg"]) >= 0.08)
     risk = [T[i] for i in ("vix", "vxn", "move", "ovx", "gvz", "skew", "vvix") if i in T]
     if risk:
         bits = ["%s %s（%s）" % (t["short"], nv(t["value"], 1), sp(t["chg"], 0)) for t in risk if t["id"] in ("vix", "vxn", "move") or abs(t["chg"]) >= 8]
         if "hyoas" in T:
             bits.append("高收益債利差 %s%%（%s）" % (nv(T["hyoas"]["value"], 2), sp(T["hyoas"]["chg"], 2, " pp")))
-        add("市場風險", "；".join(bits), "rates", "#trends/risk")
+        vx = T.get("vix")
+        add("市場風險", "；".join(bits), "rates", "#trends/risk", bool(vx and (vx["value"] >= 25 or vx["chg"] >= 15)))
 
     g, sv, b, w = T.get("xauusd"), T.get("silver"), T.get("brent"), T.get("wti")
     if any(t and abs(t["chg"]) >= th for t, th in ((g, 2), (sv, 3), (b, 3), (w, 3))):
         s = "；".join("%s %s（%s）" % (t["short"], nv(t["value"], 2), sp(t["chg"])) for t in (g, sv, b, w) if t)
         if g and sv and sv["value"]:
             s += "；金銀比 %s" % nv(g["value"] / sv["value"], 1)
-        add("商品", s, "cmd", "#trends/cmd")
+        add("商品", s, "cmd", "#trends/cmd", True)
 
     fund = [t for t in T.values() if t["group"].startswith("f_")]
     if len(fund) >= 6:
         hi, lo = _best_worst(fund, 3)
-        add("基金類別", "今日較強：%s；較弱：%s（用代理 ETF 看各類資產）" % ("、".join(_mv(t) for t in hi), "、".join(_mv(t) for t in lo)), "funds", "#funds/common")
+        add("基金類別", "今日較強：%s；較弱：%s（用代理 ETF 看各類資產）" % ("、".join(_mv(t) for t in hi), "、".join(_mv(t) for t in lo)), "funds", "#funds/common", False)
 
     if macro:
         ranked = sorted(macro, key=lambda m: m["score"])
@@ -207,12 +216,12 @@ def build_highlights(T, events, macro=()):
         good = [m for m in ranked[::-1] if m["verdict"] == "好"][:2]
         bits = ["%s %s（前值 %s）" % (m["name"], _mfmt(m, m["value"]), _mfmt(m, m["prev"])) for m in bad + good]
         if bits:
-            add("美國總經", "較差：%s；較好：%s" % ("、".join(bits[:len(bad)]) or "無", "、".join(bits[len(bad):]) or "無"), "all", "#trends/macro")
+            add("美國總經", "較差：%s；較好：%s" % ("、".join(bits[:len(bad)]) or "無", "、".join(bits[len(bad):]) or "無"), "all", "#trends/macro", False)
     if events:
         e = events[0]
         when = ("%s %s" % (md(e["date"]), e.get("time") or "")).strip()
         who = "" if e["event"].startswith(e["country"]) else e["country"]
-        add("接下來", "%s %s%s" % (when, who, e["event"]), "all", "#trends/cal")
+        add("接下來", "%s %s%s" % (when, who, e["event"]), "all", "#trends/cal", True)
     return out
 
 
@@ -331,56 +340,126 @@ def _mom(rows):
     return [(rows[i][0], (rows[i][1] / rows[i - 1][1] - 1) * 100) for i in range(1, len(rows)) if rows[i - 1][1]]
 
 
-def build_macro(fred, calendar, today):
+def _num(s):
+    """'3.7%'、'65K'、'-0.1%'、'1,234' → 數字；空白或看不懂回傳 None。"""
+    m = re.match(r"^\s*([-+\u2212]?[\d,]*\.?\d+)", str(s or ""))
+    if not m:
+        return None
+    try:
+        return float(m.group(1).replace(",", "").replace("\u2212", "-"))
+    except ValueError:
+        return None
+
+
+def _cal_hit(e, spec):
+    """行事曆事件是否符合 [國別, 標題正規表示式]。標題用英文原文（title），舊快取沒有就用中文名稱。"""
+    return bool(spec) and e["country"] == spec[0] and bool(re.search(spec[1], (e.get("title") or e["event"]).lower()))
+
+
+def update_cal_series(fred, calendar, intl):
+    """把行事曆上「已公布」的數字累積成序列（fred 字典的 CAL_<指標>）。第一次看到某指標時，
+    補一筆「前值」當作上一期，讓卡片一開始就能比較。"""
+    for ind in (intl or {}).get("indicators", []):
+        if ind.get("src") != "cal":
+            continue
+        sid = "CAL_" + ind["id"]
+        by = dict(fred.get(sid) or [])
+        had = bool(by)
+        for e in calendar:
+            if e.get("source") == "manual" or not _cal_hit(e, ind["cal"]):
+                continue
+            v = _num(e.get("actual"))
+            if v is None:
+                continue
+            d = date.fromisoformat(e["date"])
+            by[d] = v
+            pv = _num(e.get("previous"))
+            if not had and pv is not None:
+                by.setdefault(d - timedelta(days=31), pv)
+                had = True
+        if by:
+            fred[sid] = sorted(by.items())
+
+
+def _macro_rows(how, raw):
+    if how == "yoy":
+        return _yoy(raw)
+    if how == "mom":
+        return _mom(raw)
+    if how == "chg":
+        return [(raw[i][0], raw[i][1] - raw[i - 1][1]) for i in range(1, len(raw))]
+    if how == "level_k":
+        return [(d, v / 1000) for d, v in raw]
+    if how == "steps":  # 利率：只留「變動那天」，避免每日重複
+        out = []
+        for d, v in raw:
+            if not out or abs(v - out[-1][1]) > 1e-9:
+                out.append((d, v))
+        return out if len(out) >= 2 else ([(out[0][0], out[0][1]), (out[0][0], out[0][1])] if out else [])
+    return raw
+
+
+def _macro_next(calendar, today, spec, keys):
+    for e in calendar:
+        if e["date"] < today.isoformat():
+            continue
+        if (spec and _cal_hit(e, spec)) or (not spec and e["country"] == "美國" and any(k in e["event"] for k in keys)):
+            return {"date": e["date"], "time": e["time"], "event": e["event"]}
+    return None
+
+
+def build_macro(fred, calendar, today, intl=None):
     out = []
-    for tid, name, how, sid, unit, dec, good, scale, rec in MACRO:
-        raw = fred.get(sid) or []
-        if how == "yoy":
-            rows = _yoy(raw)
-        elif how == "mom":
-            rows = _mom(raw)
-        elif how == "chg":
-            rows = [(raw[i][0], raw[i][1] - raw[i - 1][1]) for i in range(1, len(raw))]
-        elif how == "level_k":
-            rows = [(d, v / 1000) for d, v in raw]
-        else:
-            rows = raw
+    cn = {c["id"]: c["name"] for c in (intl or {}).get("countries", [])}
+    cn.setdefault("us", "美國")
+    items = [dict(id=t, name=n, how=h, sid=sid, unit=u, dec=d, good=g, scale=sc, rec=r, country="us", src="fred", cal=None)
+             for t, n, h, sid, u, d, g, sc, r in MACRO]
+    items += [dict(i) for i in (intl or {}).get("indicators", [])]
+    for ind in items:
+        src = ind.get("src", "fred")
+        sid = ind.get("sid") if src == "fred" else ("NDC_" if src == "ndc" else "CAL_") + ind["id"]
+        how, good, scale = ind["how"], ind["good"], ind["scale"]
+        rows = _macro_rows(how, fred.get(sid) or [])
+        nxt = _macro_next(calendar, today, ind.get("cal"), MACRO_KEYS.get(ind["id"], ()))
+        base = {"id": ind["id"], "name": ind["name"], "kind": how, "unit": ind["unit"], "dec": ind["dec"], "good": good, "rec": ind["rec"],
+                "country": ind["country"], "cname": cn.get(ind["country"], ind["country"]), "src": src, "next": nxt}
         if len(rows) < 2:
+            if src in ("cal", "ndc"):  # 還沒累積到公布值／來源暫時取不到：留一張空卡，至少看得到下次公布時間
+                out.append(dict(base, value=None, prev=None, period="", asof="", history=[], score=0, verdict="", weekly=False, empty=True))
             continue
         v, pv = rows[-1][1], rows[-2][1]
         score = good * (v - pv) / scale if good else 0.0
-        nxt = None
-        for e in calendar:
-            if e["country"] == "美國" and e["date"] >= today.isoformat() and any(k in e["event"] for k in MACRO_KEYS.get(tid, ())):
-                nxt = {"date": e["date"], "time": e["time"], "event": e["event"]}
-                break
-        out.append({"id": tid, "name": name, "kind": how, "unit": unit, "dec": dec, "value": round(v, 3), "prev": round(pv, 3),
-                    "period": rows[-1][0].isoformat()[:7], "asof": rows[-1][0].isoformat(), "next": nxt,
-                    "history": [round(x, 3) for _, x in rows[-13:]], "good": good, "rec": rec,
-                    "score": round(score, 2), "verdict": "好" if score >= 0.5 else "壞" if score <= -0.5 else "持平",
-                    "weekly": how == "level_k"})
+        out.append(dict(base, value=round(v, 3), prev=round(pv, 3), period=rows[-1][0].isoformat()[:7], asof=rows[-1][0].isoformat(),
+                        history=[round(x, 3) for _, x in rows[-13:]], score=round(score, 2),
+                        verdict="好" if score >= 0.5 else "壞" if score <= -0.5 else "持平", weekly=how == "level_k"))
     return out
 
 
 # ---------- 行事曆 ----------
-def merge_calendar(auto, manual, today):
-    out = [dict(e) for e in auto]
+def merge_calendar(auto, manual, today, ccfg=None, feeds=()):
+    """自動日曆＋手動事件＋ICS 訂閱，統一補上分類／標籤／範圍後依時間排序。"""
+    ccfg = ccfg or events_mod.load_cfg(None)
+    out = [events_mod.tag_event(dict(e), ccfg, "auto") for e in auto]
     seen = {(e["date"], e["event"]) for e in out}
     lo = (today - timedelta(days=1)).isoformat()
-    for e in manual:
-        if not e.get("date") or e["date"] < lo or (e["date"], e.get("event")) in seen:
-            continue
-        out.append({"date": e["date"], "time": e.get("time") or "", "event": e["event"], "country": e.get("country", ""),
-                    "importance": e.get("importance", "M"), "previous": "", "forecast": "", "actual": "",
-                    "note": e.get("note", ""), "source": "manual"})
+    for src, items in (("manual", manual), ("feed", feeds)):
+        for e in items:
+            if not e.get("date") or e["date"] < lo or (e["date"], e.get("event")) in seen:
+                continue
+            seen.add((e["date"], e.get("event")))
+            ev = {"date": e["date"], "time": e.get("time") or "", "event": e["event"], "country": e.get("country", ""),
+                  "importance": e.get("importance", "M"), "previous": "", "forecast": "", "actual": "",
+                  "note": e.get("note", ""), "why": e.get("why", ""), "source": e.get("source") or src,
+                  "cat": e.get("cat"), "tags": e.get("tags"), "scope": e.get("scope"), "main": e.get("main")}
+            out.append(events_mod.tag_event(ev, ccfg, "manual"))
     out.sort(key=lambda e: (e["date"], e["time"] or "99:99"))
     return out
 
 
 # ---------- 總組裝 ----------
-def build_all(cfg, daily, fred, auto_events, manual_events, status, today):
+def build_all(cfg, daily, fred, auto_events, manual_events, status, today, ccfg=None, feeds=(), intl=None):
     """status：{標的 id: {"ok": bool, "error": str, "day_high"…}}。回傳 {檔名: 物件}。"""
-    calendar = merge_calendar(auto_events, manual_events, today)
+    calendar = merge_calendar(auto_events, manual_events, today, ccfg, feeds)
     extra, extra_meta = derive(cfg, daily)
     alld = dict(daily, **extra)
     symbols = list(cfg["symbols"]) + [m for m in extra_meta.values() if m.get("group")]
@@ -401,9 +480,10 @@ def build_all(cfg, daily, fred, auto_events, manual_events, status, today):
         for t in tiles:
             t["show_date"] = t["date"] != common
         groups.append({"id": g["id"], "name": g["name"], "tiles": tiles})
-    macro = build_macro(fred, calendar, today)
-    upcoming = [e for e in calendar if today.isoformat() <= e["date"] <= (today + timedelta(days=7)).isoformat() and e["importance"] == "H"]
-    overview = {"mood": build_mood(T), "highlights": build_highlights(T, upcoming, macro), "groups": groups, "events": upcoming[:30],
+    update_cal_series(fred, calendar, intl)  # 行事曆公布值累積進 fred（隨 fred.csv 一起保存）
+    macro = build_macro(fred, calendar, today, intl)
+    upcoming = [e for e in calendar if today.isoformat() <= e["date"] <= (today + timedelta(days=7)).isoformat() and e["importance"] == "H" and e["main"]]
+    overview = {"mood": build_mood(T), "highlights": build_highlights(T, upcoming, [m for m in macro if m["country"] == "us" and not m.get("empty")]), "groups": groups, "events": upcoming[:30],
                 "dates": {"us": T.get("spx", {}).get("date"), "tw": T.get("twii", {}).get("date")}}
     return {"overview": overview, "trends": build_trends(cfg, daily), "macro": macro,
             "lights": lights.build(cfg, daily, fred), "calendar": [e for e in calendar if e["date"] <= (today + timedelta(days=60)).isoformat()]}

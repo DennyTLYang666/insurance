@@ -66,12 +66,14 @@ def wanted(cfg, themes, groups=()):
     return out
 
 
-def refresh(cfg, themes, old, pause=0.2, groups=()):
+def refresh(cfg, themes, old, pause=0.2, groups=(), on_item=None):
     """回傳 (新聞文件, 錯誤清單)。old＝上次的文件（可為 None）。全部失敗才丟 SourceError。"""
     q = wanted(cfg, themes, groups)
     prev = (old or {}).get("items", {})
     items, errors, ok = {}, [], 0
-    for key, query in q.items():
+    for n, (key, query) in enumerate(q.items(), 1):
+        if on_item:
+            on_item(n, key)
         try:
             got = fetch_query(query)
             items[key] = got

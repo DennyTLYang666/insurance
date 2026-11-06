@@ -30,6 +30,10 @@ window.ECO = window.ECO || {};
     return pad(Math.floor(s / 60)) + ":" + pad(s % 60);
   }
 
+  /* 分類與標籤：分類用實心小標、其餘標籤用淡色；經濟以外的事件加底線樣式區隔 */
+  const tagsHtml = (e) => !e.cat ? "" : '<span class="evtags"><span class="ctg' + (e.scope === "other" ? " oth" : "") + '">' + esc(e.catn || e.cat) + "</span>" +
+    (e.tags || []).map((t) => '<span class="tg">' + esc(t) + "</span>").join("") + "</span>";
+
   ECO.eventsHtml = function (list) {
     const now = Date.now();
     return list.map((e) => {
@@ -41,10 +45,18 @@ window.ECO = window.ECO || {};
       const isToday = e.date === today();
       return '<li class="ev-row s-' + st.k + (st.dim ? " dim" : "") + (isToday ? " is-today" : "") + '"><div class="when"><b>' + (isToday ? "今天" : F.md(e.date)) + "</b><span>" +
         (isToday ? F.md(e.date) + " " : "（" + F.wd(e.date) + "）") + esc(e.time || "") + "</span></div>" +
-        '<div class="what"><span class="cty">' + esc(e.country) + "</span> " + (e.importance === "H" ? '<span class="imp" title="重要事件">★</span> ' : "") + esc(e.event) + " " + badge +
-        (res ? '<div class="res">' + res + "</div>" : "") + (e.note ? '<div class="res">' + esc(e.note) + "</div>" : "") + "</div></li>";
+        '<div class="what">' + (e.country ? '<span class="cty">' + esc(e.country) + "</span> " : "") + (e.importance === "H" ? '<span class="imp" title="重要事件">★</span> ' : "") + esc(e.event) + " " + badge + tagsHtml(e) +
+        (res ? '<div class="res">' + res + "</div>" : "") + (e.why ? '<div class="res why">' + esc(e.why) + "</div>" : "") + (e.note ? '<div class="res">' + esc(e.note) + "</div>" : "") + "</div></li>";
     }).join("");
   };
+
+  /* ---------- 行事曆篩選（三處共用）：次要事件、經濟以外、分類 ---------- */
+  const FL = { all: false, other: false, cats: [] };
+  try { FL.other = localStorage.getItem("eco.cal.other") === "1"; } catch (e) {}
+  // 經濟事件依重要度顯示；電競／體育等「經濟以外」的事件，要勾選才看得到（除非被標成主要事件 main）
+  const passBase = (e) => e.scope === "other" ? (FL.other || e.main !== false) : (FL.all || e.importance === "H");
+  const pass = (e) => passBase(e) && (!FL.cats.length || FL.cats.indexOf(e.cat) >= 0);
+  const redrawAll = () => Object.keys(CALS).forEach((k) => { if (CALS[k].o.minor) CALS[k].draw(); });
 
   /* ---------- 共用的日曆／列表元件 ---------- */
   const CALS = {};
@@ -86,7 +98,9 @@ window.ECO = window.ECO || {};
       const bar = '<div class="calbar" data-cal="' + o.box + '"><div class="seg" role="group" aria-label="檢視方式"><button type="button" data-view="grid"' + (this.view === "grid" ? ' class="on"' : "") + '>日曆</button><button type="button" data-view="list"' +
         (this.view === "list" ? ' class="on"' : "") + ">列表</button></div>" +
         (this.view === "list" && o.sorts.length > 1 ? '<label class="sortsel">排序 <select data-sort aria-label="排序">' + o.sorts.map((s) => '<option value="' + s[0] + '"' + (this.sort === s[0] ? " selected" : "") + ">" + s[1] + "</option>").join("") + "</select></label>" : "") +
-        (o.minor ? '<label class="chk"><input type="checkbox" data-all' + (this.all ? " checked" : "") + "> 同時顯示次要事件</label>" : "") + "</div>";
+        (o.minor ? '<label class="chk"><input type="checkbox" data-all' + (FL.all ? " checked" : "") + "> 同時顯示次要事件</label>" +
+          '<label class="chk"><input type="checkbox" data-other' + (FL.other ? " checked" : "") + "> 顯示經濟以外（電競、體育、娛樂）</label>" : "") + "</div>" +
+        (o.chips ? this.chips() : "");
       let body;
       if (this.view === "grid") {
         if (!this.ym) { const t = today(); this.ym = [+t.slice(0, 4), +t.slice(5, 7) - 1]; }
@@ -100,6 +114,18 @@ window.ECO = window.ECO || {};
       }
       box.innerHTML = bar + body;
     },
+    chips() {
+      const m = {}, order = [];
+      (this.src || []).filter(passBase).forEach((e) => {
+        if (!e.cat) return;
+        if (!m[e.cat]) { m[e.cat] = { n: 0, name: e.catn || e.cat, other: e.scope === "other" }; order.push(e.cat); }
+        m[e.cat].n++;
+      });
+      if (order.length < 2) return "";
+      order.sort((a, b) => (m[a].other - m[b].other) || m[b].n - m[a].n);
+      return '<div class="catchips" role="group" aria-label="依分類篩選"><button type="button" data-cat=""' + (FL.cats.length ? "" : ' class="on"') + ">全部</button>" +
+        order.map((c) => '<button type="button" data-cat="' + esc(c) + '" class="' + (FL.cats.indexOf(c) >= 0 ? "on " : "") + (m[c].other ? "oth" : "") + '">' + esc(m[c].name) + " <i>" + m[c].n + "</i></button>").join("") + "</div>";
+    },
     firstDay(map) {
       const t = today(), days = Object.keys(map).sort();
       return map[t] ? t : days.find((d) => d >= t) || t;
@@ -112,8 +138,13 @@ window.ECO = window.ECO || {};
     if (!box) return;
     const c = CALS[box.dataset.calbox];
     if (!c) return;
-    const v = e.target.closest("[data-view]"), nav = e.target.closest("[data-nav]"), cell = e.target.closest(".cell[data-d]");
-    if (v) { c.view = v.dataset.view; try { localStorage.setItem("eco.cal." + c.o.box, c.view); } catch (x) {} c.draw(); }
+    const v = e.target.closest("[data-view]"), nav = e.target.closest("[data-nav]"), cell = e.target.closest(".cell[data-d]"), cat = e.target.closest("[data-cat]");
+    if (cat) {
+      const k = cat.dataset.cat;
+      if (!k) FL.cats = [];
+      else FL.cats = FL.cats.indexOf(k) >= 0 ? FL.cats.filter((x) => x !== k) : FL.cats.concat(k);
+      redrawAll();
+    } else if (v) { c.view = v.dataset.view; try { localStorage.setItem("eco.cal." + c.o.box, c.view); } catch (x) {} c.draw(); }
     else if (nav) {
       const k = +nav.dataset.nav;
       if (k === 0) { const t = today(); c.ym = [+t.slice(0, 4), +t.slice(5, 7) - 1]; c.sel = t; }
@@ -125,7 +156,12 @@ window.ECO = window.ECO || {};
     const box = e.target.closest("[data-calbox]");
     const c = box && CALS[box.dataset.calbox];
     if (!c) return;
-    if (e.target.matches("[data-all]")) { c.all = e.target.checked; Object.keys(CALS).forEach((k) => { if (CALS[k].o.minor) { CALS[k].all = c.all; CALS[k].draw(); } }); }
+    if (e.target.matches("[data-all]")) { FL.all = e.target.checked; redrawAll(); }
+    else if (e.target.matches("[data-other]")) {
+      FL.other = e.target.checked;
+      try { localStorage.setItem("eco.cal.other", FL.other ? "1" : "0"); } catch (x) {}
+      redrawAll();
+    }
     else if (e.target.matches("[data-sort]")) { c.sort = e.target.value; try { localStorage.setItem("eco.calsort." + c.o.box, c.sort); } catch (x) {} c.draw(); }
   });
 
@@ -152,12 +188,12 @@ window.ECO = window.ECO || {};
   const sortsEv = [["time", "依時間（近→遠）"], ["imp", "依重要性"], ["new", "依時間（遠→近）"]];
 
   const trendCal = new Cal(Object.assign({}, evBase, {
-    box: "cal", defView: "grid", minor: true, sorts: sortsEv,
-    items: (c) => (c.src || []).filter((e) => c.all || e.importance === "H")
+    box: "cal", defView: "grid", minor: true, sorts: sortsEv, chips: true,
+    items: (c) => (c.src || []).filter(pass)
   }));
   const ovCal = new Cal(Object.assign({}, evBase, {
     box: "ov-events", defView: "list", minor: true, sorts: sortsEv,
-    items: (c) => (c.src || []).filter((e) => c.all || e.importance === "H"),
+    items: (c) => (c.src || []).filter(pass),
     listItems: (l) => {
       const t = today(), lim = F.tpe(new Date(Date.now() + 14 * 864e5), { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\//g, "-");
       return l.filter((e) => e.date >= t && e.date <= lim);

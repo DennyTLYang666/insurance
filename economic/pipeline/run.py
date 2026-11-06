@@ -15,7 +15,7 @@ import time
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from . import build, fetch, funds, news
+from . import build, events, fetch, funds, news
 from .common import ROOT, TZ, SourceError, atomic_write, load_series, merge_bars, save_series, write_pair
 
 MIN_OK_RATIO = 0.5  # 報價成功的標的低於這個比例，視為整體失敗，不更新網站
@@ -24,6 +24,42 @@ NEWS_MAX_AGE = timedelta(hours=3)
 
 def log(msg):
     print(msg, flush=True)
+
+
+class Progress:
+    """處理進度：每個大階段一行「[n/總數] 名稱」，階段內逐項顯示「第 k/總數 項（百分比）」。
+    在命令列視窗用同一行刷新；導向檔案（例如 GitHub Actions 記錄）時只印階段和每 25% 一行。"""
+
+    def __init__(self, stages):
+        self.stages, self.i, self.total, self.name, self.t0, self.shown = stages, 0, 0, "", time.time(), -1
+        self.tty = sys.stdout.isatty()
+
+    def stage(self, name, total=0):
+        self.done()
+        self.i += 1
+        self.total, self.name, self.t0, self.shown = total, name, time.time(), -1
+        self._line("[%d/%d] %s%s" % (self.i, self.stages, name, "（共 %d 項）" % total if total else ""), end="\n")
+
+    def tick(self, k, label=""):
+        if not self.total:
+            return
+        pct = int(k * 100 / self.total)
+        if self.tty:
+            self._line("      %3d%%  %d/%d  %s" % (pct, k, self.total, label[:40]), end="\r")
+        elif pct // 25 > self.shown // 25 or k == self.total:
+            self._line("      %3d%%  %d/%d" % (pct, k, self.total), end="\n")
+        self.shown = pct
+
+    def done(self):
+        if self.name and self.tty and self.total:
+            print(" " * 70, end="\r", flush=True)
+
+    def _line(self, text, end):
+        print(text, end=end, flush=True)
+
+    def note(self, text):
+        self.done()
+        print("      " + text, flush=True)
 
 
 def read_json(path):
@@ -57,12 +93,21 @@ def main(argv=None):
     cfg = json.loads((root / "config" / "symbols.json").read_text(encoding="utf-8"))
     theme_cfg = json.loads((root / "config" / "fund_themes.json").read_text(encoding="utf-8"))
     manual = (read_json(root / "config" / "events.json") or {}).get("events", [])
+    ccfg = events.load_cfg(read_json(root / "config" / "calendar.json"))
+    intl = read_json(root / "config" / "macro_intl.json") or {}
+    t_start = time.time()
     watch = read_json(root / "config" / "fund_watch.json") or {}
     sdir, out = root / "data" / "series", root / "data" / "site"
     daily, fred = load_series(sdir / "daily.csv", "close"), load_series(sdir / "fred.csv", "value")
     navs = load_series(sdir / "fund_nav.csv", "nav")
     now = datetime.now(TZ)
     today = now.date()
+    # 先算出這次會做哪些階段，進度才能顯示「第 n／共 m 步」
+    old_f, old_n = read_json(out / "funds.json"), read_json(out / "news.json")
+    plan_funds = not args.offline and args.funds != "no" and (args.funds == "yes" or args.mode == "daily" or not old_f)
+    plan_news = not args.offline and args.news != "no" and (args.news == "yes" or args.mode == "daily" or not old_n or stale(old_n, NEWS_MAX_AGE, now))
+    full = not args.offline and (args.mode == "daily" or not fred)
+    prog = Progress(2 + (0 if args.offline else 3) + (1 if full else 0) + int(plan_funds) + int(plan_news))
     status, problems = {}, []
     src = {"yahoo": {"ok": 0, "fail": 0, "errors": []}, "fred": {"ok": 0, "fail": 0, "errors": []},
            "calendar": {"ok": False, "error": None, "note": None}, "news": {"ok": None, "errors": 0},
@@ -76,7 +121,9 @@ def main(argv=None):
     from_fred = {s["id"]: s["from_fred"] for s in cfg["symbols"] if s.get("from_fred")}
 
     if not args.offline:
-        for s in quotes:
+        prog.stage("報價（Yahoo）", len(quotes))
+        for k, s in enumerate(quotes, 1):
+            prog.tick(k, s["id"])
             try:
                 bars, info, used = fetch.fetch_symbol(s, daily.get(s["id"], []), today)
                 daily[s["id"]] = merge_bars(daily.get(s["id"]), bars)
@@ -96,9 +143,10 @@ def main(argv=None):
             return 1
 
         everything = args.mode == "daily" or not fred
-        for f in cfg["fred"]:
-            if not everything and f["id"] not in from_fred.values():
-                continue  # 盤中快照只更新「當成報價用」的序列（例如 2 年期殖利率）
+        todo = [f for f in cfg["fred"] if everything or f["id"] in from_fred.values()]  # 盤中快照只更新「當成報價用」的序列
+        prog.stage("總經（FRED）", len(todo))
+        for k, f in enumerate(todo, 1):
+            prog.tick(k, f["id"])
             try:
                 start = (today - timedelta(days=760 if (everything or not fred.get(f["id"])) else 45)).isoformat()
                 fred[f["id"]] = merge_bars(fred.get(f["id"]), fetch.fred_series(f["id"], start))
@@ -107,6 +155,18 @@ def main(argv=None):
                 src["fred"]["fail"] += 1
                 src["fred"]["errors"].append("%s：%s" % (f["id"], e))
             time.sleep(args.pause)
+        if everything:
+            prog.stage("台灣總經（國發會）")
+            ndc_cols = {i["id"]: i["col"] for i in intl.get("indicators", []) if i.get("src") == "ndc"}
+            if ndc_cols:
+                try:
+                    for iid, pts in fetch.fetch_ndc(ndc_cols, intl.get("ndc_csv")).items():
+                        fred["NDC_" + iid] = merge_bars(fred.get("NDC_" + iid), pts)
+                    src["fred"]["ok"] += 1
+                except (SourceError, ValueError, OSError, KeyError) as e:
+                    src["fred"]["fail"] += 1
+                    src["fred"]["errors"].append("國發會景氣指標：%s（台灣總經沿用上次資料）" % str(e)[:140])
+        prog.stage("經濟日曆")
         try:
             auto_events, note = fetch.fetch_calendar()
             src["calendar"]["ok"] = True
@@ -123,7 +183,18 @@ def main(argv=None):
             daily[sid] = merge_bars(daily.get(sid), fred[fid])
             status.setdefault(sid, {"ok": True, "symbol": "FRED:" + fid})
 
-    docs = build.build_all(cfg, daily, fred, auto_events, manual, status, today)
+    feed_events, feed_cache = [], sdir / "feeds_cache.json"
+    if ccfg["feeds"] and not args.offline:
+        feed_events, fwarn = events.fetch_feeds(ccfg["feeds"], today)
+        if fwarn and not feed_events:  # 全部訂閱都失敗：沿用上一次成功的內容
+            feed_events = read_json(feed_cache) or []
+        elif feed_events:
+            atomic_write(feed_cache, json.dumps(feed_events, ensure_ascii=False) + "\n")
+        problems += ["日曆" + w for w in fwarn]
+    elif ccfg["feeds"]:
+        feed_events = read_json(feed_cache) or []
+    prog.stage("整理成網站資料")
+    docs = build.build_all(cfg, daily, fred, auto_events, manual, status, today, ccfg, feed_events, intl)
 
     # ---------- 基金（加值資料：失敗就保留上一版） ----------
     ids_path = sdir / "fund_ids.json"
@@ -131,8 +202,10 @@ def main(argv=None):
     old_funds = read_json(out / "funds.json")
     want_funds = not args.offline and args.funds != "no" and (args.funds == "yes" or args.mode == "daily" or not old_funds)
     if want_funds:
+        prog.stage("基金（台壽、南山）", 2)
         raw = {}
-        for co, fn in (("tlife", funds.fetch_tlife), ("nanshan", funds.fetch_nanshan)):
+        for k, (co, fn) in enumerate((("tlife", funds.fetch_tlife), ("nanshan", funds.fetch_nanshan)), 1):
+            prog.tick(k - 1, funds.CO[co])
             try:
                 raw[co] = fn()
             except (SourceError, ValueError, OSError) as e:
@@ -160,14 +233,17 @@ def main(argv=None):
     want_news = not args.offline and args.news != "no" and (args.news == "yes" or args.mode == "daily" or not old_news
                                                               or stale(old_news, NEWS_MAX_AGE, now))
     if want_news:
+        prog.stage("新聞（Google News）", len(news.wanted(cfg, themes_for_news, theme_cfg.get("groups", []))))
         try:
-            ndoc, nerr = news.refresh(cfg, themes_for_news, old_news, pause=min(args.pause, 0.3), groups=theme_cfg.get("groups", []))
+            ndoc, nerr = news.refresh(cfg, themes_for_news, old_news, pause=min(args.pause, 0.3), groups=theme_cfg.get("groups", []),
+                                      on_item=lambda k, key: prog.tick(k, key))
             docs["news"] = ndoc
             src["news"] = {"ok": True, "errors": len(nerr)}
         except SourceError as e:
             src["news"] = {"ok": False, "errors": 1}
             log("[提醒] 新聞更新失敗，沿用上一版：%s" % str(e)[:120])
 
+    prog.stage("寫入檔案")
     for name, obj in docs.items():
         write_pair(out / (name + ".json"), obj, "data/site/%s.json" % name)
     for k in ("yahoo", "fred"):
@@ -188,8 +264,9 @@ def main(argv=None):
         extra += "；基金 台壽 %d・南山 %d 檔" % tuple(docs["funds"]["companies"].get(c, {}).get("count", 0) for c in ("tlife", "nanshan"))
     if "news" in docs:
         extra += "；新聞 %d 組" % len(docs["news"]["items"])
-    log("完成（%s）：市場方塊 %d 個、趨勢圖 %d 張、總經 %d 項、行事曆 %d 筆；氣氛：%s%s"
-        % (meta["mode"], n_t, len(docs["trends"]["charts"]), len(docs["macro"]), len(docs["calendar"]), docs["overview"]["mood"]["label"], extra))
+    prog.done()
+    log("完成（%s，%d 秒）：市場方塊 %d 個、趨勢圖 %d 張、總經 %d 項、行事曆 %d 筆；氣氛：%s%s"
+        % (meta["mode"], round(time.time() - t_start), n_t, len(docs["trends"]["charts"]), len(docs["macro"]), len(docs["calendar"]), docs["overview"]["mood"]["label"], extra))
     for m in problems[:10]:
         log("[警告] " + m)
     return 2 if problems else 0

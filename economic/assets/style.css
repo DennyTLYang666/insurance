@@ -253,7 +253,7 @@ button:disabled { opacity: .4; cursor: default; }
 
 .sortsel { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
 .sortsel select { border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); padding: 3px 8px; font: inherit; font-size: 13px; }
-.calbar { justify-content: flex-start; } .calbar .chk { margin-left: auto; margin-bottom: 0; }
+.calbar { justify-content: flex-start; } .calbar .chk { margin-left: auto; margin-bottom: 0; } .calbar .chk + .chk { margin-left: 12px; }
 
 /* 事件狀態：過期變暗、今天強調、已公佈、待公佈、倒數 */
 .events li { position: relative; }
@@ -301,3 +301,30 @@ button:disabled { opacity: .4; cursor: default; }
   .top .tools, .tabs, .toolbar, .skip { display: none; } .top { position: static; backdrop-filter: none; }
   body { background: #fff; } .tile, .mood, .points, .block, .chart { box-shadow: none; break-inside: avoid; }
 }
+
+/* 行事曆：分類篩選、分類與標籤、經濟以外 */
+.catchips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+.catchips button { border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 999px; padding: 2px 10px; font: inherit; font-size: 12.5px; cursor: pointer; }
+.catchips button i { font-style: normal; opacity: .7; margin-left: 2px; font-variant-numeric: tabular-nums; }
+.catchips button.on { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.catchips button.oth:not(.on) { border-style: dashed; }
+.evtags { display: inline-flex; flex-wrap: wrap; gap: 4px; margin-left: 4px; vertical-align: 1px; }
+.ctg { font-size: 11px; font-weight: 700; padding: 0 7px; border-radius: 4px; background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); }
+.ctg.oth { background: transparent; color: var(--muted); border: 1px dashed var(--muted); padding: 0 6px; }
+.tg { font-size: 11px; padding: 0 6px; border-radius: 4px; background: var(--bg); color: var(--muted); border: 1px solid var(--line); }
+.res.why { color: var(--ink); opacity: .75; }
+.ev.oth { border: 1px dashed var(--muted); background: transparent; }
+
+/* 今日重點：預設只顯示重點，其餘收合 */
+.points .hl-more { margin-top: 6px; border: 1px dashed var(--line); background: transparent; color: var(--accent); border-radius: 8px; padding: 3px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+.points li.rest { display: none; } .points.open li.rest { display: flex; }
+
+/* ===== 總經：依國家分群 ===== */
+.macgroup + .macgroup { margin-top: 20px; }
+.macgroup > h3 { font-size: 15px; margin: 0 0 8px; padding-left: 8px; border-left: 3px solid var(--accent); }
+.macgroup > h3 .mut { font-size: 12px; font-weight: 400; margin-left: 6px; }
+.mac.empty { opacity: .7; border-style: dashed; }
+.msrcrow { margin-top: 4px; }
+.msrc { font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 7px; }
+.macbar .seg { flex-wrap: wrap; }
+.macbar + .hint { margin: -4px 0 14px; flex: none; }

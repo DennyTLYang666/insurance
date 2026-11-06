@@ -65,7 +65,7 @@ window.ECO = window.ECO || {};
 
   function toObj(cols, r) { const o = {}; cols.forEach((c, i) => (o[c] = r[i])); return o; }
 
-  function drawTable(co) {
+  function drawTable(co, onlyRes) {
     const body = $("ft-body-" + co);
     if (!body) return;
     const u = S.uni[co];
@@ -114,15 +114,14 @@ window.ECO = window.ECO || {};
         '</td><td class="r hide-s">' + F.num(o.nav, 2) + "</td>" + cell(o.d1, 2).replace('class="r', 'class="r hide-s') + cell(o.m1, 1).replace('class="r', 'class="r hide-s') + cell(o.m3, 1) + cell(o.y1, 1) + cell(o.y3, 1).replace('class="r', 'class="r hide-s') +
         '<td class="r hide-s">' + (o.sd == null ? "—" : F.num(o.sd, 1) + "%") + '</td><td class="r hide-s">' + (o.sh == null ? "—" : F.num(o.sh, 2)) + '</td><td class="r hide-s">' + (o.sz == null ? "—" : F.num(o.sz, 0)) + "</td></tr>";
     }).join("");
-    body.innerHTML = '<div class="ffilters" data-co="' + co + '"><input type="search" data-f="q" placeholder="搜尋名稱、代碼、投信" value="' + esc(f.q) + '" aria-label="搜尋基金"><select data-f="grp" aria-label="大分類">' + gOpts + '</select><select data-f="theme" aria-label="小分類">' + tOpts + '</select><select data-f="tier" aria-label="風險階層">' + tierOpts + '</select><select data-f="cc" aria-label="幣別">' + ccOpts + '</select><select data-f="ty" aria-label="類型">' + tyOpts + '</select><button type="button" data-reset="' + co + '">清除條件</button></div>' + rangeRow +
-      '<p class="mut">符合 ' + rows.length + " 檔・報酬為官網公布的累積報酬率，點名稱看明細與新聞</p>" +
+    const top = '<div class="ffilters" data-co="' + co + '"><input type="search" data-f="q" placeholder="搜尋名稱、代碼、投信" value="' + esc(f.q) + '" aria-label="搜尋基金"><select data-f="grp" aria-label="大分類">' + gOpts + '</select><select data-f="theme" aria-label="小分類">' + tOpts + '</select><select data-f="tier" aria-label="風險階層">' + tierOpts + '</select><select data-f="cc" aria-label="幣別">' + ccOpts + '</select><select data-f="ty" aria-label="類型">' + tyOpts + '</select><button type="button" data-reset="' + co + '">清除條件</button></div>' + rangeRow;
+    const res = '<p class="mut">符合 ' + rows.length + " 檔・報酬為官網公布的累積報酬率，點名稱看明細與新聞</p>" +
       '<div class="tablewrap"><table class="mtable ftable"><thead><tr>' + head + "</tr></thead><tbody>" + (tr || '<tr><td colspan="13" class="mut">沒有符合的標的。</td></tr>') + "</tbody></table></div>" +
       (rows.length > shown.length ? '<button type="button" class="more-btn" data-more="' + co + '">再顯示 60 筆（還有 ' + (rows.length - shown.length) + " 筆）</button>" : "");
-    if (S.keepFocus && S.keepFocus.co === co) {
-      const el = body.querySelector('[data-f="' + S.keepFocus.k + '"]');
-      if (el) { el.focus(); try { el.setSelectionRange(el.value.length, el.value.length); } catch (e) {} }
-      S.keepFocus = null;
-    }
+    /* 輸入框打字時只重畫結果，不動篩選列：整列重畫會讓游標跳回開頭（打 10 變 01） */
+    const fres = onlyRes && body.querySelector(".fres");
+    if (fres) { fres.innerHTML = res; return; }
+    body.innerHTML = '<div class="ftop">' + top + '</div><div class="fres">' + res + "</div>";
   }
 
   function loadUni(co) {
@@ -275,16 +274,19 @@ window.ECO = window.ECO || {};
       (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => (b.textContent = "已複製"), () => (b.textContent = "請手動選取複製"));
     }
   });
+  const timers = {};
   const onFilter = (e) => {
     const el = e.target.closest("[data-f]");
     if (!el) return;
     const co = el.closest(".ffilters").dataset.co;
+    const isInput = el.tagName === "INPUT";
     if (el.closest(".rng")) el.setAttribute("value", el.value);
     S.flt[co][el.dataset.f] = el.value;
     S.flt[co].limit = 60;
     if (el.dataset.f === "grp" && S.flt[co].theme && (S.th[S.flt[co].theme] || {}).grp !== el.value && el.value) S.flt[co].theme = "";
-    if (el.tagName === "INPUT") S.keepFocus = { co: co, k: el.dataset.f };
-    drawTable(co);
+    if (!isInput) { drawTable(co); return; }
+    clearTimeout(timers[co]);
+    timers[co] = setTimeout(() => drawTable(co, true), 180);
   };
   document.addEventListener("input", (e) => { if (e.target.matches('input[data-f]')) onFilter(e); });
   document.addEventListener("change", (e) => { if (e.target.matches("select[data-f]")) onFilter(e); });

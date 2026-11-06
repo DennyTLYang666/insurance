@@ -64,25 +64,56 @@
     return a;
   }
 
+  const SRC = { fred: "FRED 官方序列", ndc: "國發會", cal: "行事曆公布值" };
+  let mcountry = "all";
+  try { const v = localStorage.getItem("eco.mcountry"); if (v) mcountry = v; } catch (e) {}
+
+  function macroCard(m) {
+    const unit = m.unit === "%" ? "%" : " " + m.unit;
+    const src = '<span class="msrc" title="資料來源">' + SRC[m.src] + "</span>";
+    const nxt = m.next ? '<div class="next">下次公布 ' + F.md(m.next.date) + "（" + F.wd(m.next.date) + "）" + esc(m.next.time) + "</div>" : "";
+    if (m.empty) {
+      return '<article class="mac empty"><div class="mh"><div class="nm">' + esc(m.name) + '</div></div><div class="val mut">—</div><div class="prev">' +
+        (m.src === "cal" ? "尚未累積到公布值（每次更新會從行事曆記下）" : "來源暫時取不到，下次更新再試") + "</div>" + nxt + '<div class="msrcrow">' + src + "</div></article>";
+    }
+    const fmt = (v) => m.kind === "chg" ? F.sign(v, m.dec, "") + " " + m.unit : F.num(v, m.dec) + unit;
+    const d = m.value - m.prev;
+    const vd = m.good ? '<span class="vd ' + VD[m.verdict] + '" title="和前一期相比">' + m.verdict + "</span>" : "";
+    return '<article class="mac"><div class="mh"><div class="nm">' + esc(m.name) + "</div>" + vd + '</div><div class="val">' + fmt(m.value) + '</div><div class="prev">前期 ' + fmt(m.prev) +
+      ' <span class="mut">' + (d > 0 ? "▲" : d < 0 ? "▼" : "–") + "</span> ・ " + esc(m.weekly ? F.md(m.asof) + " 當週" : m.period) + "</div>" + nxt +
+      (m.history && m.history.length > 2 ? '<div class="hist">' + F.spark(m.history, 120, 28) + "</div>" : "") + '<div class="msrcrow">' + src + "</div></article>";
+  }
+
   function macro(list) {
     S.macro = list;
     document.getElementById("macro-block").hidden = !list.length;
-    const bar = '<div class="macbar"><div class="seg" role="group" aria-label="排序">' + MSORTS.map((s) => '<button type="button" data-msort="' + s[0] + '"' + (msort === s[0] ? ' class="on"' : "") + ">" + s[1] + "</button>").join("") + "</div>" +
-      '<p class="hint">好壞是和前一期比：通膨、失業、初領救濟金下降算好；就業、銷售、信心、GDP 上升算好；變動很小算持平。規則式判斷，不是預測。</p></div>';
-    const unit = (m) => m.unit === "%" ? "%" : " " + m.unit;
-    const cards = macroSorted(list).map((m) => {
-      const fmt = (v) => m.kind === "chg" ? F.sign(v, m.dec, "") + " " + m.unit : F.num(v, m.dec) + unit(m);
-      const d = m.value - m.prev;
-      const vd = m.good ? '<span class="vd ' + VD[m.verdict] + '" title="和前一期相比">' + m.verdict + "</span>" : "";
-      const nxt = m.next ? '<div class="next">下次公布 ' + F.md(m.next.date) + "（" + F.wd(m.next.date) + "）" + esc(m.next.time) + "</div>" : "";
-      return '<article class="mac"><div class="mh"><div class="nm">' + esc(m.name) + "</div>" + vd + '</div><div class="val">' + fmt(m.value) + '</div><div class="prev">前期 ' + fmt(m.prev) +
-        ' <span class="mut">' + (d > 0 ? "▲" : d < 0 ? "▼" : "–") + "</span> ・ " + esc(m.weekly ? F.md(m.asof) + " 當週" : m.period) + "</div>" + nxt +
-        (m.history && m.history.length > 2 ? '<div class="hist">' + F.spark(m.history, 120, 28) + "</div>" : "") + "</article>";
+    const countries = [];
+    list.forEach((m) => { if (!countries.some((c) => c.id === m.country)) countries.push({ id: m.country, name: m.cname }); });
+    if (mcountry !== "all" && !countries.some((c) => c.id === mcountry)) mcountry = "all";
+    const cnt = (id) => list.filter((m) => m.country === id && !m.empty).length;
+    const chips = '<div class="seg" role="group" aria-label="國家"><button type="button" data-mcountry="all"' + (mcountry === "all" ? ' class="on"' : "") + ">全部</button>" +
+      countries.map((c) => '<button type="button" data-mcountry="' + c.id + '"' + (mcountry === c.id ? ' class="on"' : "") + ">" + esc(c.name) + "</button>").join("") + "</div>";
+    const bar = '<div class="macbar">' + chips + '<div class="seg" role="group" aria-label="排序">' + MSORTS.map((s) => '<button type="button" data-msort="' + s[0] + '"' + (msort === s[0] ? ' class="on"' : "") + ">" + s[1] + "</button>").join("") + "</div></div>" +
+      '<p class="hint">依國家分群，群內依所選排序。好壞是和前一期比：通膨、失業下降算好；就業、銷售、信心、GDP 上升算好；變動很小算持平。規則式判斷，不是預測。' +
+      "歐／日／英／中部分指標由行事曆公布值逐次累積，剛開始會是空白卡。</p>";
+    const groups = countries.filter((c) => mcountry === "all" || c.id === mcountry).map((c) => {
+      const items = macroSorted(list.filter((m) => m.country === c.id));
+      // 排序時空白卡一律放最後
+      items.sort((x, y) => (x.empty ? 1 : 0) - (y.empty ? 1 : 0));
+      return '<section class="macgroup" data-country="' + c.id + '"><h3>' + esc(c.name) + ' <span class="mut">' + cnt(c.id) + " / " + items.length + " 項有資料</span></h3>" +
+        '<div class="macgrid">' + items.map(macroCard).join("") + "</div></section>";
     }).join("");
-    document.getElementById("macro").innerHTML = bar + '<div class="macgrid">' + cards + "</div>";
+    document.getElementById("macro").innerHTML = bar + groups;
   }
 
   document.addEventListener("click", (e) => {
+    const c = e.target.closest("[data-mcountry]");
+    if (c) {
+      mcountry = c.dataset.mcountry;
+      try { localStorage.setItem("eco.mcountry", mcountry); } catch (x) {}
+      macro(S.macro || []);
+      return;
+    }
     const b = e.target.closest("[data-msort]");
     if (!b) return;
     msort = b.dataset.msort;

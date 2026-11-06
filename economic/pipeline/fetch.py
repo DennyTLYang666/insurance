@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 """資料抓取：Yahoo 報價、FRED 總經、經濟日曆。每個來源獨立失敗，不影響其他來源。"""
 import csv
+import io
 import json
+import os
+import re
 import urllib.parse
 from datetime import date, datetime, timedelta, timezone
 
@@ -146,10 +149,71 @@ def fetch_calendar():
         if key in seen:
             continue
         seen.add(key)
-        out.append({"date": dt.strftime("%Y-%m-%d"), "time": dt.strftime("%H:%M"), "event": EVENT_ZH.get(title, title),
+        out.append({"date": dt.strftime("%Y-%m-%d"), "time": dt.strftime("%H:%M"), "event": EVENT_ZH.get(title, title), "title": title,
                     "country": CAL_COUNTRIES[e["country"]], "importance": imp, "previous": (e.get("previous") or "").strip(),
                     "forecast": (e.get("forecast") or "").strip(), "actual": (e.get("actual") or "").strip(), "source": "auto"})
     if not out:
         raise SourceError("沒有符合條件（高／中重要度）的事件")
     out.sort(key=lambda x: (x["date"], x["time"]))
     return out, note
+
+
+# ---------- 國發會「景氣指標及燈號」（data.gov.tw 資料集 6099；台灣總經一次取得） ----------
+def _ndc_month(s):
+    """'202509'、'2025/09'、'2025-09'、'2025-09-01' → date(2025, 9, 1)；看不懂回傳 None。"""
+    m = re.match(r"^\s*(\d{4})[-/.]?(\d{1,2})", str(s))
+    if not m or not 1 <= int(m.group(2)) <= 12:
+        return None
+    return date(int(m.group(1)), int(m.group(2)), 1)
+
+
+def parse_ndc(text, cols):
+    """text＝CSV 全文；cols＝{key: 欄名關鍵字}。回傳 {key: [(date, value)]}；找不到的欄就沒有該 key。"""
+    rows = list(csv.reader(io.StringIO(text)))
+    DATE_COL = r"date|日期|時間|月份|統計期|期別|年月|period"
+    hi = next((i for i, r in enumerate(rows[:6]) if any(re.search(DATE_COL, c, re.I) for c in r)), None)
+    if hi is None:  # 欄名不認得：第一列當標題、第一欄當日期
+        hi = 0
+    head = [re.sub(r"[\s（）()\ufeff]", "", c) for c in (rows[hi] if rows else [])]
+    di = next((i for i, c in enumerate(head) if re.search(DATE_COL, c, re.I)), 0)
+    if not head:
+        raise SourceError("國發會 CSV 是空的")
+    out = {}
+    for key, name in cols.items():
+        want = re.sub(r"[\s（）()]", "", name)
+        ci = next((i for i, c in enumerate(head) if want in c), None)
+        if ci is None:
+            continue
+        pts = []
+        for r in rows[hi + 1:]:
+            if len(r) <= max(ci, di):
+                continue
+            d, v = _ndc_month(r[di]), num(r[ci].replace(",", ""))
+            if d and v is not None:
+                pts.append((d, v))
+        if pts:
+            out[key] = sorted(pts)
+    return out
+
+
+def fetch_ndc(cols, csv_url=None):
+    """先用設定／環境變數給的 CSV 網址；沒有就問 data.gov.tw 的資料集 API 取得下載連結。"""
+    u = os.environ.get("ECO_URL_NDC_CSV") or csv_url
+    if not u:
+        meta = json.loads(http_get(url("NDC_META")))
+        res = (meta.get("result") or meta) if isinstance(meta, dict) else {}
+        dist = res.get("distribution") or []
+        cand = [d for d in dist if isinstance(d, dict) and (d.get("resourceDownloadUrl") or d.get("downloadURL"))]
+        pick = next((d for d in cand if "csv" in str(d.get("format") or d.get("resourceFormat") or "").lower()), cand[0] if cand else None)
+        if not pick:
+            raise SourceError("國發會資料集沒有可下載的檔案")
+        u = pick.get("resourceDownloadUrl") or pick.get("downloadURL")
+    raw = http_get(u)
+    try:
+        text = raw.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        text = raw.decode("cp950", errors="replace")
+    got = parse_ndc(text, cols)
+    if not got:
+        raise SourceError("國發會 CSV 沒有找到任何需要的欄位")
+    return got

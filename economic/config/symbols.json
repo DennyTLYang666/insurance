@@ -15,7 +15,11 @@
   },
   {
    "id": "twd",
-   "name": "新台幣匯率"
+   "name": "新台幣匯率（每 1 單位外幣兌台幣）"
+  },
+  {
+   "id": "twd_c",
+   "name": "新台幣・加密貨幣（每 1 單位兌台幣；美元報價×美元兌台幣）"
   },
   {
    "id": "fx",
@@ -35,27 +39,32 @@
   },
   {
    "id": "f_dev",
-   "name": "成熟市場股票"
+   "name": "基金類別・成熟市場股票"
   },
   {
    "id": "f_em",
-   "name": "新興與亞洲股票"
+   "name": "基金類別・新興與亞洲股票"
   },
   {
    "id": "f_theme",
-   "name": "產業與主題"
+   "name": "基金類別・產業與主題"
   },
   {
    "id": "f_bond",
-   "name": "債券"
+   "name": "基金類別・債券"
   },
   {
    "id": "f_mix",
-   "name": "平衡與多重資產"
+   "name": "基金類別・平衡與多重資產"
   },
   {
    "id": "f_cash",
-   "name": "貨幣與保守"
+   "name": "基金類別・貨幣與保守"
+  },
+  {
+   "id": "x_raw",
+   "name": "原始報價（不顯示）",
+   "hidden": true
   }
  ],
  "symbols": [
@@ -438,8 +447,8 @@
   },
   {
    "id": "usdsgd",
-   "name": "美元／新幣",
-   "short": "新幣",
+   "name": "美元／新加坡幣",
+   "short": "新加坡幣",
    "group": "fx",
    "yahoo": [
     "SGD=X"
@@ -1007,6 +1016,71 @@
    "dec": 2,
    "market": "US",
    "q": "美債 7-10年 IEF"
+  },
+  {
+   "id": "usdt_usd",
+   "name": "USDT／美元",
+   "short": "USDT",
+   "group": "x_raw",
+   "yahoo": [
+    "USDT-USD"
+   ],
+   "kind": "price",
+   "dec": 4,
+   "market": "CRYPTO",
+   "q": "泰達幣 USDT 價格"
+  },
+  {
+   "id": "usdc_usd",
+   "name": "USDC／美元",
+   "short": "USDC",
+   "group": "x_raw",
+   "yahoo": [
+    "USDC-USD"
+   ],
+   "kind": "price",
+   "dec": 4,
+   "market": "CRYPTO",
+   "q": "USDC 穩定幣 價格"
+  },
+  {
+   "id": "btc_usd",
+   "name": "比特幣／美元",
+   "short": "BTC",
+   "group": "x_raw",
+   "yahoo": [
+    "BTC-USD"
+   ],
+   "kind": "price",
+   "dec": 0,
+   "market": "CRYPTO",
+   "q": "比特幣 價格"
+  },
+  {
+   "id": "eth_usd",
+   "name": "以太幣／美元",
+   "short": "ETH",
+   "group": "x_raw",
+   "yahoo": [
+    "ETH-USD"
+   ],
+   "kind": "price",
+   "dec": 1,
+   "market": "CRYPTO",
+   "q": "以太幣 價格"
+  },
+  {
+   "id": "sol_usd",
+   "name": "SOL／美元",
+   "short": "SOL",
+   "group": "x_raw",
+   "yahoo": [
+    "SOL-USD"
+   ],
+   "kind": "price",
+   "dec": 2,
+   "market": "CRYPTO",
+   "q": "Solana SOL 價格"
   }
  ],
  "fred": [
@@ -1108,6 +1182,26 @@
   {
    "id": "JTSJOL",
    "name": "美國職缺數 JOLTS（千個）"
+  },
+  {
+   "id": "CP0000EZCCM086NEST",
+   "name": "歐元區 HICP（指數）"
+  },
+  {
+   "id": "CLVMNACSCAB1GQEA",
+   "name": "歐元區實質 GDP（季）"
+  },
+  {
+   "id": "ECBDFR",
+   "name": "歐洲央行存款利率"
+  },
+  {
+   "id": "LRUNTTTTJPM156S",
+   "name": "日本失業率"
+  },
+  {
+   "id": "VALEXPTWM052N",
+   "name": "台灣出口值（百萬美元）"
   }
  ],
  "lights": [
@@ -1203,6 +1297,31 @@
     "twd_zar",
     "twd_hkd",
     "twd_krw"
+   ]
+  },
+  {
+   "id": "twd_stable",
+   "cat": "fx",
+   "title": "穩定幣兌新台幣（USDT／USDC 對照美元）",
+   "note": "單位：新台幣；與美元／新台幣的差距＝穩定幣偏離 1 美元的程度（未含台灣交易所價差）",
+   "mode": "level",
+   "series": [
+    "usdtwd",
+    "twd_usdt",
+    "twd_usdc"
+   ]
+  },
+  {
+   "id": "twd_crypto",
+   "cat": "fx",
+   "title": "加密貨幣（新台幣計價）",
+   "note": "起點設為 100；美元報價×美元／新台幣",
+   "mode": "index",
+   "series": [
+    "twd_btc",
+    "twd_eth",
+    "twd_sol",
+    "twd_usdt"
    ]
   },
   {
@@ -1383,15 +1502,15 @@
   },
   {
    "id": "twd_jpy",
-   "name": "100 日圓／新台幣",
-   "short": "日圓×100",
+   "name": "日圓／新台幣",
+   "short": "日圓",
    "a": "usdtwd",
    "b": "usdjpy",
    "op": "div",
-   "scale": 100,
+   "scale": 1,
    "group": "twd",
    "kind": "price",
-   "dec": 3,
+   "dec": 4,
    "market": "FX",
    "q": "日圓 新台幣 匯率"
   },
@@ -1509,8 +1628,8 @@
   },
   {
    "id": "twd_sgd",
-   "name": "新幣／新台幣",
-   "short": "新幣",
+   "name": "新加坡幣／新台幣",
+   "short": "新加坡幣",
    "a": "usdtwd",
    "b": "usdsgd",
    "op": "div",
@@ -1523,17 +1642,87 @@
   },
   {
    "id": "twd_krw",
-   "name": "1000 韓元／新台幣",
-   "short": "韓元×1000",
+   "name": "韓元／新台幣",
+   "short": "韓元",
    "a": "usdtwd",
    "b": "usdkrw",
    "op": "div",
-   "scale": 1000,
+   "scale": 1,
    "group": "twd",
    "kind": "price",
-   "dec": 3,
+   "dec": 5,
    "market": "FX",
    "q": "韓元 新台幣 匯率"
+  },
+  {
+   "id": "twd_usdt",
+   "name": "USDT／新台幣",
+   "short": "USDT",
+   "a": "usdt_usd",
+   "b": "usdtwd",
+   "op": "mul",
+   "scale": 1,
+   "group": "twd_c",
+   "kind": "price",
+   "dec": 3,
+   "market": "CRYPTO",
+   "q": "USDT 新台幣 價格"
+  },
+  {
+   "id": "twd_usdc",
+   "name": "USDC／新台幣",
+   "short": "USDC",
+   "a": "usdc_usd",
+   "b": "usdtwd",
+   "op": "mul",
+   "scale": 1,
+   "group": "twd_c",
+   "kind": "price",
+   "dec": 3,
+   "market": "CRYPTO",
+   "q": "USDC 新台幣 價格"
+  },
+  {
+   "id": "twd_btc",
+   "name": "比特幣／新台幣",
+   "short": "比特幣",
+   "a": "btc_usd",
+   "b": "usdtwd",
+   "op": "mul",
+   "scale": 1,
+   "group": "twd_c",
+   "kind": "price",
+   "dec": 0,
+   "market": "CRYPTO",
+   "q": "比特幣 價格 新台幣"
+  },
+  {
+   "id": "twd_eth",
+   "name": "以太幣／新台幣",
+   "short": "以太幣",
+   "a": "eth_usd",
+   "b": "usdtwd",
+   "op": "mul",
+   "scale": 1,
+   "group": "twd_c",
+   "kind": "price",
+   "dec": 0,
+   "market": "CRYPTO",
+   "q": "以太幣 價格 新台幣"
+  },
+  {
+   "id": "twd_sol",
+   "name": "SOL／新台幣",
+   "short": "SOL",
+   "a": "sol_usd",
+   "b": "usdtwd",
+   "op": "mul",
+   "scale": 1,
+   "group": "twd_c",
+   "kind": "price",
+   "dec": 1,
+   "market": "CRYPTO",
+   "q": "Solana SOL 價格"
   }
  ],
  "curve": {
