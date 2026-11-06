@@ -1,0 +1,100 @@
+name: 更新市場資料並發布
+
+on:
+  schedule:
+    # 台灣時間 = UTC+8；GitHub 排程為盡力而為，可能延遲數分鐘
+    - cron: "20 22 * * 1-5"   # 06:20 美股收盤後（日更，寫入歷史）
+    - cron: "10 6 * * 1-5"    # 14:10 台股收盤後（日更）
+    - cron: "10 8 * * 1-5"    # 16:10 歐股開盤後（日更）
+    - cron: "30 1-5 * * 1-5"  # 09:30–13:30 台股盤中（快照，只發布不寫歷史）
+    - cron: "30 14 * * 1-5"   # 22:30 美股盤中（快照）
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "daily＝寫入歷史並發布；snapshot＝只發布"
+        type: choice
+        default: daily
+        options: [daily, snapshot]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: eco-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 決定模式
+        id: mode
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "mode=${{ inputs.mode }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event.schedule }}" = "30 1-5 * * 1-5" ] || [ "${{ github.event.schedule }}" = "30 14 * * 1-5" ]; then
+            echo "mode=snapshot" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=daily" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 還原上一版的基金與新聞（盤中快照不重抓，且抓失敗時沿用）
+        run: |
+          mkdir -p data/site
+          base="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/data/site"
+          for f in funds funds_tlife funds_nanshan news; do
+            curl -fsSL --max-time 30 "$base/$f.json" -o "data/site/$f.json" || rm -f "data/site/$f.json"
+          done
+          ls -la data/site || true
+
+      - name: 抓資料並產生網站資料
+        id: run
+        run: |
+          set +e
+          python -m pipeline.run --mode "${{ steps.mode.outputs.mode }}"
+          code=$?
+          echo "exit code: $code"
+          # 0 = 成功；2 = 部分來源失敗（仍可發布，網頁會標示）；其他 = 全面失敗，不發布
+          if [ "$code" -ne 0 ] && [ "$code" -ne 2 ]; then exit "$code"; fi
+          if [ "$code" -eq 2 ]; then echo "::warning::部分資料來源失敗，詳見網頁狀態列"; fi
+
+      - name: 提交歷史資料（僅日更）
+        if: steps.mode.outputs.mode == 'daily'
+        run: |
+          git config user.name "eco-bot"
+          git config user.email "eco-bot@users.noreply.github.com"
+          git add data/series
+          if git diff --cached --quiet; then
+            echo "歷史資料無變動"
+          else
+            git commit -m "data: 日更 $(TZ=Asia/Taipei date +'%Y-%m-%d %H:%M')"
+            git pull --rebase --autostash
+            git push
+          fi
+
+      - name: 組裝網站
+        run: |
+          mkdir -p _site/data
+          cp index.html _site/
+          cp -r assets _site/assets
+          cp -r data/site _site/data/site
+          touch _site/.nojekyll
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deploy
+        uses: actions/deploy-pages@v4

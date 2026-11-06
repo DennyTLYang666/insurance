@@ -1,0 +1,75 @@
+{
+  "_說明": "手動維護的重要日期（選舉、央行會議、賽事…）。importance：H／M／L；time 可省略。過期自動隱藏。",
+  "events": [
+    {
+      "date": "2026-11-10",
+      "time": "21:30",
+      "event": "美國 10 月 CPI",
+      "country": "美國",
+      "importance": "H"
+    },
+    {
+      "date": "2026-11-12",
+      "event": "直轄市長候選人名單公告",
+      "country": "台灣",
+      "importance": "L"
+    },
+    {
+      "date": "2026-11-14",
+      "event": "英雄聯盟全球總決賽（紐約，台北時間可能為 11/15）",
+      "country": "美國",
+      "importance": "M",
+      "note": "娛樂：電競賽事，影響年輕族群的直播與遊戲消費（推論）"
+    },
+    {
+      "date": "2026-11-17",
+      "event": "縣市長候選人名單公告",
+      "country": "台灣",
+      "importance": "L"
+    },
+    {
+      "date": "2026-11-20",
+      "event": "日本 10 月 CPI",
+      "country": "日本",
+      "importance": "M"
+    },
+    {
+      "date": "2026-11-28",
+      "time": "08:00",
+      "event": "九合一選舉與核電公投投票（至 16:00）",
+      "country": "台灣",
+      "importance": "H"
+    },
+    {
+      "date": "2026-12-04",
+      "event": "地方選舉當選人公告",
+      "country": "台灣",
+      "importance": "L"
+    },
+    {
+      "date": "2026-12-10",
+      "time": "03:00",
+      "event": "聯準會利率決議（美東 12/9）",
+      "country": "美國",
+      "importance": "H"
+    },
+    {
+      "date": "2026-12-17",
+      "event": "台灣央行理監事會",
+      "country": "台灣",
+      "importance": "H"
+    },
+    {
+      "date": "2026-12-17",
+      "event": "歐洲央行利率決議",
+      "country": "歐元區",
+      "importance": "H"
+    },
+    {
+      "date": "2026-12-18",
+      "event": "日本銀行利率決議",
+      "country": "日本",
+      "importance": "H"
+    }
+  ]
+}

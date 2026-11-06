@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>市場觀察｜台股・美股・匯率一頁看懂</title>
+<meta name="description" content="自動更新的市場概覽：全球股市、AI 供應鏈、匯率、利率、商品與趨勢圖。">
+<script>
+  try { var t = localStorage.getItem("eco.theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到內容</a>
+
+<header class="top">
+  <div class="wrap top-in">
+    <div class="brand">
+      <h1>市場觀察</h1>
+      <p class="sub">全球股市・匯率・利率，一頁看懂</p>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="主要頁面">
+      <a href="#overview" data-tab="overview" class="on">概覽</a>
+      <a href="#trends" data-tab="trends">趨勢</a>
+      <a href="#funds" data-tab="funds">基金</a>
+    </nav>
+    <div class="tools">
+      <button id="theme" class="icon" type="button" aria-label="切換深色／淺色">◐</button>
+    </div>
+  </div>
+  <div class="wrap">
+    <div id="status" class="status" role="status" aria-live="polite">載入中…</div>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+  <div id="fatal" class="fatal" hidden></div>
+
+  <!-- ========== 概覽 ========== -->
+  <section id="page-overview" class="page">
+    <nav class="subtabs" id="sub-overview" aria-label="概覽分類" data-page="overview">
+      <a href="#overview/all" data-sub="all">全部</a>
+      <a href="#overview/stocks" data-sub="stocks">股市</a>
+      <a href="#overview/fx" data-sub="fx">匯率</a>
+      <a href="#overview/rates" data-sub="rates">利率與風險</a>
+      <a href="#overview/cmd" data-sub="cmd">商品</a>
+      <a href="#overview/funds" data-sub="funds">基金類別</a>
+    </nav>
+    <div id="hero" class="hero"></div>
+    <div id="markets"></div>
+    <div class="two" id="ov-extra">
+      <section class="block" id="events-block" hidden>
+        <h2>接下來要注意</h2>
+        <div id="ov-events"></div>
+      </section>
+      <section class="block" id="news-block" hidden>
+        <h2>市場新聞</h2>
+        <div id="ov-news"></div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ========== 趨勢 ========== -->
+  <section id="page-trends" class="page" hidden>
+    <nav class="subtabs" id="sub-trends" aria-label="趨勢分類" data-page="trends">
+      <a href="#trends/stocks" data-sub="stocks">股市</a>
+      <a href="#trends/fx" data-sub="fx">匯率</a>
+      <a href="#trends/rates" data-sub="rates">利率</a>
+      <a href="#trends/risk" data-sub="risk">風險</a>
+      <a href="#trends/cmd" data-sub="cmd">商品</a>
+      <a href="#trends/table" data-sub="table">市場表</a>
+      <a href="#trends/macro" data-sub="macro">總經</a>
+      <a href="#trends/cal" data-sub="cal">行事曆</a>
+    </nav>
+    <div class="toolbar" id="range-bar">
+      <div class="seg" id="range" role="group" aria-label="圖表區間">
+        <button type="button" data-days="22">1 個月</button>
+        <button type="button" data-days="66" class="on">3 個月</button>
+        <button type="button" data-days="252">1 年</button>
+      </div>
+      <p class="hint">點圖例可隱藏／顯示該條線；「起點設為 100」是把區間第一天當基準，方便比較誰漲得多。</p>
+    </div>
+    <div class="sub-panel" data-sub="stocks"><div id="charts-stocks" class="charts"></div></div>
+    <div class="sub-panel" data-sub="fx"><div id="charts-fx" class="charts"></div></div>
+    <div class="sub-panel" data-sub="rates"><div id="charts-rates" class="charts"></div></div>
+    <div class="sub-panel" data-sub="risk"><div id="charts-risk" class="charts"></div></div>
+    <div class="sub-panel" data-sub="cmd"><div id="charts-cmd" class="charts"></div></div>
+    <div class="sub-panel" data-sub="table">
+      <section class="block"><h2>全球市場一張表</h2><div class="tablewrap"><table id="mtable" class="mtable"></table></div></section>
+    </div>
+    <div class="sub-panel" data-sub="macro">
+      <section class="block" id="macro-block" hidden><h2>美國總經數據</h2><div id="macro" class="macro"></div></section>
+      <section class="block" id="lights-block" hidden><h2>宏觀環境</h2><div id="lights"></div></section>
+    </div>
+    <div class="sub-panel" data-sub="cal">
+      <section class="block" id="cal-block" hidden><h2>行事曆</h2><div id="cal"></div></section>
+    </div>
+  </section>
+
+  <!-- ========== 基金 ========== -->
+  <section id="page-funds" class="page" hidden>
+    <nav class="subtabs" id="sub-funds" aria-label="基金分類" data-page="funds">
+      <a href="#funds/nanshan" data-sub="nanshan">南山基金</a>
+      <a href="#funds/tlife" data-sub="tlife">台壽基金</a>
+      <a href="#funds/common" data-sub="common">基金共同</a>
+    </nav>
+    <div id="funds-empty" class="block" hidden></div>
+    <div class="sub-panel" data-sub="nanshan"><div id="fund-nanshan"></div></div>
+    <div class="sub-panel" data-sub="tlife"><div id="fund-tlife"></div></div>
+    <div class="sub-panel" data-sub="common"><div id="fund-common"></div></div>
+  </section>
+</main>
+
+<dialog id="dlg" class="dlg" aria-labelledby="dlg-title">
+  <div class="dlg-in">
+    <header><h3 id="dlg-title"></h3><button type="button" class="icon" id="dlg-x" aria-label="關閉">✕</button></header>
+    <div id="dlg-body"></div>
+  </div>
+</dialog>
+
+<footer class="foot wrap">
+  <p>紅色代表上漲、綠色代表下跌（台灣慣例）。資料來自 Yahoo Finance、FRED、Forex Factory、Google 新聞、台灣人壽與南山人壽官網基金資訊，由程式自動整理，報價可能有延遲，也可能偶有缺漏。</p>
+  <p>本頁是市場資訊整理，不是投資建議，也不保證準確或完整；氣氛標籤與環境燈號為規則式計算，不是預測。</p>
+</footer>
+
+<script src="assets/vendor/chart.umd.js"></script>
+<script src="assets/js/loader.js"></script>
+<script src="assets/js/fmt.js"></script>
+<script src="assets/js/news.js"></script>
+<script src="assets/js/overview.js"></script>
+<script src="assets/js/charts.js"></script>
+<script src="assets/js/calendar.js"></script>
+<script src="assets/js/trends.js"></script>
+<script src="assets/js/funds.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
