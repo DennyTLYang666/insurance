@@ -169,7 +169,8 @@ def _ndc_month(s):
 
 def parse_ndc(text, cols):
     """text＝CSV 全文；cols＝{key: 欄名關鍵字}。回傳 {key: [(date, value)]}；找不到的欄就沒有該 key。"""
-    rows = list(csv.reader(io.StringIO(text)))
+    text = text.replace("\x00", "").replace("\r\n", "\n").replace("\r", "\n")  # 有些檔只用 CR 換行
+    rows = list(csv.reader(io.StringIO(text, newline="")))
     DATE_COL = r"date|日期|時間|月份|統計期|期別|年月|period"
     hi = next((i for i, r in enumerate(rows[:6]) if any(re.search(DATE_COL, c, re.I) for c in r)), None)
     if hi is None:  # 欄名不認得：第一列當標題、第一欄當日期
@@ -213,7 +214,11 @@ def fetch_ndc(cols, csv_url=None):
         text = raw.decode("utf-8-sig")
     except UnicodeDecodeError:
         text = raw.decode("cp950", errors="replace")
-    got = parse_ndc(text, cols)
+    try:
+        got = parse_ndc(text, cols)
+    except csv.Error as e:
+        raise SourceError("國發會檔案不是 CSV（%s）；開頭：%r" % (e, text[:80]))
     if not got:
-        raise SourceError("國發會 CSV 沒有找到任何需要的欄位")
+        first = [c.strip() for c in next(csv.reader(io.StringIO(text.replace("\r", "\n"), newline="")), [])]
+        raise SourceError("國發會 CSV 沒有找到需要的欄位；實際欄位：%s" % "｜".join(first)[:200])
     return got

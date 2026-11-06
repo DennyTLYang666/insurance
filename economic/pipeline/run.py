@@ -163,7 +163,7 @@ def main(argv=None):
                     for iid, pts in fetch.fetch_ndc(ndc_cols, intl.get("ndc_csv")).items():
                         fred["NDC_" + iid] = merge_bars(fred.get("NDC_" + iid), pts)
                     src["fred"]["ok"] += 1
-                except (SourceError, ValueError, OSError, KeyError) as e:
+                except Exception as e:  # 台灣總經是加分項，任何錯誤都不能拖垮整個更新
                     src["fred"]["fail"] += 1
                     src["fred"]["errors"].append("國發會景氣指標：%s（台灣總經沿用上次資料）" % str(e)[:140])
         prog.stage("經濟日曆")
