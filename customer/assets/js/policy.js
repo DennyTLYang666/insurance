@@ -1,6 +1,6 @@
 /* 保單分頁：全部保單，以及依保險類型（防癌、意外傷害、住院醫療、壽險…）的第二層頁籤 */
 const Policy = {
-  st: { sub: 'all', q: '', status: '', rel: '', type: '', sort: 'owner', dir: 1 },
+  st: { sub: 'all', q: '', status: '', rel: '', type: '', sort: 'owner', dir: 1, limit: 200 },
 
   subs() {
     const P = Store.policies, out = [['all', '全部保單', P.length]];
@@ -77,7 +77,7 @@ const Policy = {
   },
   filtered() {
     const s = this.st, q = s.q.trim().toLowerCase();
-    return Store.policies.filter(p => {
+    const kept = Store.policies.filter(p => {
       if (s.status && p.status !== s.status) return false;
       if (s.rel === 'self' && !p.self) return false;
       if (s.rel === 'other' && p.self) return false;
@@ -85,7 +85,9 @@ const Policy = {
       if (s.dueOnly && !(p.due.date && p.due.days <= Store.warnDays('payWarnDays'))) return false;
       if (q && ![p.no, p.owner.name, p.insuredName, p.status, p.items.map(i => i.raw).join(' ')].join(' ').toLowerCase().includes(q)) return false;
       return true;
-    }).sort((a, b) => String(this.val(a, s.sort)).localeCompare(String(this.val(b, s.sort)), 'zh-Hant') * s.dir || a.no.localeCompare(b.no));
+    });
+    const kv = new Map(kept.map(p => [p, String(this.val(p, s.sort))]));   // 排序鍵只算一次
+    return kept.sort((a, b) => U.coll.compare(kv.get(a), kv.get(b)) * s.dir || a.no.localeCompare(b.no));
   },
 
   render() {
@@ -99,7 +101,7 @@ const Policy = {
   },
 
   bodyAll() {
-    const s = this.st, rows = this.filtered(), P = Store.policies;
+    const s = this.st, rows = this.filtered(), P = Store.policies, pg = U.page(s, rows);
     const COLS = [['no', '保單號碼'], ['owner', '要保人'], ['insured', '被保險人'], ['start', '保險始期'], ['status', '狀態'], ['payMode', '繳別'], ['due', '下次繳費 ⚠'], ['types', '保障類型'], ['', '明細（保額）']];
     const types = Store.TYPES.filter(t => P.some(p => p.types.has(t)));
     return `<div class="filters">
@@ -112,8 +114,8 @@ const Policy = {
         <button id="pclear" class="ghost">清除</button><span class="count">${rows.length} / ${P.length} 張</span></div>
       ${this.dueBanner()}
       <div class="tablewrap"><table><thead><tr>${COLS.map(([k, t]) => `<th class="${k ? '' : 'nosort'}" data-k="${k}">${t}${s.sort === k ? (s.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('')}</tr></thead><tbody>
-        ${rows.map(p => `<tr class="row" data-pol="${U.esc(p.key)}"><td>${U.esc(p.no)}</td><td>${this.custLink(p.owner)}</td><td>${this.insLink(p)}</td><td>${U.esc(p.start || '—')}</td><td><span class="tag">${U.esc(p.status || '未填')}</span></td><td>${U.esc(p.payMode || '—')}</td><td>${this.dueCell(p)}</td><td class="wrap">${this.typeTags(p)}</td><td class="wrap">${this.itemsHtml(p)}</td></tr>`).join('') || `<tr><td colspan="${COLS.length}" class="empty">沒有符合的保單</td></tr>`}
-      </tbody></table></div>
+        ${pg.shown.map(p => `<tr class="row" data-pol="${U.esc(p.key)}"><td>${U.esc(p.no)}</td><td>${this.custLink(p.owner)}</td><td>${this.insLink(p)}</td><td>${U.esc(p.start || '—')}</td><td><span class="tag">${U.esc(p.status || '未填')}</span></td><td>${U.esc(p.payMode || '—')}</td><td>${this.dueCell(p)}</td><td class="wrap">${this.typeTags(p)}</td><td class="wrap">${this.itemsHtml(p)}</td></tr>`).join('') || `<tr><td colspan="${COLS.length}" class="empty">沒有符合的保單</td></tr>`}
+      </tbody></table></div>${pg.foot}
       <p class="muted small">「下次繳費」由保險始期＋繳別推算（繳別沒填視為年繳）：主約繳費期滿且無附約者不顯示；主約繳費期滿但含附約者仍推算並標「附約?」（附約是否續繳依條款，屬推定）。點一列看保單內容；點「要保人」「被保險人」看對應的人。要保人＝保單所在的客戶檔案；保障類型是依商品名稱關鍵字推斷。</p>`;
   },
 
@@ -122,7 +124,7 @@ const Policy = {
     const hit = it => other ? !it.type : it.type === t;
     const groups = new Map();
     Store.policies.forEach(p => p.items.forEach(it => { if (hit(it)) { if (!groups.has(it.name)) groups.set(it.name, []); groups.get(it.name).push({ p, it }); } }));
-    const gs = [...groups.entries()].sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0], 'zh-Hant'));
+    const gs = [...groups.entries()].sort((a, b) => b[1].length - a[1].length || U.coll.compare(a[0], b[0]));
     const polsOfType = Store.policies.filter(p => p.items.some(hit));
     const owners = new Set(polsOfType.map(p => p.owner)), insureds = new Set(polsOfType.map(p => p.insuredName));
     const have = other ? [] : Store.list.filter(c => c.ownTypes.has(t)), lack = other ? [] : Store.list.filter(c => !c.ownTypes.has(t));
@@ -144,14 +146,15 @@ const Policy = {
     el.querySelectorAll('[data-sub]').forEach(b => b.onclick = () => { s.sub = b.dataset.sub; this.render(); });
     const q = id => el.querySelector(id);
     if (s.sub === 'all') {
-      q('#pq').oninput = e => { s.q = e.target.value; this.render(); const n = q('#pq'); n.focus(); n.setSelectionRange(n.value.length, n.value.length); };
-      q('#pstatus').onchange = e => { s.status = e.target.value; this.render(); };
-      q('#prel').onchange = e => { s.rel = e.target.value; this.render(); };
-      q('#ptype').onchange = e => { s.type = e.target.value; this.render(); };
+      q('#pq').oninput = e => { s.q = e.target.value; s.limit = 200; this.render(); const n = q('#pq'); n.focus(); n.setSelectionRange(n.value.length, n.value.length); };
+      q('#pstatus').onchange = e => { s.status = e.target.value; s.limit = 200; this.render(); };
+      q('#prel').onchange = e => { s.rel = e.target.value; s.limit = 200; this.render(); };
+      q('#ptype').onchange = e => { s.type = e.target.value; s.limit = 200; this.render(); };
+      U.bindPage(el, s, again);
       const pi = q('#pics'); if (pi) pi.onclick = () => this.dueIcs();
       q('#pdue').onchange = e => { Store.setting('payWarnDays', +e.target.value); this.render(); App.updateBadges(); };
       q('#pdueonly').onchange = e => { s.dueOnly = e.target.checked; this.render(); };
-      q('#pclear').onclick = () => { Object.assign(s, { q: '', status: '', rel: '', type: '', dueOnly: false }); this.render(); };
+      q('#pclear').onclick = () => { Object.assign(s, { q: '', status: '', rel: '', type: '', dueOnly: false, limit: 200 }); this.render(); };
       el.querySelectorAll('th[data-k]').forEach(th => { if (th.dataset.k) th.onclick = () => { const k = th.dataset.k; if (s.sort === k) s.dir *= -1; else { s.sort = k; s.dir = 1; } this.render(); }; });
     } else if (s.sub !== '_other') {
       const t = s.sub, L = Store.list;

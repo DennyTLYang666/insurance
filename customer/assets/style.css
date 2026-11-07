@@ -79,7 +79,7 @@ td.wrap{white-space:normal;min-width:180px}
 .sec{margin:14px 0 4px;font-weight:600;color:var(--text2);border-bottom:1px solid var(--line);padding-bottom:2px}
 .toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:6px 14px;border-radius:99px;z-index:20}
 .sched{display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:12px}
-.cand{max-height:70vh;overflow:auto}
+.cand{}
 .cand .gh{font-weight:600;color:var(--text2);margin:8px 0 2px}
 .cand label{display:flex;gap:6px;align-items:flex-start;padding:2px 0;cursor:pointer}
 .opts{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-bottom:10px}
@@ -179,11 +179,78 @@ table.mini td{border-top:1px solid var(--line);padding:3px 4px;vertical-align:to
 /* 載入資料檔 */
 .filebtn{display:inline-block;padding:10px 16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);cursor:pointer;font-weight:600}
 .filebtn input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
-#loadPanel,#pwDlg{z-index:60}
+#loadPanel,#pwDlg,#syncPanel{z-index:60}
 #pwDlg{z-index:70}
-@media print{#loadPanel,#pwDlg,#btnLoad{display:none!important}}
+#btnSync.ok{border-color:#2e8b57;color:#2e8b57}
+#btnSync.warn{border-color:#c0392b;color:#c0392b}
+#syncPanel input[type=url],#syncPanel input[type=text]{margin:2px 0 6px;font-size:16px}
+@media print{#loadPanel,#pwDlg,#syncPanel,#btnLoad,#btnSync{display:none!important}}
 
 .blank{display:none;margin:40px 16px;padding:24px;text-align:center;color:var(--text2);border:1px dashed var(--line);border-radius:var(--radius)}
 body:has(main.empty) .blank{display:block}
 main.empty .tab,main.empty .tab.on{display:none!important}
 @media print{.blank,#btnLock{display:none!important}}
+
+/* 地圖 */
+:root{ --st-orig:#2a78d6; --st-non:#1baf7a; --st-todo:#eb6834; --st-arch:#85837d; }
+@media (prefers-color-scheme: dark){ :root{ --st-orig:#3987e5; --st-non:#199e70; --st-todo:#d95926; --st-arch:#8f8d84; } }
+.gm{position:relative;height:460px;overflow:hidden;border:1px solid var(--line);border-radius:var(--radius);background:var(--grid);touch-action:none;user-select:none;cursor:grab}
+.gm.dragging{cursor:grabbing} .gm.picking{cursor:crosshair;outline:3px solid var(--s2);outline-offset:-3px} .gm.boxing{cursor:crosshair}
+.gm-tiles,.gm-marks{position:absolute;inset:0;pointer-events:none}
+.gm-marks{pointer-events:none}
+.gm-t{position:absolute;left:0;top:0;width:256px;height:256px;max-width:none;opacity:0;transition:opacity .15s}
+.gm-t.ok{opacity:1}
+.gm-line{position:absolute;left:0;top:0;pointer-events:none}
+.gm-m{isolation:isolate;position:absolute;left:-14px;top:-34px;width:28px;height:28px;padding:0;border:0;background:none;pointer-events:auto;cursor:pointer;color:#fff;font-size:12px;font-weight:700;line-height:28px;text-align:center;--pin:var(--st-arch)}
+.gm-m::before{content:'';position:absolute;inset:0;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--pin);border:2px solid #fff;box-sizing:border-box;box-shadow:0 1px 4px rgba(0,0,0,.5);z-index:-1}
+.gm-m.s-orig{--pin:var(--st-orig)} .gm-m.s-non{--pin:var(--st-non)} .gm-m.s-todo{--pin:var(--st-todo)} .gm-m.s-arch{--pin:#77756c}
+.gm-m.stop{--pin:var(--text);color:var(--surface);font-size:13px}
+.gm-m.stop::before{border-color:var(--surface)}
+.gm-m.sel{z-index:3}
+.gm-m.sel::before{transform:rotate(-45deg) scale(1.18);outline:3px solid var(--text);outline-offset:1px}
+.gm-m.dim{opacity:.4}
+.gm-m.approx{color:var(--pin);opacity:.9}
+.gm-m.approx::before{background:var(--surface);border:2px dashed var(--pin)}
+.gm-m.bad::before{border:3px solid #c0392b}
+.gm-m.bad::after{content:'!';position:absolute;right:-7px;top:-5px;width:15px;height:15px;border-radius:50%;background:#c0392b;color:#fff;font-size:11px;line-height:15px}
+.nogeo{margin:6px 0;padding:6px 8px;border:1px dashed var(--line);border-radius:6px}
+.nogeo button{margin:2px 4px 2px 0}
+.cand .tbar{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-bottom:6px}
+.cand .tq{flex:1 1 100%;font-size:16px}
+.cand .tscroll{max-height:62vh;overflow:auto}
+.tr{display:flex;align-items:center;gap:4px;padding:3px 0 3px calc(var(--lv,0)*14px);border-bottom:1px solid var(--line)}
+.tr .tl{cursor:pointer;font-weight:600}
+.tg{border:0;background:none;padding:0 4px;cursor:pointer;color:var(--text2);width:20px}
+.cand .tleaf{display:flex;gap:6px;align-items:flex-start;padding:2px 0 2px calc(var(--lv,0)*14px + 24px)}
+#btnExport.warn{border-color:#c0392b;color:#c0392b}
+.gm-m:hover{z-index:4}
+.gm-ctl{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:4px}
+.gm-ctl button{width:32px;height:32px;padding:0;font-size:16px;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.gm-attr{position:absolute;left:0;bottom:0;padding:1px 6px;font-size:11px;background:color-mix(in srgb,var(--surface) 80%,transparent);color:var(--text2)}
+.gm-msg{position:absolute;left:8px;right:48px;top:8px;padding:6px 10px;font-size:12px;border:1px solid var(--warn);border-radius:6px;background:var(--surface);color:var(--text)}
+.gm-box{position:absolute;border:2px dashed var(--s1);background:color-mix(in srgb,var(--s1) 15%,transparent);pointer-events:none}
+.maptool{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.mapwrap{display:grid;grid-template-columns:1fr 280px;gap:12px}
+@media (max-width:860px){.mapwrap{grid-template-columns:1fr}.gm{height:360px}}
+.maplegend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--text2);margin:6px 0}
+.maplegend i{display:inline-block;width:12px;height:12px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);vertical-align:-2px;margin-right:6px}
+.mapside{max-height:460px;overflow:auto;border:1px solid var(--line);border-radius:var(--radius);padding:8px;background:var(--surface)}
+.mapside .it{display:flex;gap:6px;align-items:center;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--grid)}
+.mappop{position:absolute;z-index:6;min-width:220px;max-width:290px;padding:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 4px 14px rgba(0,0,0,.3);font-size:13px}
+.mappop h3{margin:0 0 4px;font-size:14px;color:var(--text)}
+@media print{.gm-ctl{display:none}}
+/* 待辦／拜訪紀錄 */
+td.rec{min-width:190px}
+td.rec input{display:block;width:100%;margin:2px 0;font-size:12px}
+/* 地圖：合併氣泡 */
+.gm-m.gm-c{width:32px;height:32px;left:-16px;top:-16px;background:var(--surface);color:var(--text);border:3px solid var(--s1);border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.4);font-size:12px;font-weight:700;line-height:26px}
+.gm-m.gm-c::before,.gm-m.gm-c::after{display:none}
+
+.pastebox{margin-top:6px;padding-top:6px;border-top:1px dashed var(--line,#ccc)}
+.pastebox .pr{display:flex;gap:6px;align-items:center;margin:4px 0;flex-wrap:wrap}
+.pastebox .pr input{width:170px}
+
+.qchips{display:flex;flex-direction:column;gap:6px;margin:6px 0}
+.qchip{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--grid)}
+.qchip select{width:auto;padding:2px 4px}
+.drawer .seg{display:inline-flex}

@@ -7,7 +7,7 @@ const App = {
     try { await Store.load(); } catch (e) { console.error(e); this.notice('讀取資料失敗：' + e.message); }
     Schedule.init();
     this.setBadge();
-    Bundle.bind();
+    Bundle.bind(); Sync.bind();
     Bundle.showPanel();   // 預設是空白的：要先載入客戶資料才能使用
     q('maskToggle').checked = Store.ov.settings.mask !== false;
     q('maskToggle').onchange = e => { Store.setting('mask', e.target.checked); this.refresh(); };
@@ -15,14 +15,7 @@ const App = {
     window.addEventListener('beforeunload', e => { if (Store.bundle && Store.dirty) { e.preventDefault(); e.returnValue = ''; } });
     q('btnLock').onclick = () => this.lock();
     q('btnPrint').onclick = () => window.print();
-    q('btnExport').onclick = () => U.download(`客戶補填備份_${U.iso(U.today())}.json`, Store.exportJson(), 'application/json');
-    q('btnImport').onclick = () => q('fileImport').click();
-    q('fileImport').onchange = async e => {
-      const f = e.target.files[0]; if (!f) return;
-      try { if (!confirm('匯入會覆蓋目前的補填資料與排程，確定嗎？')) return; Store.importJson(await f.text()); this.refresh(); U.toast('已匯入'); }
-      catch (err) { U.toast('匯入失敗：' + err.message); }
-      e.target.value = '';
-    };
+    q('btnExport').onclick = () => this.exportData();
     Stats.bind();
     // 全域：點擊撥號／導航（capture 階段處理，避免觸發列點擊開明細）
     document.addEventListener('click', e => {
@@ -45,18 +38,49 @@ const App = {
   afterLoad() {
     this.setBadge();
     document.getElementById('notice').hidden = true;
-    this.notice(Store.bundle ? '已載入資料檔（資料日期 ' + (Store.bundle.built ? Store.bundle.built.replace('T', ' ').slice(0, 16) : '不明') + '）。資料只在這個頁面的記憶體裡，關閉或重新整理就清掉，不會存在這個裝置；修改請用「匯出備份」帶走。' : '已從本機伺服器載入。補填資料會存回資料資料夾的 _overlay.json；關閉頁面後再開會是空白，要重新按「載入」。');
+    this.notice(Store.bundle ? '已載入資料檔（資料日期 ' + (Store.bundle.built ? Store.bundle.built.replace('T', ' ').slice(0, 16) : '不明') + '）。客戶資料只在這個頁面的記憶體裡，關閉或重新整理就清掉；修改後請按右上「匯出資料檔」存成新檔' + (Sync.on ? '，或登入「同步」帶到其他裝置。' : '。') : '已從本機伺服器載入。補填資料會自動存回資料資料夾的 _overlay.json；關閉頁面後再開會是空白，要重新按「載入」。');
     document.getElementById('maskToggle').checked = Store.ov.settings.mask !== false;
     Schedule.init();
     this.refresh();
   },
   /* 鎖定：清掉記憶體裡的客戶資料，回到空白 */
   lock() {
-    if (Store.bundle && Store.dirty && !confirm('有尚未匯出的修改，鎖定後會消失。確定鎖定嗎？')) return;
+    const safe = Sync.token && !Sync.pending();   // 已全部同步到伺服器
+    if (Store.bundle && Store.changed && !safe && !confirm('有修改還沒匯出資料檔' + (Sync.on ? '（也還沒同步）；暫存在這個瀏覽器，下次載入同一個資料檔會還原，但其他裝置看不到' : '，鎖定後會消失') + '。確定鎖定嗎？')) return;
     Store.unload();
     document.getElementById('drawer').hidden = true;
     document.getElementById('notice').hidden = true;
     this.setBadge(); this.refresh(); Bundle.showPanel();
+  },
+  /* 匯出資料檔：把目前資料（含修改與已同步的更新）存成新的加密 .cbundle；沒有密碼的舊檔會要求設定密碼 */
+  async exportData() {
+    try {
+      if (!Store.bundle && !this.canExportServer()) throw new Error('請先載入資料檔');
+      let n;
+      if (Sync.on) n = await Sync.exportCheckpoint();
+      else n = await Bundle.exportPlain(() => this.newPassword());
+      if (n == null) return;
+      Store.changed = false; Store.dirty = false; this.updateExport();
+      U.toast('已匯出資料檔（' + (n / 1024).toFixed(0) + ' KB），請存到「檔案」App 或你的資料夾；其他裝置載入這個檔即可');
+    } catch (e) { U.toast('匯出失敗：' + e.message); }
+  },
+  async newPassword() {
+    for (let msg = '設定資料檔密碼（至少 8 個字元；忘記無法救回）'; ;) {
+      const a = await Bundle.askPassword(msg); if (a === null) return null;
+      if (a.length < 8) { msg = '至少 8 個字元，請重新設定'; continue; }
+      const b = await Bundle.askPassword('再輸入一次確認'); if (b === null) return null;
+      if (a === b) return a;
+      msg = '兩次不一致，請重新設定';
+    }
+  },
+  /* 本機伺服器模式也能匯出：把「最新的 adoc 客戶資料＋補填資料」合成一個加密 .cbundle，自成一體（不需要 _overlay.json） */
+  canExportServer() { return Store.mode === 'server' && !!Store.raw && !Store.bundle; },
+  updateExport() {
+    const b = document.getElementById('btnExport'); if (!b) return;
+    if (this.canExportServer()) { b.disabled = false; b.textContent = '匯出資料檔'; b.className = ''; b.title = '把目前最新的客戶資料（adoc）＋補填資料打包成加密 .cbundle，自成一體，不需要另外帶 _overlay.json'; return; }
+    b.disabled = !Store.bundle; b.textContent = Store.changed ? '匯出資料檔 ●' : '匯出資料檔';
+    b.className = Store.changed ? 'warn' : '';
+    b.title = !Store.bundle ? '載入資料檔後可用（本機伺服器模式的修改已自動存回資料資料夾）' : Store.changed ? '有修改還沒匯出：按這裡存成新的加密資料檔' : '把目前資料存成新的加密資料檔，沿用原本的密碼';
   },
   notice(msg) { const n = document.getElementById('notice'); n.textContent = msg; n.hidden = false; },
   show(t) {
@@ -70,7 +94,7 @@ const App = {
       document.querySelector('main').classList.add('empty'); this.updateBadges(); return;
     }
     document.querySelector('main').classList.remove('empty');
-    ({ list: List, insured: Insured, cover: Cover, policy: Policy, stats: Stats, schedule: Schedule, todo: Todo })[this.tab].render(); this.updateBadges(); },
-  updateBadges() { Todo.updateBadge(); Policy.updateBadge(); },
+    ({ list: List, insured: Insured, cover: Cover, policy: Policy, stats: Stats, schedule: Schedule, rem: Reminders, todo: Todo })[this.tab].render(); this.updateBadges(); },
+  updateBadges() { Todo.updateBadge(); Policy.updateBadge(); Reminders.updateBadge(); this.updateExport(); },
 };
 App.init();

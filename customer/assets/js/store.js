@@ -1,6 +1,6 @@
 /* 資料層：客戶資料（本機伺服器讀 adoc，或載入 .cbundle 資料檔）＋補填資料 overlay，組出畫面用的 view model。啟動時是空白。 */
 const Store = {
-  mode: 'file',           // 'server'（scripts/serve.py）或 'file'（雙擊 index.html）
+  mode: 'file',           // 'server'（scripts/py/server/serve.py）或 'file'（雙擊 index.html）
   raw: null,
   ov: { extra: {}, visits: {}, geo: {}, settings: {} },
   list: [], policies: [], insureds: [],
@@ -36,9 +36,10 @@ const Store = {
   /* 鎖定：把客戶資料從記憶體清掉，回到空白 */
   unload() {
     clearTimeout(this._st);
-    this.raw = null; this.bundle = null; this.dirty = false; this._warned = false;
+    this.raw = null; this.bundle = null; this.dirty = false; this.changed = false; this._warned = false;
     this.mode = this.serverAvail ? 'server' : 'file';
     this._setOv({});
+    Bundle.sess = null; Sync.detach();
     this.rebuild();
   },
   /* 從單一資料檔（.cbundle）載入 */
@@ -48,7 +49,7 @@ const Store = {
     this.raw = d.customers;
     if (d.coverage) Coverage.init(d.coverage);   // 新版資料檔不含商品保障（網頁自帶 data/coverage.js）；舊檔才有
     this._setOv(d.overlay || {});
-    this.dirty = false;
+    this.dirty = false; this.changed = false; this._warned = false;
     this.rebuild();
   },
   _setOv(o) {
@@ -56,9 +57,11 @@ const Store = {
     for (const k of ['extra', 'visits', 'geo', 'settings', 'ins']) if (!this.ov[k] || typeof this.ov[k] !== 'object') this.ov[k] = {};
   },
   save() {
-    if (this.bundle) {   // 資料檔模式：不存任何東西；改過的資料請用「匯出備份」帶走
+    if (this.bundle) {   // 資料檔模式：不存明文；有同步時修改會加密暫存（見 sync.js），否則請用「匯出資料檔」帶走
+      this.changed = true; App.updateExport();
+      if (!this._warned) { this._warned = true; U.toast(Sync.on ? '已儲存。要保留或帶到其他裝置，請按右上「匯出資料檔」或登入「同步」' : '已儲存在這個頁面。要保留請按右上「匯出資料檔」，關閉頁面就會消失'); }
+      if (Sync.on) { Sync.capture(); this.dirty = !Sync.persistOK; return; }
       this.dirty = true;
-      if (!this._warned) { this._warned = true; U.toast('資料檔模式：修改只在這個頁面，關閉就消失；要保留請按「匯出備份」'); }
       return;
     }
     clearTimeout(this._st);
@@ -70,7 +73,7 @@ const Store = {
         } catch (e) { U.toast('儲存失敗：' + e.message); }
       } else {
         try { localStorage.setItem(this.LS_KEY, JSON.stringify(this.ov)); }
-        catch (e) { U.toast('瀏覽器無法儲存，請用「匯出備份」'); }
+        catch (e) { U.toast('瀏覽器無法儲存'); }
       }
     }, 150);
   },
@@ -91,7 +94,12 @@ const Store = {
     this.save(); this.rebuild();
   },
   setGeo(id, g) { if (g) this.ov.geo[id] = g; else delete this.ov.geo[id]; this.save(); this.rebuild(); },
-  setting(k, v) { if (v === undefined) return this.ov.settings[k]; this.ov.settings[k] = v; this.save(); },
+  setting(k, v) {
+    if (v === undefined) return this.ov.settings[k];
+    this.ov.settings[k] = v;
+    if (this.bundle && Sync.LOCAL_ONLY.has(k)) return;   // 遮蔽個資、底圖這類只屬於這台裝置的偏好，不算「資料有修改」
+    this.save();
+  },
 
   normGender(s) {
     if (!s) return '';
@@ -198,11 +206,11 @@ const Store = {
   },
   dueSoon() { const n = this.warnDays('payWarnDays'); return this.policies.filter(p => p.due.date && p.due.days <= n).sort((a, b) => a.due.days - b.due.days); },
   getPolicy(key) { return this.policies.find(p => p.key === key); },
-  get(id) { return this.list.find(c => c.id === id); },
+  get(id) { if (!this._idx || this._idxFor !== this.list) { this._idx = new Map(this.list.map(c => [c.id, c])); this._idxFor = this.list; } return this._idx.get(id); },
   statuses() {
     const s = new Set(this.list.map(c => c.status));
     this.STATUS_ORDER.forEach(x => s.add(x));
-    return [...s].sort((a, b) => (this.STATUS_ORDER.indexOf(a) + 99) % 99 - (this.STATUS_ORDER.indexOf(b) + 99) % 99 || a.localeCompare(b, 'zh-Hant'));
+    return [...s].sort((a, b) => (this.STATUS_ORDER.indexOf(a) + 99) % 99 - (this.STATUS_ORDER.indexOf(b) + 99) % 99 || U.coll.compare(a, b));
   },
   statusClass(s) { return s === '待訪談' ? 'todo' : s === '原招' || s === '非原招' ? 'own' : ''; },
 
@@ -239,5 +247,6 @@ const Store = {
     return (a.city || '') + (a.district || '') + (a.roadKey || '') + (a.raw ? '…' : '');
   },
   /* 供 Google 地圖用：有座標用座標，否則用完整地址 */
-  mapQuery(c) { return c.geo ? c.geo.lat + ',' + c.geo.lng : (c.addr ? c.addr.raw : ''); },
+  /* 導航一律優先用地址文字（Google 地圖自己解析，通常最準）；沒地址才用補填的座標，因為座標可能是手動標錯或查詢誤差 */
+  mapQuery(c) { return c.addr && c.addr.raw ? c.addr.raw : (c.geo ? c.geo.lat + ',' + c.geo.lng : ''); },
 };

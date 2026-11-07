@@ -25,7 +25,7 @@ const Cover = {
       if (q && !g.name.toLowerCase().includes(q)) return false;
       if (s.has) { const [m, code] = s.has.split(':'); const has = !!r.cells[code]; if ((m === 'has') !== has) return false; }
       return true;
-    }).sort((a, b) => a.g.name.localeCompare(b.g.name, 'zh-Hant'));
+    }).sort((a, b) => U.coll.compare(a.g.name, b.g.name));
   },
   bodySum() {
     const E = U.esc, s = this.st, all = Store.insureds.map(g => Coverage.ofInsured(g));
@@ -112,7 +112,7 @@ const Cover = {
   /* ---------- 理賠試算 ---------- */
   bodyClaim() {
     const E = U.esc, cl = this.st.cl;
-    const people = Store.insureds.filter(g => Coverage.ofInsured(g).active.length).sort((a, b) => a.name.localeCompare(b.name, 'zh-Hant'));
+    const people = Store.insureds.filter(g => Coverage.ofInsured(g).active.length).sort((a, b) => U.coll.compare(a.name, b.name));
     if (!people.length) return '<div class="card empty">沒有有效保單的被保險人。</div>';
     if (!people.some(g => g.name === cl.ins)) cl.ins = people[0].name;
     const g = people.find(x => x.name === cl.ins), e = Claim.ev(cl.ev);
@@ -166,7 +166,7 @@ const Cover = {
       held.forEach((x, k) => { if (!seen.has(k)) list.push({ name: x.name, n: x.n, lk: Coverage.lookup(x.name) }); });
     }
     return list.filter(x => (!q || x.name.toLowerCase().includes(q)) && (!s.pcode || x.lk.benefits.some(b => Coverage.expand(b.code).includes(s.pcode))) && (!s.psrc || x.lk.source === s.psrc))
-      .sort((a, b) => b.n - a.n || a.name.localeCompare(b.name, 'zh-Hant'));
+      .sort((a, b) => b.n - a.n || U.coll.compare(a.name, b.name));
   },
   bodyProd() {
     const E = U.esc, s = this.st, rows = this.prodRows();
@@ -185,7 +185,7 @@ const Cover = {
           ${cols.map(c => { const bs = x.lk.benefits.filter(b => Coverage.expand(b.code).includes(c[0])); return `<td class="cv${bs.length ? ' has' : ''}">${bs.length ? E(bs.map(b => Coverage.allKind(b.code) ? Coverage.ALL_TXT[Coverage.allKind(b.code)] : (Coverage.BASIS_TXT[b.basis] || b.basis)).join('/')) : ''}</td>`; }).join('')}
           <td>${x.lk.source !== 'manual' && x.lk.benefits.length ? `<button class="ghost" data-tpl="${i}" title="複製成 coverage.yaml 的草稿，依條款確認後貼進去">複製範本</button>` : ''}</td></tr>`).join('') || `<tr><td colspan="${4 + cols.length}" class="empty">沒有符合的商品</td></tr>`}</tbody></table></div>
       <p class="muted small">來源：<b>已確認</b>＝你寫在 <code>data/產品/structured/coverage.yaml</code>（或舊的 coverage_manual.json）的商品；<b>官網特色</b>＝官網商品清單的特色欄依規則對應（疾病／意外歸類依商品名稱，不是條款）；<b>名稱推論</b>＝只看名稱關鍵字；<b>未建檔</b>＝沒有資料。
-        官網清單只有在售商品，舊商品通常找不到，需依條款補到 coverage.yaml（按「複製範本」取得 YAML 草稿，貼入並依條款修正、存檔後重新整理；也可執行 <code>python scripts/build_coverage.py --scaffold</code> 一次產生全部尚未確認商品的草稿）。怎麼賠的細節（免責日、上限、給付表）寫在 <code>pay:</code>，用法見 coverage.yaml 開頭的說明，結果可到「理賠試算」查看。</p>`;
+        官網清單只有在售商品，舊商品通常找不到，需依條款補到 coverage.yaml（按「複製範本」取得 YAML 草稿，貼入並依條款修正、存檔後重新整理；也可執行 <code>python scripts/py/build/build_coverage.py --scaffold</code> 一次產生全部尚未確認商品的草稿）。怎麼賠的細節（免責日、上限、給付表）寫在 <code>pay:</code>，用法見 coverage.yaml 開頭的說明，結果可到「理賠試算」查看。</p>`;
   },
   bindProd(el) {
     const s = this.st, bind = (id, k, ev) => { const n = el.querySelector(id); n.addEventListener(ev || 'change', () => { s[k] = n.value; this.render(); if (k === 'pq') { const q = el.querySelector('#pq'); q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }); };

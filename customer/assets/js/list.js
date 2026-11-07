@@ -2,7 +2,7 @@
 const List = {
   anchor: null,     // 上一次點選的客戶 id（Shift 連選的起點）
   sel: new Set(),   // 勾選的客戶 id（切換篩選仍保留）
-  st: { q: '', status: '', district: '', circle: '', band: '', policy: '', visit: '', sort: 'status', dir: 1, group: '' },
+  st: { q: '', status: '', district: '', circle: '', band: '', policy: '', visit: '', sort: 'status', dir: 1, group: '', view: 'list', limit: 200 },
   COLS: [
     ['status', '狀態'], ['visit', '拜訪'], ['name', '姓名'], ['id', '身分證'], ['gender', '性別'], ['age', '年齡/保險年齡'],
     ['birth', '生日'], ['mobile', '手機'], ['home', '市話'], ['district', '縣市區'], ['circle', '生活圈'],
@@ -24,7 +24,7 @@ const List = {
   },
   filtered() {
     const s = this.st, q = s.q.trim().toLowerCase();
-    return Store.list.filter(c => {
+    const kept = Store.list.filter(c => {
       if (s.status && c.status !== s.status) return false;
       if (s.district && (c.city + c.district) !== s.district) return false;
       if (s.circle && c.circle !== s.circle) return false;
@@ -39,14 +39,17 @@ const List = {
         if (!hay.includes(q)) return false;
       }
       return true;
-    }).sort((a, b) => {
-      const x = this.val(a, s.sort), y = this.val(b, s.sort);
-      const r = (typeof x === 'number' && typeof y === 'number') ? x - y : String(x).localeCompare(String(y), 'zh-Hant');
-      return (r || a.name.localeCompare(b.name, 'zh-Hant')) * s.dir;
     });
+    const keyed = kept.map(c => [c, this.val(c, s.sort)]);   // 排序鍵只算一次
+    keyed.sort((a, b) => {
+      const x = a[1], y = b[1];
+      const r = (typeof x === 'number' && typeof y === 'number') ? x - y : U.coll.compare(String(x), String(y));
+      return (r || U.coll.compare(a[0].name, b[0].name)) * s.dir;
+    });
+    return keyed.map(k => k[0]);
   },
   opts(vals, cur) {
-    return '<option value="">全部</option>' + [...new Set(vals)].filter(Boolean).sort((a, b) => a.localeCompare(b, 'zh-Hant'))
+    return '<option value="">全部</option>' + [...new Set(vals)].filter(Boolean).sort((a, b) => U.coll.compare(a, b))
       .map(v => `<option${v === cur ? ' selected' : ''}>${U.esc(v)}</option>`).join('');
   },
   confTag(c) {
@@ -78,22 +81,12 @@ const List = {
     }
     return '';
   },
-  render() {
-    const el = document.getElementById('tab-list'), s = this.st, m = Store.ov.settings.mask !== false;
-    if (!Store.list.length) { el.innerHTML = '<div class="card empty">沒有客戶資料。請確認 <code>客戶/</code> 資料夾內有 .adoc，並用 scripts\\serve.bat 開啟，或先執行 scripts\\build.bat。</div>'; return; }
-    const rows = this.filtered();
-    let body = '', lastG = null;
-    const gk = c => s.group === 'district' ? (c.city + c.district) : s.group === 'circle' ? c.circle : s.group === 'status' ? c.status : null;
-    rows.forEach(c => {
-      if (s.group) {
-        const g = gk(c);
-        if (g !== lastG) { lastG = g; const n = rows.filter(x => gk(x) === g).length; body += `<tr class="grp"><td colspan="${this.COLS.length + 1}">${U.esc(g || '未填')}（${n}）</td></tr>`; }
-      }
-      body += `<tr class="row" data-id="${U.esc(c.id)}"><td class="selc"><input type="checkbox" class="rowsel" data-id="${U.esc(c.id)}" aria-label="勾選 ${U.esc(c.name)}"${this.sel.has(c.id) ? ' checked' : ''}></td>${this.COLS.map(([k]) => `<td>${this.cell(c, k, m)}</td>`).join('')}</tr>`;
-    });
-    const L = Store.list;
-    el.innerHTML = `
+  /* 篩選列（清單與地圖共用） */
+  bar(rows) {
+    const s = this.st, L = Store.list;
+    return `
       <div class="filters">
+        <span class="seg no-print" role="group" aria-label="檢視方式"><button data-view="list" class="${s.view !== 'map' ? 'on' : ''}">清單</button><button data-view="map" class="${s.view === 'map' ? 'on' : ''}">地圖</button></span>
         <input type="search" id="fq" placeholder="搜尋 姓名/電話/地址/備註/保單" value="${U.esc(s.q)}">
         <select id="fstatus" title="狀態">${this.opts(Store.statuses(), s.status).replace('全部', '全部狀態')}</select>
         <select id="fvisit" title="拜訪"><option value="">拜訪不限</option><option value="no"${s.visit === 'no' ? ' selected' : ''}>未拜訪</option><option value="yes"${s.visit === 'yes' ? ' selected' : ''}>已拜訪</option></select>
@@ -108,15 +101,43 @@ const List = {
         <button id="fpdf"${this.sel.size ? '' : ' disabled'} title="把勾選的客戶匯出成 PDF">匯出 PDF（已選 ${this.sel.size}）</button>
         ${this.sel.size ? '<button id="fselclr" class="ghost">清除勾選</button>' : ''}</span>
       </div>
+    `;
+  },
+  bindBar(el) {
+    const s = this.st;
+    const bind = (id, key, ev) => { const n = el.querySelector(id); n.addEventListener(ev || 'change', () => { s[key] = n.value; s.limit = 200; this.render(); if (key === 'q') { const q = el.querySelector('#fq'); q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }); };
+    bind('#fq', 'q', 'input'); bind('#fstatus', 'status'); bind('#fvisit', 'visit'); bind('#fdistrict', 'district'); bind('#fcircle', 'circle');
+    bind('#fband', 'band'); bind('#fpolicy', 'policy'); bind('#fgroup', 'group');
+    el.querySelector('#fclear').onclick = () => { Object.assign(s, { q: '', status: '', district: '', circle: '', band: '', policy: '', visit: '', limit: 200 }); this.render(); };
+    el.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { s.view = b.dataset.view; this.render(); });
+    const pdf = el.querySelector('#fpdf'); if (pdf) pdf.onclick = () => PdfExport.openDialog();
+    const clr = el.querySelector('#fselclr'); if (clr) clr.onclick = () => { this.sel.clear(); this.render(); };
+  },
+  render() {
+    const el = document.getElementById('tab-list'), s = this.st, m = Store.ov.settings.mask !== false;
+    if (!Store.list.length) { el.innerHTML = '<div class="card empty">沒有客戶資料。請確認 <code>客戶/</code> 資料夾內有 .adoc，並用 scripts\\serve.bat 開啟，或先執行 scripts\\build.bat。</div>'; return; }
+    const rows = this.filtered();
+    if (s.view === 'map') { MapView.list(el, rows); return; }
+    let body = '', lastG = null;
+    const gk = c => s.group === 'district' ? (c.city + c.district) : s.group === 'circle' ? c.circle : s.group === 'status' ? c.status : null;
+    const shown = rows.slice(0, s.limit);   // 5000 筆全畫會很慢：先畫一頁，其餘按「顯示更多」；勾選與全選仍以全部篩選結果計
+    shown.forEach(c => {
+      if (s.group) {
+        const g = gk(c);
+        if (g !== lastG) { lastG = g; const n = rows.filter(x => gk(x) === g).length; body += `<tr class="grp"><td colspan="${this.COLS.length + 1}">${U.esc(g || '未填')}（${n}）</td></tr>`; }
+      }
+      body += `<tr class="row" data-id="${U.esc(c.id)}"><td class="selc"><input type="checkbox" class="rowsel" data-id="${U.esc(c.id)}" aria-label="勾選 ${U.esc(c.name)}"${this.sel.has(c.id) ? ' checked' : ''}></td>${this.COLS.map(([k]) => `<td>${this.cell(c, k, m)}</td>`).join('')}</tr>`;
+    });
+    const L = Store.list;
+    el.innerHTML = `
+      ${this.bar(rows)}
       <div class="tablewrap"><table>
         <thead><tr><th class="selc"><input type="checkbox" id="selhead" title="全選／取消全選目前篩選結果"></th>${this.COLS.map(([k, t]) => `<th data-k="${k}">${t}${s.sort === k ? (s.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('')}</tr></thead>
         <tbody>${body || `<tr><td colspan="${this.COLS.length + 1}" class="empty">沒有符合條件的客戶</td></tr>`}</tbody>
       </table></div>
+      ${rows.length > shown.length ? `<div class="actions no-print" style="margin:8px 0"><span class="muted">目前顯示 ${shown.length} / ${rows.length} 筆</span><button id="fmore">再顯示 200 筆</button><button id="fall">全部顯示</button></div>` : ''}
       <p class="muted small">點 📱／☎ 撥電話、點 🧭 開 Google 地圖導航；點其他地方看明細並補填。年齡欄為「足歲 / 保險年齡」（超過 6 個月加 1 歲，以商品條款為準）。性別旁有 ※ 者由身分證第 2 碼推算。</p>`;
-    const bind = (id, key, ev) => { const n = el.querySelector(id); n.addEventListener(ev || 'change', () => { s[key] = n.value; this.render(); if (key === 'q') { const q = el.querySelector('#fq'); q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }); };
-    bind('#fq', 'q', 'input'); bind('#fstatus', 'status'); bind('#fvisit', 'visit'); bind('#fdistrict', 'district'); bind('#fcircle', 'circle');
-    bind('#fband', 'band'); bind('#fpolicy', 'policy'); bind('#fgroup', 'group');
-    el.querySelector('#fclear').onclick = () => { Object.assign(s, { q: '', status: '', district: '', circle: '', band: '', policy: '', visit: '' }); this.render(); };
+    this.bindBar(el);
     // 勾選：同 Gmail——表頭框全選／取消（部分勾選時為半選），按住 Shift 再點可連續勾選一段
     const ids = rows.map(c => c.id), nSel = ids.filter(i => this.sel.has(i)).length;
     const head = el.querySelector('#selhead');
@@ -135,6 +156,8 @@ const List = {
     });
     el.querySelector('#fpdf').onclick = () => PdfExport.openDialog();
     const clr = el.querySelector('#fselclr'); if (clr) clr.onclick = () => { this.sel.clear(); this.render(); };
+    const more = el.querySelector('#fmore'); if (more) more.onclick = () => { s.limit += 200; this.render(); };
+    const all = el.querySelector('#fall'); if (all) all.onclick = () => { s.limit = Infinity; this.render(); };
     el.querySelectorAll('th[data-k]').forEach(th => th.onclick = () => { const k = th.dataset.k; if (s.sort === k) s.dir *= -1; else { s.sort = k; s.dir = 1; } this.render(); });
     el.querySelectorAll('tr.row').forEach(tr => tr.onclick = () => this.open(tr.dataset.id));
   },
@@ -149,7 +172,7 @@ const List = {
       <div class="hd">${back ? '<button class="ghost" id="dBack">← 返回</button>' : ''}<h2>${E(c.name)} <span class="tag ${Store.statusClass(c.status)}">${E(c.status)}</span> ${this.visitTag(c)}</h2><button class="ghost" id="dClose">✕ 關閉</button></div>
       <div class="muted small">${E(m ? U.maskId(c.id) : c.id)}　${c.birth ? E(c.birth) + '（' + c.age + ' 歲／保險年齡 ' + c.insAge + '）' : '缺生日'}</div>
       <div class="actions">${Store.callBtns(c, m)} ${Store.navBtn(c, '導航到客戶')}</div>
-      <div class="sec">補填資料（存在本機，不改動 adoc）</div>
+      <div class="sec">補填資料</div>
       <div class="form">
         <label>狀態</label><select id="fStatus">${Store.statuses().map(s => `<option${s === c.status ? ' selected' : ''}>${E(s)}</option>`).join('')}</select>
         <label>性別</label><select id="fGender"><option value="">${c.genderSrc === '身分證推算' ? '依身分證（' + E(c.gender) + '）' : '未填'}</option><option${e.gender === '男' ? ' selected' : ''}>男</option><option${e.gender === '女' ? ' selected' : ''}>女</option></select>
@@ -161,6 +184,7 @@ const List = {
         <label>備註</label><textarea id="fNote">${E(c.note)}</textarea>
       </div>
       <div class="actions"><button class="primary" id="dSave">儲存</button><button id="dSched">加入排程…</button><input type="date" id="dDate" value="${U.iso(U.addDays(U.today(), 1))}"></div>
+      ${(() => { const vs = Reminders.visitsFor(id); return vs.length ? `<div class="sec">拜訪紀錄（${vs.length}）</div>${vs.map(r => `<div class="small"><b>${E(r.date)}</b> ${r.done ? '✔ 已拜訪' : '<span class="muted">（已排程，未完成）</span>'}${r.note ? '　' + E(r.note) : ''}${r.next ? `<div class="muted">下次動作：${E(r.next)}</div>` : ''}</div>`).join('')}` : ''; })()}
       <div class="sec">地址與生活圈</div>
       ${c.addresses.map(a => `<div style="margin-top:6px">📍 ${E(m ? Store.addrText(c, true, a) : a.raw)} ${Store.navBtn(c, '導航', a)}
         <div class="small muted">${E(a.city + a.district)}｜生活圈：${E(a.label)}${a.confidence ? '（' + E(a.confidence) + '）' : ''}｜路名：${E(a.roadKey || '？')}</div>

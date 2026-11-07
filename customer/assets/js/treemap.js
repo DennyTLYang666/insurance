@@ -35,7 +35,7 @@ const Treemap = {
     // 色相：依第一層的「固定順序」（維度的 order，其次筆畫排序）指派，不隨數值大小改變
     const hueKeys = kids.filter(k => !this.isGray(k.key)).map(k => k.key).sort((a, b) => {
       const ord = (ds[0] && ds[0].order) || [], ia = ord.indexOf(a), ib = ord.indexOf(b);
-      return (ia < 0 ? 999 : ia) - (ib < 0 ? 999 : ib) || a.localeCompare(b, 'zh-Hant');
+      return (ia < 0 ? 999 : ia) - (ib < 0 ? 999 : ib) || U.coll.compare(a, b);
     });
     kids.forEach(k => { k.hue = this.isGray(k.key) ? 0 : hueKeys.indexOf(k.key) + 1; });
     return { root, kids, ds, m, total: root.value, skipped: all.length - used.length, n: used.length, un };

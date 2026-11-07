@@ -5,8 +5,8 @@ const Stats = {
   SUBS: [['cust', '客戶'], ['ins', '被保險人'], ['pol', '保單'], ['prod', '產品'], ['cov', '保障'], ['multi', '多面向'], ['eval', '欄位評估']],
   reg: [],       // 本次渲染登記的下鑽條件
   // 登記一個下鑽條件，回傳要放在元素上的屬性字串
-  d(title, pred, labels, neg) {
-    this.reg.push({ title, pred, labels: labels || null, neg: !!neg });
+  d(title, pred, labels, neg, spec) {
+    this.reg.push({ title, pred, labels: labels || null, neg: !!neg, spec: spec || null });
     return `data-d="${this.reg.length - 1}" tabindex="0" role="button"`;
   },
   // 依 fn 分組計數 → [[key, n, note, pred]]
@@ -15,19 +15,19 @@ const Stats = {
     L.forEach(c => { const k = fn(c) || '未填'; m.set(k, (m.get(k) || 0) + 1); });
     return [...m.entries()].map(([k, n]) => [k, n, '', c => (fn(c) || '未填') === k]);
   },
-  sorted(rows) { return rows.sort((a, b) => (a[0] === '未填') - (b[0] === '未填') || b[1] - a[1] || a[0].localeCompare(b[0], 'zh-Hant')); },
+  sorted(rows) { return rows.sort((a, b) => /^未填/.test(a[0]) - /^未填/.test(b[0]) || b[1] - a[1] || U.coll.compare(a[0], b[0])); },
   bars(rows, total, titlePrefix, labelsFor, unit) {
     unit = unit || '位';
     if (!rows.length) return '<div class="empty">沒有資料</div>';
     const max = Math.max(...rows.map(r => r[1]), 1);
-    return '<div class="bars">' + rows.map(([k, n, note, pred, neg]) => {
+    return '<div class="bars">' + rows.map(([k, n, note, pred, neg, spec]) => {
       const none = /^(未填|未登錄|缺始期|缺生日|性別未知)/.test(k) || /（未細分）$/.test(k);
-      return `<div class="r click${none ? ' none' : ''}" ${this.d((titlePrefix || '') + k, pred, labelsFor ? labelsFor(k) : null, neg)} title="${U.esc(k)}：${n} ${unit}（${(n / total * 100).toFixed(0)}%）— 點擊看是哪些客戶"><span class="lab">${U.esc(k)}${note ? ' <span class="tag warn">' + U.esc(note) + '</span>' : ''}</span><span class="trk"><div class="fill" style="width:${(n / max * 100).toFixed(1)}%"></div></span><span class="num">${n}（${(n / total * 100).toFixed(0)}%）</span></div>`;
+      return `<div class="r click${none ? ' none' : ''}" ${this.d((titlePrefix || '') + k, pred, labelsFor ? labelsFor(k) : null, neg, spec)} title="${U.esc(k)}：${n} ${unit}（${(n / total * 100).toFixed(0)}%）— 點擊看是哪些客戶"><span class="lab">${U.esc(k)}${note ? ' <span class="tag warn">' + U.esc(note) + '</span>' : ''}</span><span class="trk"><div class="fill" style="width:${(n / max * 100).toFixed(1)}%"></div></span><span class="num">${n}（${(n / total * 100).toFixed(0)}%）</span></div>`;
     }).join('') + '</div>';
   },
 
   render() {
-    this.reg = [];
+    this.reg = []; Dims.prep();
     const el = document.getElementById('tab-stats'), L = Store.list, N = L.length;
     if (!N) { el.innerHTML = '<div class="card empty">沒有客戶資料</div>'; return; }
     const ages = L.filter(c => c.age != null).map(c => c.age);
@@ -37,13 +37,14 @@ const Stats = {
     const male = L.filter(c => c.gender === '男'), female = L.filter(c => c.gender === '女'), gNone = L.filter(c => c.gender !== '男' && c.gender !== '女');
     const gFromId = L.filter(c => c.genderSrc === '身分證推算').length;
 
-    const stRows = this.countBy(L, c => c.status).sort((a, b) => Store.statuses().indexOf(a[0]) - Store.statuses().indexOf(b[0]));
-    const visitRows = [['未拜訪', unvisited.length, '', c => !c.visited], ['已拜訪', N - unvisited.length, '', c => c.visited]];
-    const band = this.countBy(L, c => c.band).sort((a, b) => U.bandOrder.indexOf(a[0]) - U.bandOrder.indexOf(b[0]));
-    const dist = this.sorted(this.countBy(L, c => c.city + c.district));
-    const circ = this.sorted(this.countBy(L, c => c.circle).map(r => { const grp = L.filter(c => c.circle === r[0]); r[2] = grp.some(c => c.circleConf === '待確認') ? '含待確認' : grp.some(c => c.circleConf === '同路推定') ? '含同路推定' : ''; return r; }));
-    const roads = this.sorted(this.countBy(L, c => c.roadKey)).slice(0, 12);
-    const seg = (arr, color, label, extra) => arr.length ? `<div class="click" style="flex:${arr.length};background:${color}" ${this.d(label, c => arr.includes(c))} title="${label} ${arr.length} 位 — 點擊看是哪些客戶">${arr.length}</div>` : '';
+    const R = id => this.rowsFor('customer', this.dimOf('customer', id));
+    const stRows = R('status');
+    const visitRows = R('visit');
+    const band = R('band');
+    const dist = this.sorted(R('district'));
+    const circ = this.sorted(R('circle').map(r => { const grp = L.filter(c => (c.circle || '未填生活圈') === r[0]); r[2] = grp.some(c => c.circleConf === '待確認') ? '含待確認' : grp.some(c => c.circleConf === '同路推定') ? '含同路推定' : ''; return r; }));
+    const roads = this.sorted(R('road')).slice(0, 12);
+    const seg = (arr, color, label, extra) => arr.length ? `<div class="click" style="flex:${arr.length};background:${color}" ${this.d(label, c => arr.includes(c), null, false, this.spec('customer', this.dimOf('customer', 'gender'), label))} title="${label} ${arr.length} 位 — 點擊看是哪些客戶">${arr.length}</div>` : '';
     const kpi = (lab, val, sub, attr) => `<div class="card kpi${attr ? ' click' : ''}" ${attr || ''}><div class="l">${lab}</div><div class="v">${val}</div><div class="s">${sub}</div></div>`;
     const head = `
       <div class="kpis">
@@ -66,11 +67,10 @@ const Stats = {
         <div class="card"><h2>年齡分佈</h2>${this.bars(band, N)}</div>
         <div class="card"><h2>地區：縣市區</h2>${this.bars(dist, N)}</div>
         <div class="card"><h2>地區：生活圈</h2>${this.bars(circ, N)}<p class="muted small">以你在 adoc 登錄的「生活圈：」為準；沒登錄的，同一條路有人登錄就沿用（標「同路推定」），否則依 scripts/area_rules.json，再沒有就是「（未細分）」。</p></div>
-        ${roads.some(r => r[0] !== '未填') ? `<div class="card"><h2>地區：路名（前 12）</h2>${this.bars(roads, N)}</div>` : ''}
+        ${roads.some(r => !/^未填/.test(r[0])) ? `<div class="card"><h2>地區：路名（前 12）</h2>${this.bars(roads, N)}</div>` : ''}
         <div class="card"><h2>狀態</h2>${this.bars(stRows, N)}<p class="muted small">資料夾名稱＝狀態（待訪談／已歸檔／原招／非原招）。</p></div>
       </div>
       <div class="card" style="margin-top:12px"><h2>明細表：區 × 年齡帶</h2>${this.cross(L)}</div>`;
-    Dims.prep();
     const subs = `<div class="subtabs" role="tablist">${this.SUBS.map(([k, t]) => `<button role="tab" data-ssub="${k}" class="${this.st.sub === k ? 'on' : ''}">${t}</button>`).join('')}</div>`;
     const bodies = { cust: () => cust, ins: () => this.bodyIns(), pol: () => this.bodyPol(), prod: () => this.bodyProd(), cov: () => this.bodyCov(), multi: () => '<div id="tmHost"></div>', eval: () => this.bodyEval() };
     el.innerHTML = head + subs + `<div id="stBody" style="margin-top:10px">${(bodies[this.st.sub] || bodies.cust)()}</div>`;
@@ -81,8 +81,9 @@ const Stats = {
   // 一個維度 → 長條圖資料 [[key, n, '', pred]]；pred 的下鑽對象是「對應的要保人（客戶）」
   rowsFor(uid, dim) {
     const un = Dims.units[uid];
-    return Dims.group(un.all(), dim).map(g => { const ids = new Set(Dims.owners(uid, g.units).map(c => c.id)); return [g.key, g.units.length, '', c => ids.has(c.id)]; });
+    return Dims.group(un.all(), dim).map(g => { const ids = new Set(Dims.owners(uid, g.units).map(c => c.id)); return [g.key, g.units.length, '', c => ids.has(c.id), false, this.spec(uid, dim, g.key)]; });
   },
+  spec(uid, dim, key, name) { return { uid, conds: [{ dim, key, op: 'eq', name }] }; },
   dimOf(uid, id) { return Dims.dims()[uid].find(d => d.id === id); },
   // 一組卡片：[[uid, dimId, 標題, 說明?]]
   cards(items) {
@@ -96,9 +97,9 @@ const Stats = {
     const un = Dims.units[uid], rd = this.dimOf(uid, rowId), cd = this.dimOf(uid, colId), all = un.all();
     let rows = Dims.group(all, rd); const cols = Dims.group(all, cd);
     if (maxRows) rows = rows.slice(0, maxRows);
-    const cell = (us, title) => { if (!us.length) return '<td>·</td>'; const ids = new Set(Dims.owners(uid, us).map(c => c.id)); return `<td class="click" ${this.d(title, c => ids.has(c.id))}>${us.length}</td>`; };
+    const cell = (us, title, conds) => { if (!us.length) return '<td>·</td>'; const ids = new Set(Dims.owners(uid, us).map(c => c.id)); return `<td class="click" ${this.d(title, c => ids.has(c.id), null, false, { uid, conds: conds.map(x => ({ ...x, op: 'eq' })) })}>${us.length}</td>`; };
     return `<div class="tablewrap"><table><thead><tr><th class="nosort">${rowLabel || rd.label}</th>${cols.map(c => `<th class="nosort">${U.esc(c.key)}</th>`).join('')}<th class="nosort">合計</th></tr></thead><tbody>` +
-      rows.map(r => `<tr><td>${U.esc(r.key)}</td>${cols.map(c => cell(r.units.filter(u => cd.fn(u) === c.key || (!cd.fn(u) && c.key === '未填')), r.key + '・' + c.key)).join('')}${cell(r.units, r.key)}</tr>`).join('') + '</tbody></table></div>';
+      rows.map(r => `<tr><td>${U.esc(r.key)}</td>${cols.map(c => cell(r.units.filter(u => cd.fn(u) === c.key || (!cd.fn(u) && c.key === '未填')), r.key + '・' + c.key, [{ dim: rd, key: r.key }, { dim: cd, key: c.key }])).join('')}${cell(r.units, r.key, [{ dim: rd, key: r.key }])}</tr>`).join('') + '</tbody></table></div>';
   },
   note(t) { return `<p class="muted small" style="margin:6px 2px">${t}</p>`; },
 
@@ -150,16 +151,17 @@ const Stats = {
     const G = Store.insureds; if (!G.length) return '<div class="card empty">還沒有登錄保單。</div>';
     const rows = Coverage.codes().map(c => {
       const us = G.filter(g => Dims.hasCode(g, c[0])), ids = new Set(Dims.owners('insured', us).map(x => x.id));
-      return [c[1], us.length, us.some(g => Dims.covOf(g).cells[c[0]].inferred) ? '含名稱推論' : '', x => ids.has(x.id)];
+      const hd = this.dimOf('insured', 'has_' + c[0]);
+      return [c[1], us.length, us.some(g => Dims.covOf(g).cells[c[0]].inferred) ? '含名稱推論' : '', x => ids.has(x.id), false, hd ? this.spec('insured', hd, '有' + c[1]) : null];
     }).filter(r => r[1] > 0);
-    const mk = (id, label, f, order) => ({ id, label, fn: f, order });
+    const mk = (id, label, f, order) => ({ id, label, fn: f, order, ord: true });
     const death = mk('d', '', g => { const x = Dims.covOf(g).cells.death_disease; if (!x || !x.hasSum) return '無可加總金額'; const w = x.sum / 10000; return w < 100 ? '未滿 100 萬' : w < 300 ? '100–299 萬' : w < 500 ? '300–499 萬' : w < 1000 ? '500–999 萬' : '1000 萬以上'; }, ['未滿 100 萬', '100–299 萬', '300–499 萬', '500–999 萬', '1000 萬以上', '無可加總金額']);
     const hosp = mk('h', '', g => { const x = Dims.covOf(g).cells.hosp_disease; if (!x || !x.hasDaily) return '無可加總金額'; const d = x.daily; return d < 1000 ? '未滿 1000 元/日' : d < 2000 ? '1000–1999 元/日' : d < 3000 ? '2000–2999 元/日' : '3000 元/日以上'; }, ['未滿 1000 元/日', '1000–1999 元/日', '2000–2999 元/日', '3000 元/日以上', '無可加總金額']);
-    const bar = (dim, title, note) => `<div class="card"><h2>${title}</h2>${this.bars(Dims.group(G, dim).map(g => { const ids = new Set(Dims.owners('insured', g.units).map(c => c.id)); return [g.key, g.units.length, '', c => ids.has(c.id)]; }), G.length, '', null, '人')}${note ? `<p class="muted small">${note}</p>` : ''}</div>`;
+    const bar = (dim, title, note) => `<div class="card"><h2>${title}</h2>${this.bars(Dims.group(G, dim).map(g => { const ids = new Set(Dims.owners('insured', g.units).map(c => c.id)); return [g.key, g.units.length, '', c => ids.has(c.id), false, this.spec('insured', dim, g.key, title)]; }), G.length, '', null, '人')}${note ? `<p class="muted small">${note}</p>` : ''}</div>`;
     const L = Store.list, typeRows = Store.TYPES.map(t => [Store.typeLabel(t), L.filter(c => c.ownTypes.has(t)).length, '', c => c.ownTypes.has(t)]);
     return this.note('單位＝被保險人，依「保障」頁籤的加總（只計有效保單；金額只含單位為萬／元或設定檔有 per_unit 的）。含名稱推論的項目請到「保障」頁看標「?」的數字。') +
       `<div class="grid g2">
-        <div class="card"><h2>各保障項目：有此保障的人數</h2>${this.bars(rows, G.length, '有：', null, '人')}<p class="muted small">點長條看持有的要保人；沒有任何資料的保障項目不列。</p></div>
+        <div class="card"><h2>各保障項目：有此保障的人數</h2>${this.bars(rows, G.length, '有：', null, '人')}<p class="muted small">點長條看持有的要保人；在右側把條件改成「不等於」，或切到「沒有任何符合」，就能找到沒有這項保障的人／客戶；沒有任何資料的保障項目不列。</p></div>
         ${bar(this.dimOf('insured', 'kcount'), '四項基本保障齊全度', '四項＝疾病身故、意外身故、疾病住院、癌症住院。是「有沒有」的缺口檢查，不代表保額夠不夠。')}
         ${bar(death, '疾病身故保額帶', '只算單位為萬／元且已知保額的保單；壽險不分原因會同時計入疾病身故。')}
         ${bar(hosp, '疾病住院日額帶', '日額型（元/日）加總；實支實付、計劃數等無法加總者不計。')}
@@ -190,14 +192,15 @@ const Stats = {
   },
   cross(L) {
     const bands = U.bandOrder.filter(b => L.some(c => c.band === b)), ds = [...new Set(L.map(c => c.city + c.district))];
-    const cell = (n, title, pred) => n ? `<td class="click" ${this.d(title, pred)}>${n}</td>` : '<td>·</td>';
+    const dd = this.dimOf('customer', 'district'), bd = this.dimOf('customer', 'band'), cell = (n, title, pred, conds) => n ? `<td class="click" ${this.d(title, pred, null, false, { uid: 'customer', conds: conds.map(x => ({ ...x, op: 'eq' })) })}>${n}</td>` : '<td>·</td>';
     return `<div class="tablewrap"><table><thead><tr><th class="nosort">縣市區</th>${bands.map(b => `<th class="nosort">${b}</th>`).join('')}<th class="nosort">合計</th></tr></thead><tbody>` +
-      ds.map(d => `<tr><td>${U.esc(d || '未填')}</td>${bands.map(b => { const n = L.filter(c => (c.city + c.district) === d && c.band === b).length; return cell(n, d + '・' + b, c => (c.city + c.district) === d && c.band === b); }).join('')}${cell(L.filter(c => (c.city + c.district) === d).length, d, c => (c.city + c.district) === d)}</tr>`).join('') + '</tbody></table></div>';
+      ds.map(d => `<tr><td>${U.esc(d || '未填')}</td>${bands.map(b => { const n = L.filter(c => (c.city + c.district) === d && c.band === b).length; return cell(n, d + '・' + b, c => (c.city + c.district) === d && c.band === b, [{ dim: dd, key: d || '未填地址' }, { dim: bd, key: b }]); }).join('')}${cell(L.filter(c => (c.city + c.district) === d).length, d, c => (c.city + c.district) === d, [{ dim: dd, key: d || '未填地址' }])}</tr>`).join('') + '</tbody></table></div>';
   },
 
   /* ---------- 下鑽（共用 Drill 面板） ---------- */
   showDrill(idx, neg) {
     const r = this.reg[idx]; if (!r) return;
+    if (r.spec) { Drill.query({ uid: r.spec.uid, conds: r.spec.conds.map(c => ({ ...c })), tab: (neg === undefined ? r.neg : neg) ? 'rest' : 'hit' }); return; }
     neg = neg === undefined ? r.neg : neg;
     const L = Store.list, hit = L.filter(c => neg ? !r.pred(c) : r.pred(c));
     const title = r.labels ? (neg ? r.labels.neg : r.labels.pos) : (neg ? '不屬於「' + r.title + '」' : r.title);

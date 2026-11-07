@@ -1,5 +1,5 @@
 /* 商品 → 保障項目對照，以及依被保險人加總（供「保障」分頁、保單明細使用）
- * 資料來源見 scripts/build_coverage.py：manual（已確認）＞ catalog（官網特色）＞ rules（只看名稱的推論）。 */
+ * 資料來源見 scripts/py/build/build_coverage.py：manual（已確認）＞ catalog（官網特色）＞ rules（只看名稱的推論）。 */
 const Coverage = {
   data: null,
   init(raw) { this.data = raw && raw.codes ? raw : null; this._rules = null; this._cache = new Map(); },
@@ -118,7 +118,7 @@ const Coverage = {
   heldProducts() {
     const m = new Map();
     Store.policies.forEach(p => p.items.forEach(i => { const e = m.get(i.name) || { name: i.name, n: 0 }; e.n++; m.set(i.name, e); }));
-    return [...m.values()].sort((a, b) => a.name.localeCompare(b.name, 'zh-Hant'));
+    return [...m.values()].sort((a, b) => U.coll.compare(a.name, b.name));
   },
   unconfirmed() { return this.ok() ? this.heldProducts().filter(x => this.lookup(x.name).source !== 'manual') : []; },
 };

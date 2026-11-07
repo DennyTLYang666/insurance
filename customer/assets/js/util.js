@@ -3,6 +3,18 @@ const U = {
   esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   },
+  /* 分頁：資料多（5000 筆）時先畫一頁，其餘按「顯示更多」 */
+  page(st, rows) {
+    const shown = rows.slice(0, st.limit || 200);
+    const foot = rows.length > shown.length ? `<div class="actions no-print" style="margin:8px 0"><span class="muted">目前顯示 ${shown.length} / ${rows.length} 筆</span><button data-more>再顯示 200 筆</button><button data-all>全部顯示</button></div>` : '';
+    return { shown, foot };
+  },
+  bindPage(el, st, again) {
+    const m = el.querySelector('[data-more]'), a = el.querySelector('[data-all]');
+    if (m) m.onclick = () => { st.limit = (st.limit || 200) + 200; again(); };
+    if (a) a.onclick = () => { st.limit = Infinity; again(); };
+  },
+  coll: new Intl.Collator('zh-Hant'),   // 共用排序器（每次呼叫 localeCompare 會重建，5000 筆排序要好幾秒）
   pad: n => String(n).padStart(2, '0'),
   today() { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); },
   iso(d) { return d.getFullYear() + '-' + U.pad(d.getMonth() + 1) + '-' + U.pad(d.getDate()); },
@@ -87,6 +99,8 @@ const U = {
     t.textContent = msg; t.hidden = false;
     clearTimeout(U._tt); U._tt = setTimeout(() => { t.hidden = true; }, 2600);
   },
+  /* 加歲日離現在多久：超過三個月（90 天）不顯示天數 */
+  inDays(n) { return n > 90 ? '超過三個月' : n + ' 天後'; },
   haversine(a, b) {
     const R = 6371, rad = x => x * Math.PI / 180;
     const dLat = rad(b.lat - a.lat), dLng = rad(b.lng - a.lng);
@@ -94,6 +108,9 @@ const U = {
     return 2 * R * Math.asin(Math.sqrt(h));
   },
   parseLatLng(s) {
+    s = s || '';
+    const u = /@(-?\d+\.\d+),(-?\d+\.\d+)/.exec(s) || /!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/.exec(s);   // 也接受貼 Google 地圖的網址
+    if (u) s = u[1] + ', ' + u[2];
     const m = /^\s*(-?\d+(?:\.\d+)?)\s*[,，\s]\s*(-?\d+(?:\.\d+)?)\s*$/.exec(s || '');
     if (!m) return null;
     const lat = +m[1], lng = +m[2];

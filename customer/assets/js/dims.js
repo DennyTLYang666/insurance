@@ -33,7 +33,7 @@ const Dims = {
     const insG = p => { const g = D.insOf(p); return g ? D.gender(g.gender) : '性別未知'; };
     const insB = p => { const g = D.insOf(p); return g ? U.ageBand(g.age) : '未填生日'; };
     const KEY = [['death_disease', '疾病身故'], ['death_accident', '意外身故'], ['hosp_disease', '疾病住院'], ['hosp_cancer', '癌症住院']];
-    return {
+    const R = {
       customer: [
         { id: 'status', label: '狀態', fn: c => c.status, order: Store.statuses() },
         { id: 'gender', label: '性別', fn: c => D.gender(c.gender) },
@@ -41,6 +41,7 @@ const Dims = {
         { id: 'district', label: '縣市區', fn: c => (c.city + c.district) || '未填地址' },
         { id: 'circle', label: '生活圈', fn: c => c.circle || '未填生活圈' },
         { id: 'visit', label: '拜訪', fn: c => c.visited ? '已拜訪' : '未拜訪', order: ['已拜訪', '未拜訪'] },
+        { id: 'road', label: '路名', fn: c => c.roadKey || '未填路名' },
         { id: 'pcnt', label: '保單張數', fn: c => c.policies.length ? D.cnt(c.policies.length, '張') : '沒有保單', order: ['沒有保單', '1張', '2張', '3張以上'] },
       ],
       insured: [
@@ -52,7 +53,7 @@ const Dims = {
         { id: 'occ', label: '職業等級', fn: g => g.detail && g.detail.occGrade ? '第 ' + g.detail.occGrade + ' 類' : '未填職業等級' },
         { id: 'bump', label: '下次加歲月份', fn: g => g.bump ? D.month(g.bump.date) : '缺生日', order: D.MONTHS },
         { id: 'active', label: '有效保單數', fn: g => D.cnt(D.covOf(g).active.length, '張'), order: ['0張', '1張', '2張', '3張以上'] },
-        ...KEY.map(([code, lab]) => ({ id: 'has_' + code, label: '有無' + lab, fn: g => D.hasCode(g, code) ? '有' + lab : '沒有' + lab })),
+        ...(Coverage.ok() && Coverage.codes().length ? Coverage.codes() : KEY).map(([code, lab]) => ({ id: 'has_' + code, label: '有無' + lab, fn: g => D.hasCode(g, code) ? '有' + lab : '沒有' + lab })),
         { id: 'kcount', label: '四項基本保障齊全度', fn: g => KEY.filter(([c]) => D.hasCode(g, c)).length + ' / 4 項', order: ['0 / 4 項', '1 / 4 項', '2 / 4 項', '3 / 4 項', '4 / 4 項'] },
       ],
       policy: [
@@ -85,6 +86,8 @@ const Dims = {
         { id: 'insband', label: '被保險人年齡帶', fn: x => insB(x.p), order: bandOrd },
       ],
     };
+    Object.entries(this.ORD).forEach(([uid, ids]) => R[uid].forEach(d => { if (ids.includes(d.id)) d.ord = true; }));
+    return R;
   },
 
   /* 指標：count＝單位個數（預設）。金額類只算「可換算」的（單位為萬／元，或設定檔有 per_unit），其餘算 0 */
@@ -109,7 +112,33 @@ const Dims = {
     units.forEach(u => { const k = dim.fn(u) || '未填'; (m.get(k) || m.set(k, []).get(k)).push(u); });
     const ord = dim.order || [];
     const rank = k => { const i = ord.indexOf(k); return i < 0 ? 999 : i; };
-    return [...m].map(([key, us]) => ({ key, units: us })).sort((a, b) => rank(a.key) - rank(b.key) || b.units.length - a.units.length || a.key.localeCompare(b.key, 'zh-Hant'));
+    return [...m].map(([key, us]) => ({ key, units: us })).sort((a, b) => rank(a.key) - rank(b.key) || b.units.length - a.units.length || U.coll.compare(a.key, b.key));
+  },
+  /* ---- 查詢條件（統計下鑽用）----
+   * 一個查詢＝某種「單位」＋幾個條件；條件在「同一個單位」上同時成立（例如同一張保單既是「有效」又是「年繳」），
+   * 結果是持有這些單位的要保人（客戶）；「沒有任何符合」＝完全沒有符合單位的客戶（含沒有保單的人）。
+   * 條件運算：eq 等於、ne 不等於、ge 以上、le 以下（後兩種只有「有大小順序」的維度才有，例如年份、年齡帶、年資）。 */
+  ORD: { customer: ['band', 'pcnt'], insured: ['band', 'insband', 'occ', 'active', 'kcount'], policy: ['year', 'tenure', 'benen', 'owband', 'insband', 'nitems'], item: ['year', 'tenure', 'insband'] },
+  OPS: { eq: '＝', ne: '≠', ge: '≥（以上）', le: '≤（以下）' },
+  /* 有大小順序的維度：回傳由小到大的類別清單（不含「未填」「缺」等）；沒有順序的維度回傳 null */
+  ordKeys(uid, dim) {
+    if (!dim.ord) return null;
+    const keys = [...new Set(this.units[uid].all().map(u => dim.fn(u) || '未填'))].filter(k => !/^(未填|缺|未登錄|性別未知|無可加總)/.test(k));
+    const num = k => { const m = /\d+/.exec(k); return m ? +m[0] : NaN; }, ord = dim.order || [];
+    return keys.sort((a, b) => { const ia = ord.indexOf(a), ib = ord.indexOf(b); if (ia >= 0 || ib >= 0) return (ia < 0 ? 999 : ia) - (ib < 0 ? 999 : ib); return num(a) - num(b) || U.coll.compare(a, b); });
+  },
+  run(uid, conds) {
+    const ords = conds.map(c => (c.op === 'ge' || c.op === 'le') ? this.ordKeys(uid, c.dim) : null);
+    const ok = (u, c, i) => {
+      const k = c.dim.fn(u) || '未填';
+      if (c.op === 'eq') return k === c.key; if (c.op === 'ne') return k !== c.key;
+      const o = ords[i]; if (!o) return false;
+      const a = o.indexOf(k), b = o.indexOf(c.key); if (a < 0 || b < 0) return false;
+      return c.op === 'ge' ? a >= b : a <= b;
+    };
+    const units = this.units[uid].all().filter(u => conds.every((c, i) => ok(u, c, i)));
+    const hit = this.owners(uid, units), ids = new Set(hit.map(c => c.id));
+    return { units, hit, rest: Store.list.filter(c => !ids.has(c.id)) };
   },
   /* 一批單位 → 對應的要保人（客戶）清單（去重） */
   owners(uid, units) {

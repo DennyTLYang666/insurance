@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>保險客戶管理</title>
+<title>客戶管理</title>
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -18,15 +18,15 @@
     <button role="tab" data-tab="policy">保單</button>
     <button role="tab" data-tab="stats">統計</button>
     <button role="tab" data-tab="schedule">排程</button>
+    <button role="tab" data-tab="rem">待辦</button>
     <button role="tab" data-tab="todo">待補充</button>
   </nav>
   <div class="tools">
     <label class="chk" title="開啟時隱藏身分證、電話、門牌號碼，適合與主管討論或螢幕分享"><input type="checkbox" id="maskToggle"> 遮蔽個資</label>
     <button id="btnLoad" title="載入客戶資料：資料檔（.cbundle），或本機伺服器">載入資料檔</button>
+    <button id="btnSync" title="多裝置同步" disabled>同步</button>
     <button id="btnLock" title="把客戶資料從畫面與記憶體清掉，回到空白">鎖定</button>
-    <button id="btnExport" title="下載補填資料與排程的備份 JSON">匯出備份</button>
-    <button id="btnImport" title="還原備份 JSON">匯入備份</button>
-    <input type="file" id="fileImport" accept=".json,application/json" hidden>
+    <button id="btnExport" title="把目前資料（含你的修改）存成新的加密資料檔，沿用原本的密碼" disabled>匯出資料檔</button>
     <button id="btnPrint">列印</button>
   </div>
 </header>
@@ -39,6 +39,7 @@
   <section id="tab-policy" class="tab"></section>
   <section id="tab-stats" class="tab"></section>
   <section id="tab-schedule" class="tab"></section>
+  <section id="tab-rem" class="tab"></section>
   <section id="tab-todo" class="tab"></section>
 </main>
 <aside id="drawer" class="drawer" hidden></aside>
@@ -60,6 +61,27 @@
     <div style="text-align:right"><button id="lpClose">關閉</button></div>
   </div>
 </div>
+<div id="syncPanel" class="dlgwrap" hidden>
+  <div class="dlg">
+    <h3>同步</h3>
+    <p id="syStatus" class="muted"></p>
+    <div id="syBody">
+      <p class="muted small">只同步「補填資料」（狀態、備註、職業、座標、排程、拜訪紀錄、設定）。客戶主檔不經過伺服器；伺服器只存加密後的資料塊，沒有解密金鑰（金鑰在你的資料檔裡）。</p>
+      <div id="syIn">
+        <label class="small">伺服器網址</label><input type="url" id="syUrl" placeholder="例：http://127.0.0.1:8765" style="width:100%" autocomplete="off" autocapitalize="off">
+        <label class="small">帳號（測試用；正式版改為 Google 登入）</label><input type="text" id="syUser" style="width:100%" autocomplete="off" autocapitalize="off">
+        <div style="margin-top:8px"><button id="syLogin" class="primary">登入並同步</button> <span class="muted small">同一帳號同時只能在一個裝置登入，新登入會讓舊的登出。</span></div>
+      </div>
+      <div id="syOut" hidden><button id="syNow" class="primary">立即同步</button> <button id="syLogout">登出</button></div>
+      <div id="syConf"></div>
+      <div class="sec">匯出資料檔</div>
+      <p class="muted small">與右上角「匯出資料檔」相同：把目前（含已同步更新）的完整資料存成新的 .cbundle，沿用原本的密碼。換裝置時載入這個檔案，再登入就只會拉這之後的更新。</p>
+      <button id="syExport">匯出資料檔（.cbundle）</button>
+    </div>
+    <p id="syMsg" class="muted"></p>
+    <div style="text-align:right"><button id="syClose">關閉</button></div>
+  </div>
+</div>
 <div id="pwDlg" class="dlgwrap" hidden>
   <div class="dlg">
     <h3>輸入密碼</h3>
@@ -75,15 +97,20 @@
 <script src="assets/js/coverage.js"></script>
 <script src="assets/js/claim.js"></script>
 <script src="assets/js/drill.js"></script>
+<script src="assets/js/map.js"></script>
+<script src="assets/js/mapview.js"></script>
 <script src="assets/js/list.js"></script>
 <script src="assets/js/export.js"></script>
 <script src="assets/js/insured.js"></script>
 <script src="assets/js/cover.js"></script>
 <script src="assets/js/policy.js"></script>
 <script src="assets/js/todo.js"></script>
+<script src="assets/js/reminders.js"></script>
 <script src="assets/js/dims.js"></script>
 <script src="assets/js/treemap.js"></script>
 <script src="assets/js/stats.js"></script>
+<script src="assets/js/tree.js"></script>
+<script src="assets/js/sync.js"></script>
 <script src="assets/js/schedule.js"></script>
 <script src="assets/js/app.js"></script>
 </body>
