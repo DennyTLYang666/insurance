@@ -4,7 +4,7 @@ window.ECO = window.ECO || {};
 (function () {
   const F = ECO.fmt, esc = F.esc;
   const RANGES = [[1, "今天"], [3, "3 天"], [7, "7 天"], [30, "30 天"]];
-  const S = { doc: null, items: [], sel: new Set(), range: 3, q: "", hot: false, view: "list", cell: null, built: false, box: null };
+  const S = { doc: null, live: [], items: [], arch: null, archOpen: false, idx: null, archMsg: "", archDocs: {}, sel: new Set(), range: 3, q: "", hot: false, view: "list", cell: null, built: false, box: null };
   try {
     const v = JSON.parse(localStorage.getItem("eco.nf") || "{}");
     if (RANGES.some((r) => r[0] === v.range)) S.range = v.range;
@@ -14,6 +14,7 @@ window.ECO = window.ECO || {};
   } catch (e) {}
   const save = () => { try { localStorage.setItem("eco.nf", JSON.stringify({ range: S.range, sel: Array.from(S.sel), hot: S.hot, view: S.view })); } catch (e) {} };
 
+  const view = () => (S.arch ? "list" : S.view);  // 封存只提供列表檢視
   const dayKey = (iso) => (iso || "").slice(0, 10);
   const todayKey = () => F.tpe(new Date(), { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\//g, "-");
   const daysAgo = (n) => F.tpe(new Date(Date.now() - n * 864e5), { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\//g, "-");
@@ -36,7 +37,7 @@ window.ECO = window.ECO || {};
   const byNew = (a, b) => (b.d || "").localeCompare(a.d || "") || (b.imp || 0) - (a.imp || 0);  // 一律新的在上
   const calDays = () => Math.min(30, Math.max(S.range, 7));  // 日曆檢視至少看 7 天
   function match(it, ignoreTopic) {
-    if (dayKey(it.d) < daysAgo((S.view === "cal" ? calDays() : S.range) - 1)) return false;
+    if (!S.arch && dayKey(it.d) < daysAgo((view() === "cal" ? calDays() : S.range) - 1)) return false;
     if (S.hot && !it.hot) return false;
     if (S.q && ((it.t || "") + " " + (it.sum || "") + " " + (it.s || "")).toLowerCase().indexOf(S.q) < 0) return false;
     if (!ignoreTopic && S.sel.size && !(it.tg || []).some((t) => S.sel.has(t))) return false;
@@ -45,7 +46,8 @@ window.ECO = window.ECO || {};
 
   function build() {
     S.box.innerHTML =
-      '<div class="nf-head"><h2>新聞</h2><span class="mut" data-n="info"></span></div>' +
+      '<div class="nf-head"><h2>新聞</h2><span class="mut" data-n="info"></span><button type="button" class="nf-archbtn" data-n="archbtn">看更早的新聞（封存）</button></div>' +
+      '<div class="tchips nf-arch" data-n="arch" hidden></div>' +
       '<div class="ffilters nf-bar"><input type="search" data-n="q" placeholder="搜尋標題或摘要" aria-label="搜尋新聞">' +
       '<div class="seg" role="group" aria-label="時間範圍" data-n="range">' + RANGES.map((r) => '<button type="button" data-r="' + r[0] + '">' + r[1] + "</button>").join("") + "</div>" +
       '<label class="chk"><input type="checkbox" data-n="hot"> 只看重點</label>' +
@@ -60,6 +62,21 @@ window.ECO = window.ECO || {};
       const b = e.target.closest("button[data-r]");
       if (!b) return;
       S.range = +b.dataset.r; save(); paint();
+    });
+    q("archbtn").addEventListener("click", async () => {
+      S.archOpen = !S.archOpen;
+      if (S.archOpen && !S.idx) {
+        S.archMsg = "載入封存索引…"; paint();
+        try { S.idx = await ECO.load("data/site/news-archive/index.json"); S.archMsg = ""; }
+        catch (e) { S.archMsg = "目前讀不到封存索引（資料站尚未產生封存檔）"; }
+      }
+      if (!S.archOpen && S.arch) selectArch("");
+      paint();
+    });
+    q("arch").addEventListener("click", async (e) => {
+      const b = e.target.closest("[data-am]");
+      if (!b) return;
+      await selectArch(b.dataset.am);
     });
     q("view").addEventListener("click", (e) => {
       const b = e.target.closest("button[data-v]");
@@ -118,18 +135,41 @@ window.ECO = window.ECO || {};
     return '<div class="ncal-wrap"><table class="ncal"><thead>' + head + "</thead><tbody>" + rows + '</tbody></table></div><p class="mut ncal-key">顏色越深＝該小時新聞越多；<i class="hotdot"></i> 紅點＝其中有重點。</p>' + detail;
   }
 
+  async function selectArch(m) {
+    if (!m) { S.arch = null; S.items = S.live; S.cell = null; paint(); return; }
+    S.archMsg = "載入 " + m + "…"; paint();
+    try {
+      if (!S.archDocs[m]) S.archDocs[m] = await ECO.load("data/site/news-archive/" + m + ".json");
+      S.arch = m; S.items = S.archDocs[m].items || []; S.archMsg = "";
+    } catch (e) { S.archMsg = "載入 " + m + " 失敗"; }
+    paint();
+  }
+
+  function archBar() {
+    const el = S.box.querySelector('[data-n="arch"]');
+    S.box.querySelector('[data-n="archbtn"]').classList.toggle("on", S.archOpen);
+    S.box.classList.toggle("is-arch", !!S.arch);
+    el.hidden = !S.archOpen;
+    if (!S.archOpen) return;
+    const ms = (S.idx && S.idx.months) || [];
+    el.innerHTML = '<span class="mut">封存：</span><button type="button" data-am=""' + (S.arch ? "" : ' class="on"') + ">最近 " + ((S.doc && S.doc.retention_days) || 30) + " 天</button>" +
+      ms.map((m) => '<button type="button" data-am="' + esc(m.m) + '"' + (S.arch === m.m ? ' class="on"' : "") + ">" + esc(m.m) + " <i>" + m.n + "</i></button>").join("") +
+      (S.archMsg ? '<span class="mut">' + esc(S.archMsg) + "</span>" : (S.idx && !ms.length ? '<span class="mut">還沒有封存：新聞超過保存天數後才會進封存，之後每月一個檔案。</span>' : ""));
+  }
+
   function paint() {
     const q = (k) => S.box.querySelector('[data-n="' + k + '"]');
+    archBar();
     q("hot").checked = S.hot;
-    q("range").querySelectorAll("button").forEach((b) => b.classList.toggle("on", S.view === "list" && +b.dataset.r === S.range || S.view === "cal" && +b.dataset.r === calDays()));
-    q("view").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.v === S.view));
+    q("range").querySelectorAll("button").forEach((b) => b.classList.toggle("on", view() === "list" && +b.dataset.r === S.range || view() === "cal" && +b.dataset.r === calDays()));
+    q("view").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.v === view()));
     const topics = (S.doc && S.doc.topics) || [];
     const cnt = {};
     S.items.filter((it) => match(it, true)).forEach((it) => (it.tg || []).forEach((t) => (cnt[t] = (cnt[t] || 0) + 1)));
     q("chips").innerHTML = '<button type="button" data-chip="*"' + (S.sel.size ? "" : ' class="on"') + ">全部主題</button>" +
       topics.map((t) => '<button type="button" data-chip="' + esc(t.id) + '" class="ntag tg-' + esc(t.id) + (S.sel.has(t.id) ? " on" : "") + '">' + esc(t.name) + " <i>" + (cnt[t.id] || 0) + "</i></button>").join("");
     const list = S.items.filter((it) => match(it)).sort(byNew);
-    if (S.view === "cal") { q("body").innerHTML = calHtml(list); q("info").textContent = "小時日曆（台灣時間）・最近 " + calDays() + " 天 " + list.length + " 則・點格子看該小時的新聞，點日期看整天"; return; }
+    if (view() === "cal") { q("body").innerHTML = calHtml(list); q("info").textContent = "小時日曆（台灣時間）・最近 " + calDays() + " 天 " + list.length + " 則・點格子看該小時的新聞，點日期看整天"; return; }
     const top = S.hot ? [] : list.filter((it) => it.hot).slice(0, 6);  // 重點區也是新的在上
     const rest = list.filter((it) => top.indexOf(it) < 0);
     let html = "";
@@ -139,6 +179,7 @@ window.ECO = window.ECO || {};
     days.forEach((g) => { html += '<section class="nf-day"><h3>' + esc(dayLabel(g.k)) + ' <span class="mut">' + g.l.length + " 則</span></h3><ul class=\"nlist\">" + g.l.map((it) => itemHtml(it, false)).join("") + "</ul></section>"; });
     if (!list.length) html = '<p class="mut">這段期間、這些條件下沒有新聞。可以放寬時間範圍或取消標籤。</p>';
     q("body").innerHTML = html;
+    if (S.arch) { q("info").textContent = "封存 " + S.arch + "・目前顯示 " + list.length + " / " + S.items.length + " 則（封存不受時間範圍限制）"; return; }
     const upd = S.doc && S.doc.updated ? "更新於 " + F.tpe(new Date(S.doc.updated), { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }) + "・" : "";
     q("info").textContent = upd + "保留最近 " + ((S.doc && S.doc.retention_days) || 30) + " 天・目前顯示 " + list.length + " / " + S.items.length + " 則";
   }
@@ -149,10 +190,10 @@ window.ECO = window.ECO || {};
     const el = document.getElementById("ov-news");
     if (!el) return;
     let html = "";
-    if (S.items.length) {
+    if (S.live.length) {
       const since = daysAgo(1);
-      let l = S.items.filter((it) => it.hot && dayKey(it.d) >= since).sort(byNew).slice(0, 5);
-      if (l.length < 3) l = S.items.filter((it) => dayKey(it.d) >= daysAgo(2)).sort((a, b) => (b.imp || 0) - (a.imp || 0) || byNew(a, b)).slice(0, 5).sort(byNew);
+      let l = S.live.filter((it) => it.hot && dayKey(it.d) >= since).sort(byNew).slice(0, 5);
+      if (l.length < 3) l = S.live.filter((it) => dayKey(it.d) >= daysAgo(2)).sort((a, b) => (b.imp || 0) - (a.imp || 0) || byNew(a, b)).slice(0, 5).sort(byNew);
       digestN = l.length;
       html = '<ul class="news ndigest">' + l.map((it) => '<li><a href="' + esc(it.u) + '" target="_blank" rel="noopener noreferrer">' + (it.hot ? '<i class="star">★</i> ' : "") + esc(it.t) + '</a><span class="mut">' +
         esc([it.s, F.md(dayKey(it.d)) + " " + hhmm(it.d)].filter(Boolean).join("・")) + "</span>" + ((it.tg || []).length ? '<span class="nmeta">' + it.tg.map((t) => '<span class="ntag tg-' + esc(t) + '">' + esc(tname(t)) + "</span>").join("") + "</span>" : "") + "</li>").join("") + "</ul>";
@@ -168,11 +209,12 @@ window.ECO = window.ECO || {};
     hasDigest: () => digestN > 0,
     render: function (doc) {
       S.doc = doc || null;
-      S.items = (doc && doc.items) || [];
+      S.live = (doc && doc.items) || [];
+      if (!S.arch) S.items = S.live;
       digest();
       S.box = document.getElementById("newspage");
       if (S.box) {
-        if (!S.items.length) {
+        if (!S.live.length) {
           S.built = false;
           S.box.innerHTML = '<section class="block"><h2>新聞</h2><p class="mut">新聞彙整還沒有資料。資料站更新（daily）一次之後就會出現；也可以到資料站 Actions 手動執行。</p></section>';
         } else {

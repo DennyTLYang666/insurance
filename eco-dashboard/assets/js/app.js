@@ -12,10 +12,11 @@
     NAMES.forEach((n, i) => (d[n] = parts[i]));
     /* 新聞與基金是選配：抓不到就當作沒有，不影響其他頁 */
     const opt = (n) => ECO.load("data/site/" + n + ".json").catch(() => null);
-    const more = await Promise.all([opt("news"), opt("funds"), opt("newsfeed")]);
+    const more = await Promise.all([opt("news"), opt("funds"), opt("newsfeed"), opt("rates")]);
     d.news = more[0];
     d.funds = more[1];
     d.newsfeed = more[2];
+    d.rates = more[3];
     return d;
   }
 
@@ -51,6 +52,7 @@
     ECO.renderTrends(d);
     ECO.funds.render(d.funds);
     ECO.newsfeed.render(d.newsfeed);
+    ECO.rates.render(d.rates);
     status();
     apply();
   }
