@@ -1,4 +1,4 @@
-/* 日曆／列表兩種檢視的共用元件（行事曆、概覽的「接下來要注意」、市場新聞都用它），
+/* 日曆／列表兩種檢視的共用元件（「日曆」頁、概覽的「接下來要注意」都用它），
    以及事件狀態：已過期變暗、今天強調、已公佈、待公佈（2 小時內／更早）、30 分鐘內倒數。 */
 window.ECO = window.ECO || {};
 (function () {
@@ -50,13 +50,11 @@ window.ECO = window.ECO || {};
     }).join("");
   };
 
-  /* ---------- 行事曆篩選（三處共用）：次要事件、經濟以外、分類 ---------- */
-  const FL = { all: false, other: false, cats: [] };
-  try { FL.other = localStorage.getItem("eco.cal.other") === "1"; } catch (e) {}
-  // 經濟事件依重要度顯示；電競／體育等「經濟以外」的事件，要勾選才看得到（除非被標成主要事件 main）
-  const passBase = (e) => e.scope === "other" ? (FL.other || e.main !== false) : (FL.all || e.importance === "H");
-  const pass = (e) => passBase(e) && (!FL.cats.length || FL.cats.indexOf(e.cat) >= 0);
-  const redrawAll = () => Object.keys(CALS).forEach((k) => { if (CALS[k].o.minor) CALS[k].draw(); });
+  /* ---------- 篩選（每個實例各自一份）：重要度、分類、國家。這裡只放財經事件，電競／體育等一律不顯示 ---------- */
+  const econ = (e) => e.scope !== "other";
+  const passImp = (e, f) => econ(e) && (f.all || e.importance === "H");
+  const pass = (e, f) => passImp(e, f) && (!f.cats.length || f.cats.indexOf(e.cat) >= 0) && (!f.cty.length || f.cty.indexOf(e.country) >= 0);
+  const redrawAll = () => Object.keys(CALS).forEach((k) => CALS[k].draw());
 
   /* ---------- 共用的日曆／列表元件 ---------- */
   const CALS = {};
@@ -67,14 +65,16 @@ window.ECO = window.ECO || {};
     try { const v = localStorage.getItem("eco.cal." + o.box); if (v === "grid" || v === "list") this.view = v; } catch (e) {}
     this.sort = o.sorts[0][0];
     try { const s = localStorage.getItem("eco.calsort." + o.box); if (o.sorts.some((x) => x[0] === s)) this.sort = s; } catch (e) {}
-    this.all = false;
+    this.f = { all: !!o.allDefault, cats: [], cty: [] };
+    try { const v = localStorage.getItem("eco.cal.all." + o.box); if (v === "1" || v === "0") this.f.all = v === "1"; } catch (e) {}
+    this.pastOpen = false;
     this.ym = null;
     this.sel = null;
     CALS[o.box] = this;
   }
 
   Cal.prototype = {
-    items() { return this.o.items(this); },
+    items() { return (this.src || []).filter((e) => pass(e, this.f)); },
     map() { const m = {}; this.items().forEach((e) => (m[e.date] = m[e.date] || []).push(e)); return m; },
     grid(map) {
       const t = today(), [y, m] = this.ym, lead = new Date(Date.UTC(y, m, 1)).getUTCDay(), n = new Date(Date.UTC(y, m + 1, 0)).getUTCDate();
@@ -98,9 +98,9 @@ window.ECO = window.ECO || {};
       const bar = '<div class="calbar" data-cal="' + o.box + '"><div class="seg" role="group" aria-label="檢視方式"><button type="button" data-view="grid"' + (this.view === "grid" ? ' class="on"' : "") + '>日曆</button><button type="button" data-view="list"' +
         (this.view === "list" ? ' class="on"' : "") + ">列表</button></div>" +
         (this.view === "list" && o.sorts.length > 1 ? '<label class="sortsel">排序 <select data-sort aria-label="排序">' + o.sorts.map((s) => '<option value="' + s[0] + '"' + (this.sort === s[0] ? " selected" : "") + ">" + s[1] + "</option>").join("") + "</select></label>" : "") +
-        (o.minor ? '<label class="chk"><input type="checkbox" data-all' + (FL.all ? " checked" : "") + "> 同時顯示次要事件</label>" +
-          '<label class="chk"><input type="checkbox" data-other' + (FL.other ? " checked" : "") + "> 顯示經濟以外（電競、體育、娛樂）</label>" : "") + "</div>" +
-        (o.chips ? this.chips() : "");
+        (o.allDefault ? '<label class="chk"><input type="checkbox" data-imp' + (this.f.all ? "" : " checked") + "> 只看重要事件（★）</label>"
+          : '<label class="chk"><input type="checkbox" data-all' + (this.f.all ? " checked" : "") + "> 同時顯示次要事件</label>") + "</div>" +
+        (o.chips ? this.ctyChips() + this.chips() : "");
       let body;
       if (this.view === "grid") {
         if (!this.ym) { const t = today(); this.ym = [+t.slice(0, 4), +t.slice(5, 7) - 1]; }
@@ -110,21 +110,34 @@ window.ECO = window.ECO || {};
           (ev.length ? o.day(ev) : '<p class="mut">這天沒有' + o.noun + "。</p>") + "</div>";
       } else {
         const list = o.sortFn(o.listItems ? o.listItems(this.items()) : this.items(), this.sort);
-        body = list.length ? o.list(list) : '<p class="mut">這段期間沒有' + o.noun + "。</p>";
+        if (o.collapsePast) {  // 今天以前（昨天及更早）的事件收成一個摺疊區；依時間由早到晚排時放最上面，其餘排序放最下面
+          const t = today(), past = list.filter((e) => e.date < t), rest = list.filter((e) => e.date >= t);
+          const det = past.length ? '<details class="pastev" data-past' + (this.pastOpen ? " open" : "") + "><summary>已過去的事件（昨天及更早）" + past.length + " 個</summary>" + o.list(past) + "</details>" : "";
+          const main = rest.length ? o.list(rest) : '<p class="mut">今天起沒有' + o.noun + "。</p>";
+          body = this.sort === "time" ? det + main : main + det;
+        } else body = list.length ? o.list(list) : '<p class="mut">這段期間沒有' + o.noun + "。</p>";
       }
       box.innerHTML = bar + body;
     },
     chips() {
-      const m = {}, order = [];
-      (this.src || []).filter(passBase).forEach((e) => {
+      const m = {}, order = [], f = this.f;
+      (this.src || []).filter((e) => passImp(e, f) && (!f.cty.length || f.cty.indexOf(e.country) >= 0)).forEach((e) => {
         if (!e.cat) return;
-        if (!m[e.cat]) { m[e.cat] = { n: 0, name: e.catn || e.cat, other: e.scope === "other" }; order.push(e.cat); }
+        if (!m[e.cat]) { m[e.cat] = { n: 0, name: e.catn || e.cat }; order.push(e.cat); }
         m[e.cat].n++;
       });
       if (order.length < 2) return "";
-      order.sort((a, b) => (m[a].other - m[b].other) || m[b].n - m[a].n);
-      return '<div class="catchips" role="group" aria-label="依分類篩選"><button type="button" data-cat=""' + (FL.cats.length ? "" : ' class="on"') + ">全部</button>" +
-        order.map((c) => '<button type="button" data-cat="' + esc(c) + '" class="' + (FL.cats.indexOf(c) >= 0 ? "on " : "") + (m[c].other ? "oth" : "") + '">' + esc(m[c].name) + " <i>" + m[c].n + "</i></button>").join("") + "</div>";
+      order.sort((a, b) => m[b].n - m[a].n);
+      return '<div class="catchips" role="group" aria-label="依分類篩選"><button type="button" data-cat=""' + (f.cats.length ? "" : ' class="on"') + ">全部分類</button>" +
+        order.map((c) => '<button type="button" data-cat="' + esc(c) + '"' + (f.cats.indexOf(c) >= 0 ? ' class="on"' : "") + ">" + esc(m[c].name) + " <i>" + m[c].n + "</i></button>").join("") + "</div>";
+    },
+    ctyChips() {
+      const m = {}, f = this.f;
+      (this.src || []).filter((e) => passImp(e, f) && (!f.cats.length || f.cats.indexOf(e.cat) >= 0)).forEach((e) => { if (e.country) m[e.country] = (m[e.country] || 0) + 1; });
+      const order = Object.keys(m).sort((a, b) => m[b] - m[a]);
+      if (order.length < 2) return "";
+      return '<div class="catchips ctychips" role="group" aria-label="依國家篩選"><button type="button" data-cty=""' + (f.cty.length ? "" : ' class="on"') + ">全部國家</button>" +
+        order.map((c) => '<button type="button" data-cty="' + esc(c) + '"' + (f.cty.indexOf(c) >= 0 ? ' class="on"' : "") + ">" + esc(c) + " <i>" + m[c] + "</i></button>").join("") + "</div>";
     },
     firstDay(map) {
       const t = today(), days = Object.keys(map).sort();
@@ -138,13 +151,11 @@ window.ECO = window.ECO || {};
     if (!box) return;
     const c = CALS[box.dataset.calbox];
     if (!c) return;
-    const v = e.target.closest("[data-view]"), nav = e.target.closest("[data-nav]"), cell = e.target.closest(".cell[data-d]"), cat = e.target.closest("[data-cat]");
-    if (cat) {
-      const k = cat.dataset.cat;
-      if (!k) FL.cats = [];
-      else FL.cats = FL.cats.indexOf(k) >= 0 ? FL.cats.filter((x) => x !== k) : FL.cats.concat(k);
-      redrawAll();
-    } else if (v) { c.view = v.dataset.view; try { localStorage.setItem("eco.cal." + c.o.box, c.view); } catch (x) {} c.draw(); }
+    const v = e.target.closest("[data-view]"), nav = e.target.closest("[data-nav]"), cell = e.target.closest(".cell[data-d]"), cat = e.target.closest("[data-cat]"), cty = e.target.closest("[data-cty]");
+    const toggle = (arr, k) => (!k ? [] : arr.indexOf(k) >= 0 ? arr.filter((x) => x !== k) : arr.concat(k));
+    if (cat) { c.f.cats = toggle(c.f.cats, cat.dataset.cat); c.sel = null; c.draw(); }
+    else if (cty) { c.f.cty = toggle(c.f.cty, cty.dataset.cty); c.sel = null; c.draw(); }
+    else if (v) { c.view = v.dataset.view; try { localStorage.setItem("eco.cal." + c.o.box, c.view); } catch (x) {} c.draw(); }
     else if (nav) {
       const k = +nav.dataset.nav;
       if (k === 0) { const t = today(); c.ym = [+t.slice(0, 4), +t.slice(5, 7) - 1]; c.sel = t; }
@@ -152,20 +163,23 @@ window.ECO = window.ECO || {};
       c.draw();
     } else if (cell) { c.sel = cell.dataset.d; c.draw(); }
   });
+  document.addEventListener("toggle", (e) => {
+    const d = e.target;
+    if (!d.matches || !d.matches("details[data-past]")) return;
+    const box = d.closest("[data-calbox]"), c = box && CALS[box.dataset.calbox];
+    if (c) c.pastOpen = d.open;
+  }, true);
   document.addEventListener("change", (e) => {
     const box = e.target.closest("[data-calbox]");
     const c = box && CALS[box.dataset.calbox];
     if (!c) return;
-    if (e.target.matches("[data-all]")) { FL.all = e.target.checked; redrawAll(); }
-    else if (e.target.matches("[data-other]")) {
-      FL.other = e.target.checked;
-      try { localStorage.setItem("eco.cal.other", FL.other ? "1" : "0"); } catch (x) {}
-      redrawAll();
-    }
+    const setAll = (v) => { c.f.all = v; c.sel = null; try { localStorage.setItem("eco.cal.all." + c.o.box, v ? "1" : "0"); } catch (x) {} c.draw(); };
+    if (e.target.matches("[data-all]")) setAll(e.target.checked);
+    else if (e.target.matches("[data-imp]")) setAll(!e.target.checked);
     else if (e.target.matches("[data-sort]")) { c.sort = e.target.value; try { localStorage.setItem("eco.calsort." + c.o.box, c.sort); } catch (x) {} c.draw(); }
   });
 
-  /* ---------- 三個實例 ---------- */
+  /* ---------- 兩個實例 ---------- */
   const impRank = (e) => (e.importance === "H" ? 0 : e.importance === "M" ? 1 : 2);
   const evSort = (list, k) => {
     const a = list.slice(), byT = (x, y) => (x.date + (x.time || "99:99")).localeCompare(y.date + (y.time || "99:99"));
@@ -185,41 +199,21 @@ window.ECO = window.ECO || {};
     day: (ev) => '<ul class="events">' + ECO.eventsHtml(evSort(ev, "time")) + "</ul>",
     list: (l) => '<ul class="events">' + ECO.eventsHtml(l) + "</ul>", sortFn: evSort
   };
-  const sortsEv = [["time", "依時間（近→遠）"], ["imp", "依重要性"], ["new", "依時間（遠→近）"]];
+  const sortsEv = [["time", "依時間（早→晚）"], ["imp", "依重要性"], ["new", "依時間（晚→早）"]];
 
   const trendCal = new Cal(Object.assign({}, evBase, {
-    box: "cal", defView: "grid", minor: true, sorts: sortsEv, chips: true,
-    items: (c) => (c.src || []).filter(pass)
+    box: "cal", defView: "grid", allDefault: true, collapsePast: true, sorts: sortsEv, chips: true
   }));
   const ovCal = new Cal(Object.assign({}, evBase, {
-    box: "ov-events", defView: "list", minor: true, sorts: sortsEv,
-    items: (c) => (c.src || []).filter(pass),
+    box: "ov-events", defView: "list", sorts: sortsEv,
     listItems: (l) => {
       const t = today(), lim = F.tpe(new Date(Date.now() + 14 * 864e5), { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\//g, "-");
       return l.filter((e) => e.date >= t && e.date <= lim);
     }
   }));
 
-  /* 市場新聞：日曆看每天有幾則，列表可依時間或來源排序 */
-  const nDay = (n) => (n.d || "").slice(0, 10);
-  const newsHtml = (l) => '<ul class="news">' + l.map((it) => '<li><a href="' + esc(it.u) + '" target="_blank" rel="noopener noreferrer">' + esc(it.t) + '</a><span class="mut">' +
-    esc([it.mk, it.s, ECO.news.when(it.d)].filter(Boolean).join("・")) + "</span></li>").join("") + "</ul>";
-  const newsCal = new Cal({
-    box: "ov-news", defView: "list", minor: false, unit: "則新聞", noun: "新聞", sorts: [["new", "最新優先"], ["src", "依來源"], ["mk", "依市場"]],
-    items: (c) => (c.src || []).filter((n) => nDay(n)).map((n) => Object.assign({}, n, { date: nDay(n) })),
-    listItems: () => newsCal.src || [],
-    chip: (n) => '<span class="ev m" title="' + esc(n.t) + '">' + esc(n.t) + "</span>",
-    day: newsHtml, list: newsHtml,
-    sortFn: (l, k) => {
-      const a = l.slice(), t = (x) => x.d || "";
-      if (k === "src") a.sort((x, y) => (x.s || "").localeCompare(y.s || "", "zh-Hant") || t(y).localeCompare(t(x)));
-      else if (k === "mk") a.sort((x, y) => (x.mk || "").localeCompare(y.mk || "", "zh-Hant") || t(y).localeCompare(t(x)));
-      else a.sort((x, y) => t(y).localeCompare(t(x)));
-      return a;
-    }
-  });
   // 日曆格裡也要包 data-calbox：覆寫 draw 把整個容器包起來
-  [trendCal, ovCal, newsCal].forEach((c) => {
+  [trendCal, ovCal].forEach((c) => {
     const draw = c.draw;
     c.draw = function () { draw.call(this); const box = document.getElementById(this.o.box); if (box) box.setAttribute("data-calbox", this.o.box); };
   });
@@ -229,8 +223,7 @@ window.ECO = window.ECO || {};
       document.getElementById("cal-block").hidden = !(list || []).length;
       trendCal.set(list);
       ovCal.set(list);
-    },
-    renderNews: function (items) { newsCal.set(items); }
+    }
   };
 
   /* ---------- 倒數與狀態自動更新 ---------- */

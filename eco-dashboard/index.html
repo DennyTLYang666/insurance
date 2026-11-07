@@ -21,6 +21,8 @@
     </div>
     <nav class="tabs" id="tabs" aria-label="主要頁面">
       <a href="#overview" data-tab="overview" class="on">概覽</a>
+      <a href="#news" data-tab="news">新聞</a>
+      <a href="#cal" data-tab="cal">日曆</a>
       <a href="#table" data-tab="table">表格</a>
       <a href="#trends" data-tab="trends">趨勢</a>
       <a href="#funds" data-tab="funds">基金</a>
@@ -51,13 +53,27 @@
     <div id="markets"></div>
     <div class="two" id="ov-extra">
       <section class="block" id="events-block" hidden>
-        <h2>接下來要注意</h2>
+        <h2>接下來要注意 <a class="ext more" href="#cal">完整日曆 ›</a></h2>
         <div id="ov-events"></div>
       </section>
       <section class="block" id="news-block" hidden>
-        <h2>市場新聞</h2>
+        <h2>今日重點新聞 <a class="ext more" href="#news">全部新聞 ›</a></h2>
         <div id="ov-news"></div>
       </section>
+    </div>
+  </section>
+
+  <!-- ========== 新聞 ========== -->
+  <section id="page-news" class="page" hidden>
+    <nav id="sub-news" hidden></nav>
+    <div class="sub-panel" data-sub="all"><section id="newspage"></section></div>
+  </section>
+
+  <!-- ========== 日曆 ========== -->
+  <section id="page-cal" class="page" hidden>
+    <nav id="sub-cal" hidden></nav>
+    <div class="sub-panel" data-sub="all">
+      <section class="block" id="cal-block" hidden><h2>財經日曆 <span class="mut sm">接下來要公布的財經事件，可依國家、分類篩選</span></h2><div id="cal"></div></section>
     </div>
   </section>
 
@@ -76,7 +92,6 @@
       <a href="#trends/risk" data-sub="risk">風險</a>
       <a href="#trends/cmd" data-sub="cmd">商品</a>
       <a href="#trends/macro" data-sub="macro">總經</a>
-      <a href="#trends/cal" data-sub="cal">行事曆</a>
     </nav>
     <div class="toolbar" id="range-bar">
       <div class="seg" id="range" role="group" aria-label="圖表區間">
@@ -94,9 +109,6 @@
     <div class="sub-panel" data-sub="macro">
       <section class="block" id="macro-block" hidden><h2>總經數據（依國家）</h2><div id="macro" class="macro"></div></section>
       <section class="block" id="lights-block" hidden><h2>宏觀環境</h2><div id="lights"></div></section>
-    </div>
-    <div class="sub-panel" data-sub="cal">
-      <section class="block" id="cal-block" hidden><h2>行事曆</h2><div id="cal"></div></section>
     </div>
   </section>
 
@@ -133,6 +145,7 @@
 <script src="assets/js/news.js"></script>
 <script src="assets/js/overview.js"></script>
 <script src="assets/js/table.js"></script>
+<script src="assets/js/newsfeed.js"></script>
 <script src="assets/js/charts.js"></script>
 <script src="assets/js/calendar.js"></script>
 <script src="assets/js/trends.js"></script>

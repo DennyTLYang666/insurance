@@ -90,7 +90,7 @@
     hero_.innerHTML = all ? hero(ov) : subPoints(ov);
     document.getElementById("markets").innerHTML = markets(ov);
     document.getElementById("events-block").hidden = !all;
-    document.getElementById("news-block").hidden = !all || !ECO.news.market().length;
+    document.getElementById("news-block").hidden = !all || !(ECO.newsfeed && ECO.newsfeed.hasDigest());
     document.getElementById("ov-extra").hidden = !all;
   }
 
@@ -116,5 +116,6 @@
     paint();
     ECO.table.render(ov);  // 「表格」頁籤
   };
+  ECO.overviewRepaint = paint;
   ECO.overviewSub = function (sub) { S.sub = SUBS[sub] !== undefined ? sub : "all"; paint(); };
 })();
