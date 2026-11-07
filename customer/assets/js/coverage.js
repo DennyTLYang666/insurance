@@ -12,7 +12,7 @@ const Coverage = {
 
   /* 與 build_coverage.py 的 norm_name 相同 */
   norm(name) {
-    let s = String(name || '').replace(/【[^】]*】/g, '').replace(/[（(]\d{2,3}[)）]/g, '').replace(/\s+/g, '');
+    let s = String(name || '').replace(/【[^】]*】/g, '').replace(/^\s*[（(][0-9A-Za-z]{3,6}[)）]/, '').replace(/[（(]\d{2,3}[)）]/g, '').replace(/\s+/g, '');
     return s.startsWith('台灣人壽') ? s.slice(4) : s;
   },
   /* 商品名稱 → {source, benefits[], note, label} ；只做完全比對，不做模糊比對（避免把不同商品當成同一個） */
